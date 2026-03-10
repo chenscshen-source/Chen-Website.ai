@@ -352,6 +352,7 @@
   #hero {
     position: relative;
     min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2054,6 +2055,14 @@
       border-radius: 8px 8px 40% 40% / 6px 6px 30% 30% !important;
     }
 
+    /* Disable glitch/glow effects on mobile — clip-path uses absolute px coords */
+    .avatar-glow-halo,
+    .avatar-glow-base,
+    .avatar-chr-r,
+    .avatar-chr-b {
+      display: none !important;
+    }
+
     .avatar-transparent {
       width: 100% !important;
       height: 100% !important;
@@ -3052,10 +3061,6 @@
     </div>
     </div>
 
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
   </div>
 </section>
 
@@ -3516,6 +3521,17 @@ DESIGN</div>
   <div class="footer-copy" style="color:var(--acid);opacity:0.5;">MADE WITH AI ✦</div>
 </footer>
 
+<script>
+// iOS Safari 100vh fix — address bar causes resize loops
+(function() {
+  function setVh() {
+    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+  }
+  setVh();
+  // Only update on orientation change, not scroll-caused resize
+  window.addEventListener('orientationchange', function() { setTimeout(setVh, 300); });
+})();
+</script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 
@@ -3775,7 +3791,7 @@ DESIGN</div>
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', () => { scrollY = window.scrollY; update(); }, { passive: true });
+  let _parallaxResizeTimer; window.addEventListener('resize', () => { clearTimeout(_parallaxResizeTimer); _parallaxResizeTimer = setTimeout(() => { scrollY = window.scrollY; update(); }, 200); }, { passive: true });
   update();
 
   // ── Mouse parallax on skill cards (per-card tilt) ──
@@ -3869,7 +3885,7 @@ document.addEventListener('mouseup',   () => { ring.classList.remove('clicking')
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); let _matrixResizeTimer; window.addEventListener('resize', () => { clearTimeout(_matrixResizeTimer); _matrixResizeTimer = setTimeout(resizeCanvas, 200); });
 const chars = 'AIGCPROMPTDESIGNWEB3DEFICHAIN01';
 const cols = Math.floor(window.innerWidth / 20);
 const drops = Array(cols).fill(1);
@@ -5469,7 +5485,7 @@ document.addEventListener('mousemove', e => {
     H = canvas.height = window.innerHeight;
   }
   resize();
-  window.addEventListener('resize', resize, { passive: true });
+  let _tvResizeTimer; window.addEventListener('resize', () => { clearTimeout(_tvResizeTimer); _tvResizeTimer = setTimeout(resize, 200); }, { passive: true });
 
   // Generates a fresh random noise tile each frame
   function makeNoiseTile(alpha) {

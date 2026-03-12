@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ChEN — AIGC Creator & Design Futurist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #050505;
@@ -53,7 +54,8 @@
     margin: -2.5px 0 0 -2.5px;
     box-shadow: 0 0 5px rgba(160,200,240,0.8), 0 0 10px rgba(120,180,230,0.4);
     transition: width 0.2s, height 0.2s, opacity 0.2s;
-    will-change: left, top;
+    will-change: transform;
+    transform: translate(0px, 0px);
   }
   .cursor-ring {
     position: fixed;
@@ -66,7 +68,8 @@
     margin: -13px 0 0 -13px;
     box-shadow: 0 0 5px rgba(130,180,230,0.15), inset 0 0 5px rgba(130,180,230,0.06);
     transition: width 0.35s cubic-bezier(0.16,1,0.3,1), height 0.35s cubic-bezier(0.16,1,0.3,1), margin 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
-    will-change: left, top;
+    will-change: transform;
+    transform: translate(0px, 0px);
   }
 
   /* HOVER — intense neon glow + glitch */
@@ -444,6 +447,26 @@
     z-index: 10;
     margin-bottom: 0;
     transform-style: preserve-3d;
+  }
+
+  .hero-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--acid);
+    opacity: 0.7;
+    margin-bottom: 14px;
+    animation: fadeIn 0.8s 0.15s both;
+  }
+  .hero-title::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--acid);
+    opacity: 0.6;
   }
 
 
@@ -1075,20 +1098,6 @@
     z-index: 4;
   }
 
-  .avatar-label {
-    position: absolute;
-    bottom: -36px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    letter-spacing: 6px;
-    color: var(--acid);
-    white-space: nowrap;
-    opacity: 0.6;
-    text-transform: uppercase;
-    z-index: 5;
-  }
-
   .floating-tag {
     position: absolute;
     background: rgba(5,5,5,0.88);
@@ -1158,6 +1167,7 @@
     text-transform: uppercase;
     margin-bottom: 60px;
     contain: layout;
+    overflow: hidden;
   }
   .section-label::after {
     content: '';
@@ -1165,7 +1175,6 @@
     height: 1px;
     background: var(--dim);
   }
-
 
   .about-grid {
     display: grid;
@@ -1866,27 +1875,10 @@
   .reveal-delay-4 { transition-delay: 0.48s; }
   .reveal-delay-5 { transition-delay: 0.60s; }
 
-
-  .section-label {
-    overflow: hidden;
+  .parallax-enter {
+    transform: translateY(var(--enter-y, 0px));
+    will-change: transform;
   }
-
-
-  .highlight-bar {
-    display: inline-block;
-    position: relative;
-  }
-  .highlight-bar::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    bottom: 4px;
-    height: 10px;
-    background: var(--acid);
-    z-index: -1;
-    opacity: 0.3;
-  }
-
 
   #loader {
     position: fixed;
@@ -1900,7 +1892,8 @@
     gap: 20px;
     transition: opacity 0.8s, visibility 0.8s;
   }
-  #loader.hidden { opacity: 0; visibility: hidden; }
+  #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  #loader.gone { display: none !important; }
   .loader-name {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 60px;
@@ -1960,6 +1953,20 @@
     .works-track { padding: 20px 24px 40px; gap: 16px; }
     .work-card { width: 400px; height: 540px; }
     .work-card.wide { width: 440px; }
+
+    .works-track-outer {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      cursor: default;
+      touch-action: pan-x;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .works-track-outer::-webkit-scrollbar { display: none; }
+    .works-track { transform: none !important; will-change: auto; }
+    .work-card, .work-card.wide { scroll-snap-align: center; }
   }
 
 
@@ -2011,6 +2018,15 @@
     }
     .hero-cta {
       justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-cta .btn-primary,
+    .hero-cta .btn-outline {
+      width: 100%;
+      max-width: 320px;
+      justify-content: center;
     }
     .hero-year-badge {
       text-align: center;
@@ -2042,11 +2058,20 @@
       cursor: pointer;
       position: relative;
       flex-shrink: 0;
+      overflow: hidden !important;
     }
 
     .avatar-svg-clip {
       width: 180px !important;
       height: 220px !important;
+      overflow: hidden !important;
+      display: none !important;
+    }
+
+    .avatar-svg-clip svg {
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
     }
 
     .avatar-clip-wrap {
@@ -2087,12 +2112,6 @@
       filter: drop-shadow(0 0 4px rgba(200,220,235,0.5)) !important;
     }
 
-    .avatar-label {
-      bottom: -24px !important;
-      font-size: 8px !important;
-      letter-spacing: 4px !important;
-    }
-
     .floating-tag { display: none; }
 
 
@@ -2120,36 +2139,18 @@
     .works-track-outer::before,
     .works-track-outer::after { display: none; }
 
-
-    .works-track-outer {
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x mandatory;
-      cursor: default;
-
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .works-track-outer::-webkit-scrollbar { display: none; }
-
-
     .works-track {
       display: flex;
       gap: 14px;
       padding: 16px 20px 30px;
       width: max-content;
-
-      transform: none !important;
-      will-change: auto;
     }
 
 
     .work-card {
       width: calc(100vw - 60px);
       max-width: 420px;
-      height: 540px;
-      scroll-snap-align: center;
+      height: min(480px, 65vh);
 
       opacity: 1 !important;
       transform: none !important;
@@ -2241,7 +2242,7 @@
     .work-card, .work-card.wide {
       width: calc(100vw - 48px);
       max-width: 360px;
-      height: 500px;
+      height: min(440px, 60vh);
     }
     .works-progress { padding: 0 16px; }
     .skills-grid { grid-template-columns: 1fr; }
@@ -2318,7 +2319,6 @@
     97% { opacity:0.9; transform:translateX(4px) skewX(2deg); clip-path:polygon(0 55%,100% 55%,100% 80%,0 80%); }
     99% { opacity:0; }
   }
-
 
   .timeline-dot {
     animation: dot-glitch 4s ease-in-out infinite;
@@ -2404,11 +2404,6 @@
   }
 
 
-  [data-parallax] {
-    will-change: transform;
-    transform: translateY(var(--py, 0px)) translateX(var(--px, 0px));
-  }
-
   .grid-bg {
     will-change: transform;
   }
@@ -2417,11 +2412,6 @@
     overflow: hidden;
     will-change: transform;
   }
-
-  .parallax-slow   { --speed: 0.08; }
-  .parallax-medium { --speed: 0.16; }
-  .parallax-fast   { --speed: 0.28; }
-  .parallax-neg    { --speed: -0.10; }
 
 
   #about, #skills, #experience, #contact {
@@ -2460,6 +2450,7 @@
 
   .hero-subtitle-line { will-change: transform; }
   .hero-tag      { will-change: transform; }
+  .hero-title    { will-change: transform; }
   .hero-name-mega { will-change: transform; }
   .hero-bottom   { will-change: transform; }
 
@@ -2975,15 +2966,17 @@
     <div class="hero-grid">
       <div class="hero-left">
 
-        <div class="hero-tag" data-parallax data-speed="-0.25">AIGC Creator · Design Futurist</div>
+        <div class="hero-title">ChEN Portfolio</div>
+
+        <div class="hero-tag">AIGC Creator · Design Futurist</div>
 
 
-        <div class="hero-mega-wrap" data-parallax data-speed="-0.18">
+        <div class="hero-mega-wrap">
           <div class="hero-name-mega" id="hero-name-mega">Ch<span class="char-accent">EN</span></div>
         </div>
 
 
-        <div class="hero-subtitle-line" data-parallax data-speed="-0.10">
+        <div class="hero-subtitle-line">
           <p class="hero-subtitle">
             Specialized in AIGC creation &amp; Vibe Coding.<br>
             Former PwC Strategy&amp; · MSc Interaction Design<br>
@@ -2993,7 +2986,7 @@
         </div>
 
 
-        <div class="hero-bottom" data-parallax data-speed="-0.06">
+        <div class="hero-bottom">
           <div class="hero-cta">
             <a href="#experience" class="btn-primary">View Work ↓</a>
             <a href="#contact" class="btn-outline">Get in Touch →</a>
@@ -3003,7 +2996,7 @@
       </div>
 
       <div class="hero-right" id="hero-right-section">
-      <div class="avatar-float-wrap" id="cinematic-wrap" data-parallax data-speed="-0.12">
+      <div class="avatar-float-wrap" id="cinematic-wrap">
 
 
         <svg class="avatar-svg-clip" viewBox="0 0 460 580" xmlns="http://www.w3.org/2000/svg">
@@ -3037,7 +3030,7 @@
 
 
         <div class="avatar-clip-wrap">
-          <img src="avatar.webp" alt="ChEN Avatar" class="avatar-transparent" id="avatar-main">
+          <img src="assets/images/avatar.webp" alt="ChEN Avatar" class="avatar-transparent" id="avatar-main">
 
           <div class="scan-overlay">
             <div class="scan-beam"></div>
@@ -3095,7 +3088,7 @@
     <div class="works-track" id="works-stage">
 
 
-      <div class="work-card wide theme-gold" id="card01" style="cursor:pointer;" onclick="window.location.href='aigc.html'">
+      <div class="work-card wide theme-gold" id="card01" style="cursor:pointer;" onclick="window.location.href='work/project-1.html'">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3107,7 +3100,7 @@
         </div>
 
         <div class="wc-body">
-          <div class="wc-bg" style="background-image:url(work-1.webp);background-position:center;"></div>
+          <div class="wc-bg" style="background-image:url(assets/images/work-1.webp);background-position:center;"></div>
           <div class="wc-card01-overlay"></div>
           <div class="wc-grid"></div>
           <div class="wc-scan"></div>
@@ -3132,7 +3125,7 @@
         </div>
       </div>
 
-      <div class="work-card theme-cyan" id="card02" style="cursor:pointer;" onclick="window.location.href='product-design.html'">
+      <div class="work-card theme-cyan" id="card02" style="cursor:pointer;" onclick="window.location.href='work/project-2.html'">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3144,7 +3137,7 @@
         </div>
 
         <div class="wc-body">
-          <div class="wc-bg" style="background-image:url(work-2.webp);background-position:center top;"></div>
+          <div class="wc-bg" style="background-image:url(assets/images/work-2.webp);background-position:center top;"></div>
           <div class="wc-card02-overlay"></div>
           <div class="wc-grid"></div>
           <div class="wc-scan"></div>
@@ -3170,7 +3163,7 @@ DESIGN</div>
         </div>
       </div>
 
-      <div class="work-card theme-purple" id="card03" style="cursor:pointer;" onclick="window.location.href='branding-design.html'">
+      <div class="work-card theme-purple" id="card03" style="cursor:pointer;" onclick="window.location.href='work/project-3.html'">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3182,7 +3175,7 @@ DESIGN</div>
         </div>
 
         <div class="wc-body">
-          <div class="wc-bg" style="background-image:url(work-3.webp);background-position:center top;"></div>
+          <div class="wc-bg" style="background-image:url(assets/images/work-3.webp);background-position:center top;"></div>
           <div class="wc-card03-overlay"></div>
           <div class="wc-grid"></div>
           <div class="wc-scan"></div>
@@ -3208,7 +3201,7 @@ DESIGN</div>
         </div>
       </div>
 
-      <div class="work-card theme-red" id="card04">
+      <div class="work-card theme-red" id="card04" style="cursor:pointer;" onclick="window.location.href='work/project-4.html'">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3220,7 +3213,7 @@ DESIGN</div>
         </div>
 
         <div class="wc-body">
-          <div class="wc-bg" style="background-image:url(work-4.webp);background-position:center top;"></div>
+          <div class="wc-bg" style="background-image:url(assets/images/work-4.webp);background-position:center top;"></div>
           <div class="wc-card04-overlay"></div>
           <div class="wc-grid"></div>
           <div class="wc-scan"></div>
@@ -3263,7 +3256,7 @@ DESIGN</div>
   <div class="section-label reveal section-label-glitch" data-text="01 — About">01 — About</div>
   <div class="about-grid">
     <div class="reveal">
-      <h2 class="about-headline" data-parallax data-speed="-0.08">
+      <h2 class="about-headline parallax-enter">
         Design<br>meets<br><span class="highlight">AI<br>frontier</span>
       </h2>
       <div class="about-stats">
@@ -3286,7 +3279,7 @@ DESIGN</div>
       </div>
     </div>
     <div class="reveal reveal-delay-2">
-      <p class="about-text" data-parallax data-speed="-0.04">
+      <p class="about-text">
         I'm <strong>ChEN</strong> — an AIGC creator and interaction design specialist operating at the intersection of visual storytelling, emerging technology, and creative production.
       </p>
       <p class="about-text">
@@ -3402,12 +3395,12 @@ DESIGN</div>
 
 <div class="divider"></div>
 
-<section>
+<section id="education">
   <div class="section-label reveal section-label-glitch" data-text="03 — Education">03 — Education</div>
   <div style="display:flex;align-items:center;gap:60px;flex-wrap:wrap;">
     <div class="reveal" style="flex:1;min-width:280px;">
       <div style="font-size:11px;letter-spacing:3px;color:var(--acid);margin-bottom:16px;text-transform:uppercase;">2019 · Melbourne, Australia</div>
-      <div class="about-headline">Monash<br>University</div>
+      <div class="about-headline parallax-enter">Monash<br>University</div>
       <div style="font-size:13px;opacity:0.5;letter-spacing:2px;margin-top:12px;text-transform:uppercase;">MSc Interaction Design</div>
     </div>
     <div class="reveal reveal-delay-1" style="flex:2;min-width:300px;position:relative;">
@@ -3483,7 +3476,7 @@ DESIGN</div>
   <div class="section-label reveal section-label-glitch" data-text="05 — Contact">05 — Contact</div>
   <div class="contact-inner">
     <div class="reveal">
-      <h2 class="contact-headline glitch" data-text="LET'S BUILD.">
+      <h2 class="contact-headline glitch parallax-enter" data-text="LET'S BUILD.">
         LET'S<br><span style="color:var(--acid)">BUILD.</span>
       </h2>
       <p class="contact-desc" style="font-size:13px;opacity:0.4;line-height:2;margin-top:30px;letter-spacing:1px;">
@@ -3521,7 +3514,9 @@ DESIGN</div>
   <div class="footer-copy" style="color:var(--acid);opacity:0.5;">MADE WITH AI ✦</div>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
+
 // iOS Safari 100vh fix — address bar causes resize loops
 (function() {
   function setVh() {
@@ -3531,17 +3526,14 @@ DESIGN</div>
   // Only update on orientation change, not scroll-caused resize
   window.addEventListener('orientationchange', function() { setTimeout(setVh, 300); });
 })();
-</script>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script>
 
-// ══════════════════════════════════════════
-// PARALLAX SCROLL ENGINE
-// ══════════════════════════════════════════
+  // PARALLAX SCROLL ENGINE
 (function() {
   const isMobile = () => window.innerWidth <= 768;
   const progressBar = document.getElementById('scroll-progress');
-  const vh = () => window.innerHeight;
+  let _vhCache = window.innerHeight;
+  window.addEventListener('resize', () => { _vhCache = window.innerHeight; }, { passive: true });
+  const vh = () => _vhCache;
 
   const orbs = [
     { el: document.getElementById('orb1'), speedY: 0.06,  speedX:  0.02 },
@@ -3552,43 +3544,39 @@ DESIGN</div>
 
   // Hero text layer speeds
   const heroLayers = [
+    { sel: '.hero-title',    vy: -0.32 },
     { sel: '.hero-tag',      vy: -0.28 },
-    { sel: '.hero-name',     vy: -0.18 },
+    { sel: '.hero-name-mega',vy: -0.18 },
     { sel: '.hero-subtitle', vy: -0.10 },
     { sel: '.hero-cta',      vy: -0.05 },
     { sel: '#cinematic-wrap',vy: -0.14 },
   ];
 
-  // ── NEW: section-scoped parallax items (relative to their section center) ──
-  // Each item moves relative to how far it is from viewport center.
-  // vy is multiplier (small = subtle). Safe range: 0.03–0.15
+  // Section-scoped parallax items (relative to their section center)
   const sectionItems = [
     // About section
     { sel: '#about .section-label',      vy: -0.06 },
-    { sel: '.about-headline',            vy: -0.10 },
+    // (Big titles use enter-parallax below)
     { sel: '.about-text:nth-of-type(1)', vy: -0.04 },
     { sel: '.about-text:nth-of-type(2)', vy: -0.06 },
     { sel: '.about-text:nth-of-type(3)', vy: -0.08 },
-    { sel: '.stat-item:nth-child(1)',    vy: -0.05 },
-    { sel: '.stat-item:nth-child(2)',    vy: -0.08 },
-    { sel: '.stat-item:nth-child(3)',    vy: -0.11 },
-    { sel: '.stat-item:nth-child(4)',    vy: -0.04 },
-    { sel: '#about .terminal-card',      vy: -0.05 },
+    // (Stats + terminal card intentionally static)
     // Experience section
     { sel: '#experience .section-label', vy: -0.06 },
     { sel: '.timeline-company',          vy: -0.05 },
+    // Education section
+    { sel: '#education .section-label',  vy: -0.06 },
     // Skills section
     { sel: '#skills .section-label',     vy: -0.06 },
     // Contact section
     { sel: '#contact .section-label',    vy: -0.06 },
-    { sel: '.contact-headline',          vy: -0.09 },
     { sel: '.contact-list',              vy: -0.04 },
   ];
 
-  // ── NEW: divider lines clip on scroll ──
+  // Divider lines clip on scroll
   const dividers = Array.from(document.querySelectorAll('.divider'));
 
-  // ── NEW: section background opacity fade (section enters from bottom) ──
+  // Section background opacity fade (section enters from bottom)
   const sectionFadeEls = Array.from(document.querySelectorAll('section[id]'));
 
   // Marquee speed modulation
@@ -3604,11 +3592,33 @@ DESIGN</div>
   const timelineDots = document.querySelectorAll('.timeline-dot');
   const timelineItems = document.querySelectorAll('.timeline-item');
 
-  // ── NEW: work card covers parallax (cover image moves slower than card) ──
+  // Work card covers parallax (cover image moves slower than card)
   const workCards = Array.from(document.querySelectorAll('.work-card'));
 
-  // ── NEW: contact items stagger opacity on scroll ──
+  // Contact items stagger opacity on scroll
   const contactItems = document.querySelectorAll('.contact-item');
+  // Enter-parallax targets (complete at viewport center)
+  const enterTargets = [];
+  const registerEnter = (sel, amp, range = 0.6, ampStep = 0) => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      enterTargets.push({ el, amp: amp + i * ampStep, range });
+    });
+  };
+  // 01 — About
+  registerEnter('#about .about-headline', 90, 0.55);
+  registerEnter('#about .about-text', 50, 0.7, 6);
+  // (Stats + terminal card intentionally static)
+  // 02 — Experience
+  registerEnter('#experience .timeline-item', 70, 0.55, 4);
+  // 03 — Education
+  registerEnter('#education .about-headline', 80, 0.55);
+  registerEnter('#education .terminal-card', 55, 0.65);
+  // 04 — Capabilities
+  registerEnter('#skills .skill-card', 50, 0.6, 6);
+  // 05 — Contact
+  registerEnter('#contact .contact-headline', 90, 0.55);
+  registerEnter('#contact .contact-desc', 50, 0.7);
+  registerEnter('#contact .contact-item', 40, 0.65, 4);
 
   let ticking = false;
   let scrollY = window.scrollY;
@@ -3683,104 +3693,145 @@ DESIGN</div>
 
     if (!mobile) {
 
+      // ── READ PHASE: batch ALL getBoundingClientRect calls first (prevents layout thrashing) ──
+      const _vH = vh();
+      const sectionEls   = sectionItems.map(l => document.querySelector(l.sel));
+      const sectionRects = sectionEls.map(el => el ? el.getBoundingClientRect() : null);
+      const timelineRects  = Array.from(timelineItems).map(el => el.getBoundingClientRect());
+      const dotRects       = Array.from(timelineDots).map(el => el.getBoundingClientRect());
+      const skillRects     = Array.from(skillCards).map(el => el.getBoundingClientRect());
+      const workRects      = workCards.map(el => el.getBoundingClientRect());
+      const dividerRects   = Array.from(dividers).map(el => el.getBoundingClientRect());
+      const contactRects   = Array.from(contactItems).map(el => el.getBoundingClientRect());
+      const fadeRects      = Array.from(sectionFadeEls).map(el => el.getBoundingClientRect());
+      const enterRects     = enterTargets.map(t => t.el.getBoundingClientRect());
+
+      // ── WRITE PHASE: apply all style changes after reading ──
+
+      const enterMap = new Map();
+      const enterHandled = new Set();
+      enterTargets.forEach((t, i) => {
+        const rect = enterRects[i];
+        if (!rect) return;
+        const dist = centerDist(rect);
+        const prog = clamp(1 - Math.abs(dist) / t.range, 0, 1);
+        const ease = prog * prog * (3 - 2 * prog);
+        enterMap.set(t.el, (1 - ease) * t.amp);
+      });
+
       // ── Section-scoped parallax items ──
-      sectionItems.forEach(layer => {
-        const el = document.querySelector(layer.sel);
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        // Only process when near viewport
-        if (rect.bottom < -200 || rect.top > vh() + 200) return;
-        const dist = centerDist(rect);
-        const offset = (dist * layer.vy * vh() * 0.35).toFixed(2);
-        el.style.transform = `translateY(${offset}px)`;
+      sectionItems.forEach((layer, i) => {
+        const el = sectionEls[i]; const rect = sectionRects[i];
+        if (!el || !rect) return;
+        if (rect.bottom < -200 || rect.top > _vH + 200) return;
+        const enterY = enterMap.get(el) || 0;
+        const baseY = centerDist(rect) * layer.vy * _vH * 0.35;
+        el.style.transform = `translateY(${(baseY + enterY).toFixed(2)}px)`;
+        enterHandled.add(el);
       });
 
-      // ── Timeline items: subtle left/right depth offset by column ──
+      // ── Timeline items ──
       timelineItems.forEach((item, i) => {
-        const rect = item.getBoundingClientRect();
-        if (rect.bottom < -100 || rect.top > vh() + 100) return;
+        const rect = timelineRects[i];
+        if (rect.bottom < -100 || rect.top > _vH + 100) return;
         const dist = centerDist(rect);
-        // Left column drifts left slightly, right column drifts right
         const col = item.closest('.timeline') ? (item.closest('.exp-grid > div:last-child') ? 1 : -1) : 0;
-        const xOffset = (dist * col * 0.025 * vh()).toFixed(2);
-        const yOffset = (dist * -0.04 * vh()).toFixed(2);
-        item.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+        const enterY = enterMap.get(item) || 0;
+        const baseY = dist * -0.04 * _vH;
+        item.style.transform = `translate(${(dist * col * 0.025 * _vH).toFixed(2)}px, ${(baseY + enterY).toFixed(2)}px)`;
+        enterHandled.add(item);
       });
 
-      // ── Timeline dots pulse with scroll proximity ──
-      timelineDots.forEach(dot => {
-        const rect = dot.getBoundingClientRect();
-        if (rect.bottom < -50 || rect.top > vh() + 50) return;
-        const proximity = 1 - clamp(Math.abs(rect.top - vh() * 0.5) / (vh() * 0.45), 0, 1);
+      // ── Timeline dots ──
+      timelineDots.forEach((dot, i) => {
+        const rect = dotRects[i];
+        if (rect.bottom < -50 || rect.top > _vH + 50) return;
+        const proximity = 1 - clamp(Math.abs(rect.top - _vH * 0.5) / (_vH * 0.45), 0, 1);
         dot.style.boxShadow = `0 0 ${(8 + proximity * 22).toFixed(1)}px var(--acid)`;
         dot.style.transform = `scale(${(1 + proximity * 0.45).toFixed(3)})`;
       });
 
-      // ── Skill cards: staggered y-depth by column position ──
+      // ── Skill cards ──
       skillCards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect();
-        if (rect.bottom < -100 || rect.top > vh() + 100) return;
-        const dist = centerDist(rect);
-        // 3-column grid: col 0 moves up, col 1 neutral, col 2 moves down
-        const col = i % 3;
-        const depths = [-0.04, 0, 0.04];
-        const yOffset = (dist * depths[col] * vh() * 0.5).toFixed(2);
+        const rect = skillRects[i];
+        if (rect.bottom < -100 || rect.top > _vH + 100) return;
+        const baseY = centerDist(rect) * [-0.04, 0, 0.04][i % 3] * _vH * 0.5;
+        const enterY = enterMap.get(card) || 0;
+        const yOffset = (baseY + enterY).toFixed(2);
         card.style.setProperty('--parallax-y', `${yOffset}px`);
-        // Only set inline transform if card is not being hovered (hover handler manages its own)
-        if (!card.matches(':hover')) {
-          card.style.transform = `translateY(${yOffset}px)`;
-        }
+        if (!card.matches(':hover')) card.style.transform = `translateY(${yOffset}px)`;
+        enterHandled.add(card);
       });
 
-      // ── Work card BG cover: inner image scrolls slower (ken burns depth) ──
-      workCards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if (rect.bottom < -50 || rect.top > vh() + 50) return;
-        const prog = viewProgress(rect);
-        // bg moves from +6% to -6% as card traverses viewport
-        const bgY = ((0.5 - prog) * 12).toFixed(2);
+      // ── Work card BG ──
+      workCards.forEach((card, i) => {
+        const rect = workRects[i];
+        if (rect.bottom < -50 || rect.top > _vH + 50) return;
         const bgEl = card.querySelector('.wc-bg');
-        if (bgEl) bgEl.style.backgroundPositionY = `calc(center + ${bgY}%)`;
+        if (bgEl) bgEl.style.backgroundPositionY = `calc(center + ${((0.5 - viewProgress(rect)) * 12).toFixed(2)}%)`;
       });
 
-      // ── Dividers: reveal width from 0% to 100% as they enter viewport ──
-      dividers.forEach(div => {
-        const rect = div.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > vh()) return;
-        const prog = clamp((vh() - rect.top) / (vh() * 0.4), 0, 1);
-        div.style.transform = `scaleX(${prog.toFixed(3)})`;
-        div.style.transformOrigin = 'left center';
-        div.style.opacity = (0.5 + prog * 0.5).toFixed(3);
+      // ── Dividers ──
+      dividers.forEach((div, i) => {
+        const rect = dividerRects[i];
+        if (rect.bottom < 0 || rect.top > _vH) return;
+        const prog = clamp((_vH - rect.top) / (_vH * 0.4), 0, 1);
+        div.style.cssText += `;transform:scaleX(${prog.toFixed(3)});transform-origin:left center;opacity:${(0.5 + prog * 0.5).toFixed(3)}`;
       });
 
-      // ── Contact items: staggered opacity + slight y-lift on scroll ──
+      // ── Contact items ──
       contactItems.forEach((item, i) => {
-        const rect = item.getBoundingClientRect();
-        if (rect.bottom < -50 || rect.top > vh() + 50) return;
-        const dist = centerDist(rect);
-        const yOffset = (dist * -0.03 * vh()).toFixed(2);
-        // Only apply y transform, not overriding hover
-        item.style.setProperty('--item-parallax-y', `${yOffset}px`);
+        const rect = contactRects[i];
+        if (rect.bottom < -50 || rect.top > _vH + 50) return;
+        const enterY = enterMap.get(item) || 0;
+        const baseY = centerDist(rect) * -0.03 * _vH;
+        item.style.setProperty('--item-parallax-y', `${(baseY + enterY).toFixed(2)}px`);
+        enterHandled.add(item);
       });
 
-      // ── Section fade: very subtle scale as section enters ──
-      // (Scale from 0.99 at entry to 1.0 at center to 0.99 at exit)
-      sectionFadeEls.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.bottom < -100 || rect.top > vh() + 100) return;
-        const prog = viewProgress(rect);
-        // Peak at 0.5 (center), edges scale slightly down
-        const scale = (1 - Math.abs(prog - 0.5) * 0.012).toFixed(4);
-        sec.style.setProperty('--section-scale', scale);
+      // ── Enter-only targets (no other transforms) ──
+      enterTargets.forEach(t => {
+        if (enterHandled.has(t.el)) return;
+        const y = enterMap.get(t.el);
+        if (y === undefined) return;
+        t.el.style.transform = `translateY(${y.toFixed(2)}px)`;
+      });
+
+      // ── Section fade ──
+      sectionFadeEls.forEach((sec, i) => {
+        const rect = fadeRects[i];
+        if (rect.bottom < -100 || rect.top > _vH + 100) return;
+        sec.style.setProperty('--section-scale', (1 - Math.abs(viewProgress(rect) - 0.5) * 0.012).toFixed(4));
       });
 
     } else {
       // ── Mobile: only timeline dots ──
-      timelineDots.forEach(dot => {
-        const rect = dot.getBoundingClientRect();
-        const proximity = 1 - clamp(Math.abs(rect.top - vh() * 0.5) / (vh() * 0.45), 0, 1);
+      const _vH = vh();
+      const dotRects = Array.from(timelineDots).map(el => el.getBoundingClientRect());
+      timelineDots.forEach((dot, i) => {
+        const rect = dotRects[i];
+        const proximity = 1 - clamp(Math.abs(rect.top - _vH * 0.5) / (_vH * 0.45), 0, 1);
         dot.style.boxShadow = `0 0 ${(8 + proximity * 22).toFixed(1)}px var(--acid)`;
       });
+
+      // ── Enter-parallax (mobile) ──
+      if (enterTargets.length) {
+        const enterRects = enterTargets.map(t => t.el.getBoundingClientRect());
+        const enterMap = new Map();
+        enterTargets.forEach((t, i) => {
+          const rect = enterRects[i];
+          if (!rect) return;
+          const dist = centerDist(rect);
+          const prog = clamp(1 - Math.abs(dist) / t.range, 0, 1);
+          const ease = prog * prog * (3 - 2 * prog);
+          enterMap.set(t.el, (1 - ease) * (t.amp * 0.8));
+        });
+        enterTargets.forEach(t => {
+          const y = enterMap.get(t.el);
+          if (y === undefined) return;
+          t.el.style.transform = `translateY(${y.toFixed(2)}px)`;
+        });
+      }
     }
 
     ticking = false;
@@ -3821,14 +3872,13 @@ DESIGN</div>
 
 })();
 
-</script><script>
 // LOADER
 const loaderBar = document.getElementById('loader-bar');
 const loaderPct = document.getElementById('loader-pct');
 let pct = 0;
 const loadInterval = setInterval(() => {
   pct += Math.random() * 15;
-  if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(() => document.getElementById('loader').classList.add('hidden'), 400); }
+  if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(() => { const l = document.getElementById('loader'); l.classList.add('hidden'); setTimeout(() => l.classList.add('gone'), 900); }, 400); }
   loaderBar.style.width = pct + '%';
   loaderPct.textContent = Math.floor(pct) + '%';
 }, 60);
@@ -3850,15 +3900,13 @@ document.addEventListener('mousemove', e => {
     cursorVisible = true;
   }
   mx = e.clientX; my = e.clientY;
-  cursorDot.style.left = mx + 'px';
-  cursorDot.style.top  = my + 'px';
+  cursorDot.style.transform = `translate(${mx}px,${my}px)`;
 });
 
 (function animateRing() {
-  rx += (mx - rx) * 0.13;
-  ry += (my - ry) * 0.13;
-  ring.style.left = Math.round(rx) + 'px';
-  ring.style.top  = Math.round(ry) + 'px';
+  rx += (mx - rx) * 0.18;
+  ry += (my - ry) * 0.18;
+  ring.style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px)`;
   requestAnimationFrame(animateRing);
 })();
 
@@ -3887,24 +3935,33 @@ const ctx = canvas.getContext('2d');
 function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resizeCanvas(); let _matrixResizeTimer; window.addEventListener('resize', () => { clearTimeout(_matrixResizeTimer); _matrixResizeTimer = setTimeout(resizeCanvas, 200); });
 const chars = 'AIGCPROMPTDESIGNWEB3DEFICHAIN01';
-const cols = Math.floor(window.innerWidth / 20);
+const cols = Math.floor(window.innerWidth / 28); // fewer columns = less work
 const drops = Array(cols).fill(1);
 let _matrixPaused = false;
+let _matrixOffscreen = false;
 document.addEventListener('visibilitychange', () => { _matrixPaused = document.hidden; });
-function drawMatrix() {
-  if (!_matrixPaused) {
-    ctx.fillStyle = 'rgba(5,5,5,0.07)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#dce8f0'; ctx.font = '13px monospace';
-    drops.forEach((y, i) => {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(char, i * 20, y * 20);
-      if (y * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-      drops[i]++;
-    });
-  }
-  setTimeout(drawMatrix, 60);
+// Pause matrix when hero is not visible (user scrolled away)
+const _matrixObserver = new IntersectionObserver(entries => {
+  _matrixOffscreen = !entries[0].isIntersecting;
+}, { threshold: 0 });
+const _heroSection = document.getElementById('hero');
+if (_heroSection) _matrixObserver.observe(_heroSection);
+let _lastMatrixTime = 0;
+function drawMatrix(timestamp) {
+  requestAnimationFrame(drawMatrix);
+  if (_matrixPaused || _matrixOffscreen) return;
+  if (timestamp - _lastMatrixTime < 50) return; // cap at ~20fps
+  _lastMatrixTime = timestamp;
+  ctx.fillStyle = 'rgba(5,5,5,0.07)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#dce8f0'; ctx.font = '13px monospace';
+  drops.forEach((y, i) => {
+    const char = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(char, i * 28, y * 20);
+    if (y * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
 }
-drawMatrix();
+requestAnimationFrame(drawMatrix);
 
 // SCROLL REVEAL - multi-variant observer
 const revealClasses = ['.reveal', '.reveal-left', '.reveal-right', '.reveal-scale', '.reveal-clip'];
@@ -3924,6 +3981,17 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
 allRevealEls.forEach(el => revealObserver.observe(el));
+
+// Pause rapid edu-logo animations when education section is off-screen
+(function() {
+  const eduSection = document.getElementById('education') || document.querySelector('.edu-logo-main')?.closest('section');
+  if (!eduSection) return;
+  const eduAnimEls = eduSection.querySelectorAll('.edu-logo-main, .edu-logo-r, .edu-logo-b');
+  new IntersectionObserver(entries => {
+    const state = entries[0].isIntersecting ? 'running' : 'paused';
+    eduAnimEls.forEach(el => el.style.animationPlayState = state);
+  }, { rootMargin: '200px' }).observe(eduSection);
+})();
 
 // Stagger children inside timeline items
 document.querySelectorAll('.timeline-item').forEach((item, i) => {
@@ -4098,10 +4166,25 @@ document.addEventListener('mousemove', e => {
   const cntEl  = document.getElementById('works-progress-count');
   if (!outer || !stage) return;
 
-  // ── MOBILE: native scroll-snap handles everything ──
-  const isMobile = () => window.innerWidth <= 600;
-  if (isMobile()) {
-    const cards = Array.from(stage.querySelectorAll('.work-card'));
+  // ── MOBILE / TOUCH: native scroll-snap handles everything ──
+  const isTouch = () =>
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(max-width: 900px)').matches;
+  if (isTouch()) {
+    // Force scrollable track for touch devices
+    outer.style.overflowX = 'auto';
+    outer.style.overflowY = 'hidden';
+    outer.style.scrollSnapType = 'x mandatory';
+    outer.style.webkitOverflowScrolling = 'touch';
+    outer.style.touchAction = 'pan-x';
+    outer.style.cursor = 'default';
+
+    // Clear any inline transforms so CSS can take over
+    stage.style.transform = '';
+    stage.style.willChange = 'auto';
+    const allCards = Array.from(stage.querySelectorAll('.work-card'));
+    allCards.forEach(c => { c.style.transform = ''; c.style.opacity = ''; });
+    const cards = allCards;
     const N = cards.length;
     outer.addEventListener('scroll', () => {
       const scrollLeft = outer.scrollLeft;
@@ -4232,6 +4315,9 @@ document.addEventListener('mousemove', e => {
 
   // ── RAF LOOP ──
   function tick() {
+    // On mobile, native scroll handles everything — skip JS transforms entirely
+    if (isTouch()) { requestAnimationFrame(tick); return; }
+
     // Smooth translate
     tx = lerp(tx, txTarget, 0.12);
     stage.style.transform = `translateX(${tx.toFixed(2)}px)`;
@@ -5511,8 +5597,15 @@ document.addEventListener('mousemove', e => {
   let scanOffset = 0;
   let lastFrameTime = 0;
   let _tvPaused = false;
+  let _tvOffscreen = false;
 
   document.addEventListener('visibilitychange', () => { _tvPaused = document.hidden; });
+  // Pause TV overlay when hero is not in viewport
+  const _tvObserver = new IntersectionObserver(entries => {
+    _tvOffscreen = !entries[0].isIntersecting;
+  }, { threshold: 0 });
+  const _tvHeroEl = document.getElementById('hero');
+  if (_tvHeroEl) _tvObserver.observe(_tvHeroEl);
 
   function scheduleGlitch() {
     setTimeout(() => { triggerGlitch(); scheduleGlitch(); }, 2500 + Math.random() * 7000);
@@ -5542,7 +5635,8 @@ document.addEventListener('mousemove', e => {
   }
 
   function draw(ts) {
-    if (!_tvPaused) requestAnimationFrame(draw);
+    requestAnimationFrame(draw);
+    if (_tvPaused || _tvOffscreen) return;
     // Throttle noise to ~24fps
     if (ts - lastFrameTime < 42) return;
     lastFrameTime = ts;

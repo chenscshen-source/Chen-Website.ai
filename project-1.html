@@ -516,7 +516,527 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
       <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/salomon-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
       <div class="video-card" data-idx="05"><video src="./videos/video-05.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ALO-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
       <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/Nike-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
-      <div class="video-card" data-idx="07"><video src="./videos/video-07.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ACG1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">07</div></div>
+      <div class="video-card" data-idx="07" style="position:relative;overflow:hidden;"><iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116216094000700&bvid=BV1zGckzMEXe&cid=36649372910&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:auto;"></iframe><div class="vc-index">07</div></div>
+
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIGC — ChEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --black:  #050508;
+    --white:  #dde8f4;
+    --accent: #b8d4f0;
+    --acid:  #b8d4f0;
+    --accent2:#8ab8e0;
+    --dim:    rgba(160,200,240,0.10);
+    --dim2:   rgba(160,200,240,0.05);
+    --grid:   rgba(160,200,240,0.038);
+    --cyan:   #00e5ff;
+    --red:    #ff2060;
+    --glow1:  rgba(180,220,255,0.55);
+    --glow2:  rgba(160,200,240,0.25);
+    --glow3:  rgba(140,180,220,0.12);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:#050508;
+    color:var(--white);
+    font-family:'Space Mono',monospace;
+    cursor:auto;
+    overflow-x:hidden;
+  }
+  body { transition: filter 1.6s ease, opacity 1.6s ease; }
+  body.loading { filter: blur(10px) saturate(1.06); opacity:0; }
+
+
+  .noise-canvas { position:fixed; inset:0; pointer-events:none; z-index:180; opacity:.08; mix-blend-mode:screen; }
+  .scanlines { position:fixed; inset:0; pointer-events:none; z-index:181;
+    background:repeating-linear-gradient(180deg, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.18) 2px 3px);
+    mix-blend-mode:multiply; animation:scanMove 8s linear infinite; }
+  .vignette { position:fixed; inset:-10%; pointer-events:none; z-index:182; opacity:.9;
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgba(0,0,0,0.55), transparent 55%),
+      radial-gradient(120% 120% at 100% 0%, rgba(0,0,0,0.55), transparent 55%),
+      radial-gradient(120% 120% at 0% 100%, rgba(0,0,0,0.55), transparent 55%),
+      radial-gradient(120% 120% at 100% 100%, rgba(0,0,0,0.55), transparent 55%);
+    mix-blend-mode:multiply; }
+  .vhs-rgb { position:fixed; inset:0; pointer-events:none; z-index:205; opacity:0; }
+  .vhs-flicker { background:rgba(255,255,255,0.08); }
+  .vhs-rgb { mix-blend-mode:screen; }
+  .vhs-rgb.red { background:rgba(255,32,96,0.07); transform:translate(calc(var(--rgb-x,0px) * -1), calc(var(--rgb-y,0px) * -1)); }
+  .vhs-rgb.cyan { background:rgba(0,229,255,0.06); transform:translate(var(--rgb-x,0px), var(--rgb-y,0px)); }
+body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
+  @keyframes scanMove { from { transform:translateY(0); } to { transform:translateY(24px); } }
+  50%{opacity:.7} 100%{opacity:.15} }
+  @keyframes rgbShift { 0%{filter:blur(0)} 50%{filter:blur(.2px)} 100%{filter:blur(0)} }
+
+
+  .cursor-dot {
+    position: fixed;
+    width: 5px; height: 5px;
+    background: #b8d4f0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    top: 0; left: 0;
+    margin: -2.5px 0 0 -2.5px;
+    box-shadow: 0 0 5px rgba(160,200,240,0.8), 0 0 10px rgba(120,180,230,0.4);
+    transition: width 0.2s, height 0.2s, opacity 0.2s;
+    will-change: transform;
+    transform: translate(0px, 0px);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 26px; height: 26px;
+    border: 1px solid rgba(160,200,240,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    top: 0; left: 0;
+    margin: -13px 0 0 -13px;
+    box-shadow: 0 0 5px rgba(130,180,230,0.15), inset 0 0 5px rgba(130,180,230,0.06);
+    transition: width 0.35s cubic-bezier(0.16,1,0.3,1), height 0.35s cubic-bezier(0.16,1,0.3,1), margin 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    will-change: transform;
+    transform: translate(0px, 0px);
+  }
+  .cursor-ring.hover {
+    width: 36px; height: 36px;
+    margin: -18px 0 0 -18px;
+    border-color: rgba(230,245,255,0.95);
+    background: rgba(180,220,255,0.06);
+    box-shadow:
+      0 0 10px rgba(200,235,255,0.9),
+      0 0 22px rgba(160,215,255,0.7),
+      0 0 44px rgba(120,195,255,0.4),
+      0 0 70px rgba(80,170,255,0.2),
+      inset 0 0 12px rgba(200,235,255,0.12);
+    animation: ring-hover-flicker 0.09s steps(1) infinite;
+  }
+  .cursor-dot.hover {
+    width: 5px; height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    background: #ffffff;
+    box-shadow:
+      0 0 6px rgba(255,255,255,1),
+      0 0 16px rgba(200,235,255,0.9),
+      0 0 30px rgba(150,210,255,0.6);
+    animation: dot-hover-pulse 0.8s ease-in-out infinite;
+  }
+  .cursor-ring.clicking {
+    width: 20px; height: 20px;
+    margin: -10px 0 0 -10px;
+    background: rgba(200,235,255,0.25);
+    border-color: #ffffff;
+    box-shadow: 0 0 16px rgba(200,235,255,1), 0 0 40px rgba(160,215,255,0.7);
+  }
+  @keyframes ring-hover-flicker {
+    0%,80%,100% { opacity: 1; }
+    81%  { opacity: 0.55; }
+    83%  { opacity: 1; }
+    90%  { opacity: 0.7; }
+    91%  { opacity: 1; }
+    96%  { opacity: 0.4; }
+    97%  { opacity: 1; }
+  }
+  @keyframes dot-hover-pulse {
+    0%,100% { box-shadow: 0 0 8px rgba(255,255,255,1), 0 0 20px rgba(200,235,255,0.9), 0 0 40px rgba(150,210,255,0.7); }
+    50%      { box-shadow: 0 0 12px rgba(255,255,255,1), 0 0 30px rgba(220,245,255,1), 0 0 60px rgba(170,220,255,0.8); }
+  }
+
+
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 60px;
+    border-bottom:1px solid var(--dim);
+    background:rgba(5,5,10,0.92);
+    backdrop-filter:blur(12px);
+  }
+  .nav-logo {
+    font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:6px;
+    color:var(--accent); text-decoration:none;
+    text-shadow:0 0 20px rgba(180,220,255,0.35);
+  }
+  .nav-back {
+    display:flex; align-items:center; gap:10px;
+    font-size:10px; letter-spacing:4px; text-transform:uppercase;
+    color:rgba(160,200,240,0.4); text-decoration:none; transition:color .3s, text-shadow .3s;
+  }
+  .nav-back:hover { color:var(--accent); text-shadow:0 0 10px rgba(180,220,255,0.4); }
+  .nav-back svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.5; }
+
+  .nav-tag { font-size:10px; letter-spacing:4px; color:rgba(160,200,240,0.28); text-transform:uppercase; }
+.nav-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+.hero-head { display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:28px; }
+.tabs-bar { margin-top:0; padding:0; display:flex; justify-content:flex-end; position:relative; z-index:90; margin-left:auto; }
+.tabs-track { display:flex; align-items:center; gap:8px; position:relative; }
+.tabs-indicator { display:none; }
+.tab-btn { display:inline-flex; align-items:center; justify-content:center; min-width:56px; padding:8px 12px;
+  font-size:8px; letter-spacing:2px; text-transform:uppercase; text-decoration:none; color:rgba(233,238,244,0.6);
+  border:1px solid rgba(240,237,230,0.25); background:rgba(8,12,16,0.45); position:relative; overflow:hidden;
+  transition:color .25s, border-color .25s, box-shadow .2s; }
+.tab-btn::before { content:''; position:absolute; inset:0;
+  background:linear-gradient(105deg, transparent 40%, rgba(200,220,235,0.25) 50%, transparent 60%);
+  transform:translateX(-120%); transition:transform .55s ease; pointer-events:none; }
+.tab-btn::after { content:''; position:absolute; bottom:-4px; left:3px; right:-3px; height:4px;
+  background:rgba(200,220,235,0.24); clip-path:polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+  z-index:-1; transition:bottom .12s ease, height .12s ease; }
+.tab-btn:hover { color:var(--acid); border-color:rgba(200,220,235,0.55); box-shadow:0 0 10px rgba(180,220,255,0.2); }
+.tab-btn:hover::before { transform:translateX(120%); }
+.tab-btn.is-active { background:var(--acid); color:var(--black); border-color:rgba(200,220,235,0.9);
+  box-shadow:0 0 16px rgba(180,220,255,0.35); }
+.tab-btn.is-active::after { background:rgba(140,160,175,0.7); }
+.tab-btn:active::after { bottom:-2px; height:2px; }
+
+
+
+
+  .hero {
+    padding:150px 60px 72px;
+    border-bottom:1px solid var(--dim);
+    position:relative; overflow:hidden; z-index:1;
+  }
+  .hero-num {
+    position:absolute; right:60px; top:80px;
+    font-family:'Bebas Neue',sans-serif; font-size:280px; line-height:1; letter-spacing:-8px;
+    color:rgba(160,200,240,0.03); pointer-events:none; user-select:none;
+  }
+
+  .hero-label {
+    display:flex; align-items:center; gap:14px;
+    font-size:10px; letter-spacing:6px; text-transform:uppercase;
+    color:var(--accent); margin-bottom:0;
+    text-shadow:0 0 16px rgba(180,220,255,0.3);
+  }
+  .hero-label::before,
+  .hero-label::after { content:''; display:inline-block; width:32px; height:1px; background:rgba(160,200,240,0.3); flex-shrink:0; }
+
+
+  .hero-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(80px,12vw,160px);
+    line-height:.9; letter-spacing:4px; margin-bottom:40px;
+    position:relative;
+    color:var(--white);
+    text-shadow:0 0 18px rgba(180,220,255,0.18), 0 0 48px rgba(140,200,255,0.12);
+    animation:titleGlow 3.2s ease-in-out infinite;
+  }
+  .hero-title::after {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,5,15,0.16) 2px,rgba(0,5,15,0.16) 3px);
+  }
+
+  .hero-title .accent {
+    color:var(--accent);
+    text-shadow:0 0 40px rgba(180,220,255,0.4), 0 0 80px rgba(160,200,240,0.15);
+  }
+  .hero-title .dim { opacity:.5; }
+  .type-caret {
+    display:inline-block;
+    width:2px;
+    height:.55em;
+    margin-left:6px;
+    background:rgba(200,235,255,0.9);
+    border-radius:2px;
+    transform:translateY(0.08em);
+    animation:caretBlink .9s steps(1) infinite;
+  }
+  @keyframes caretBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes titleGlow {
+    0%,100% { text-shadow:0 0 12px rgba(180,220,255,0.16), 0 0 36px rgba(140,200,255,0.10); }
+    50% { text-shadow:0 0 24px rgba(200,235,255,0.30), 0 0 70px rgba(140,200,255,0.22); }
+  }
+
+
+  .hero-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:40px; padding-top:32px; border-top:1px solid var(--dim); }
+  .meta-chip {
+    display:inline-flex; flex-direction:column; gap:5px; padding:12px 18px;
+    border:1px solid var(--dim); background:var(--dim2);
+    position:relative; cursor:default;
+    transition:border-color .3s, background .3s; overflow:hidden;
+  }
+  .meta-chip::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(120deg, transparent 40%, rgba(180,220,255,0.05) 100%);
+    opacity:0; transition:opacity .35s;
+  }
+  .meta-chip:hover { border-color:rgba(180,220,255,0.28); background:rgba(160,200,240,0.05); }
+  .meta-chip:hover::before { opacity:1; }
+
+  .meta-chip-label { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:var(--accent); opacity:.65; }
+  .meta-chip-val   { font-size:11px; letter-spacing:1.5px; color:rgba(221,232,244,0.75); white-space:nowrap; }
+  .meta-chip.wide { flex:1 1 auto; }
+  .meta-chip.status-chip .meta-chip-val { display:flex; align-items:center; gap:7px; }
+  .meta-chip-scan {
+    position:absolute; left:0; right:0; height:1px;
+    background:rgba(180,220,255,0.2); top:-1px;
+    transition:top .4s ease; pointer-events:none;
+  }
+  .meta-chip:hover .meta-chip-scan { top:100%; }
+
+  .status-dot {
+    display:inline-block; width:5px; height:5px; border-radius:50%;
+    background:var(--accent); flex-shrink:0;
+    animation:blinkDot 1.8s ease-in-out infinite;
+    box-shadow:0 0 6px rgba(180,220,255,0.8), 0 0 12px rgba(160,200,240,0.4);
+  }
+  @keyframes blinkDot {
+    0%,100%{ opacity:1; box-shadow:0 0 6px rgba(180,220,255,0.8), 0 0 12px rgba(160,200,240,0.4); }
+    50%    { opacity:.2; box-shadow:none; }
+  }
+
+
+  .carousel-section { padding:72px 0 0; position:relative; z-index:1; }
+  .carousel-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 60px; margin-bottom:48px;
+  }
+
+  .section-label {
+    display:flex; align-items:center; gap:16px;
+    font-size:10px; letter-spacing:6px; text-transform:uppercase;
+    color:var(--accent);
+    text-shadow:0 0 12px rgba(180,220,255,0.3);
+  }
+  .section-label::before { content:''; width:32px; height:1px; background:var(--dim); }
+  .carousel-progress { display:flex; align-items:center; gap:16px; font-size:10px; letter-spacing:3px; opacity:.4; color:var(--accent); }
+  .progress-bar { width:120px; height:1px; background:var(--dim); position:relative; overflow:hidden; }
+
+  .progress-fill {
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--accent); width:0%; transition:width .1s linear;
+    box-shadow:0 0 6px rgba(180,220,255,0.6);
+  }
+
+  .carousel-outer { width:100%; overflow:hidden; cursor:grab; position:relative; perspective:1400px; touch-action:pan-y; }
+  .carousel-outer:active { cursor:grabbing; }
+  .carousel-outer::before,
+  .carousel-outer::after { content:''; position:absolute; top:0; bottom:0; z-index:10; width:220px; pointer-events:none; }
+  .carousel-outer::before { left:0;  background:linear-gradient(to right, var(--black) 20%, transparent); }
+  .carousel-outer::after  { right:0; background:linear-gradient(to left,  var(--black) 20%, transparent); }
+
+  .carousel-track { display:flex; gap:64px; padding:52px 60px 80px; width:max-content; will-change:transform; transform-style:preserve-3d; }
+
+
+  .video-card {
+    position:relative; flex-shrink:0; width:380px; aspect-ratio:4/5;
+    overflow:hidden; background:#070809;
+    border:1px solid var(--dim); cursor:pointer;
+    transform-style:preserve-3d; will-change:transform,opacity;
+    transition:border-color .4s, box-shadow .4s, filter .4s, transform .55s cubic-bezier(.16,1,.3,1), opacity .35s ease;
+    transform-origin:center center;
+    backface-visibility:hidden;
+  }
+  .video-card::after{
+    content:''; position:absolute; inset:-20%; pointer-events:none;
+    background:linear-gradient(120deg, transparent 30%, rgba(140,210,255,.45) 45%, rgba(255,255,255,.65) 50%, rgba(140,210,255,.35) 55%, transparent 70%);
+    opacity:0; transform:translateX(-60%) skewX(-10deg);
+    transition:opacity .25s ease; mix-blend-mode:screen;
+  }
+  .video-card video { width:100%; height:100%; object-fit:cover; display:block; transition:opacity .5s, filter .35s; opacity:.55; filter:saturate(.9) contrast(1.05); backface-visibility:hidden; }
+  .video-card.is-center video { opacity:1; }
+  .vc-scan {
+    position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
+  }
+  .vc-grain {
+    position:absolute; inset:0; z-index:3; pointer-events:none;
+    opacity:.4; mix-blend-mode:overlay; display:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:100px; animation:grainShift .1s steps(1) infinite;
+  }
+  @keyframes grainShift {
+    0%{background-position:0 0} 25%{background-position:-14px 10px}
+    50%{background-position:10px -16px} 75%{background-position:-18px 6px}
+  }
+  .vc-vignette {
+    position:absolute; inset:0; z-index:4; pointer-events:none;
+    background:linear-gradient(to bottom, transparent 50%, rgba(5,5,5,.85) 100%);
+  }
+  .vc-index {
+    position:absolute; bottom:14px; left:16px; z-index:6;
+    font-size:9px; letter-spacing:4px; text-transform:uppercase;
+    color:rgba(160,200,240,0.22); pointer-events:none; transition:color .3s, text-shadow .3s;
+  }
+  .video-card.is-center .vc-index {
+    color:var(--accent);
+    text-shadow:0 0 8px rgba(180,220,255,0.6);
+  }
+  .vc-play {
+    position:absolute; top:50%; left:50%; z-index:6;
+    transform:translate(-50%,-50%) scale(.6);
+    width:56px; height:56px;
+    border:1px solid rgba(180,220,255,0.4); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none; opacity:0; cursor:pointer;
+    transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1), box-shadow .3s;
+  }
+  .vc-play svg { width:16px; height:16px; fill:var(--accent); margin-left:4px; }
+  .video-card.is-center .vc-play {
+    opacity:1; transform:translate(-50%,-50%) scale(1);
+    box-shadow:0 0 20px rgba(180,220,255,0.25), 0 0 40px rgba(160,200,240,0.1);
+    pointer-events:auto;
+  }
+
+  .video-card.is-center {
+    border-color:rgba(180,220,255,0.3);
+    box-shadow:
+      0 0 40px rgba(180,220,255,0.07),
+      0 0 80px rgba(160,200,240,0.04),
+      0 0 120px rgba(140,180,220,0.02);
+  }
+  .video-card.is-hover{
+    border-color:rgba(180,220,255,0.6);
+    box-shadow:
+      0 0 30px rgba(180,220,255,0.25),
+      0 0 80px rgba(120,200,255,0.18),
+      0 0 140px rgba(90,160,255,0.12);
+  }
+  .video-card.is-hover video { filter:saturate(1.2) contrast(1.15); }
+  .video-card.is-hover::after{ opacity:.9; animation:cardSweep 1.2s linear infinite; }
+  .video-card.is-hover .vc-play{ opacity:1; box-shadow:0 0 26px rgba(180,220,255,0.35), 0 0 50px rgba(120,200,255,0.18); }
+  .video-card.is-hover .vc-index{ color:var(--accent); text-shadow:0 0 12px rgba(180,220,255,0.6); }
+  @keyframes cardSweep {
+    0%{ transform:translateX(-70%) skewX(-10deg); }
+    100%{ transform:translateX(70%) skewX(-10deg); }
+  }
+  .video-overlay {
+    position:fixed; inset:0; z-index:220;
+    background:rgba(5,6,10,0.78); backdrop-filter:blur(10px);
+    opacity:0; pointer-events:none; transition:opacity .35s ease;
+  }
+  .video-overlay.is-open { opacity:1; pointer-events:auto; }
+  .video-card.is-expanded {
+    position:fixed; left:50%; top:50%;
+    width:min(82vw,640px); aspect-ratio:4/5;
+    transform:translate(-50%,-50%) scale(1);
+    z-index:230; opacity:1 !important;
+    box-shadow:0 0 30px rgba(120,180,255,0.35), 0 0 90px rgba(90,150,255,0.18);
+  }
+  .video-card.is-expanded video { opacity:1; }
+  .video-card.is-expanded .vc-play { opacity:0; pointer-events:none; }
+  .video-card .vc-close {
+    position:absolute; top:10px; right:10px; z-index:7;
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(200,220,235,0.45);
+    background:rgba(5,6,10,0.85); color:var(--accent);
+    font-size:18px; cursor:pointer; display:none;
+    align-items:center; justify-content:center;
+    box-shadow:0 0 12px rgba(160,200,240,0.3);
+  }
+  .video-card.is-expanded .vc-close { display:flex; }
+
+
+  .carousel-hint {
+    padding:24px 60px 0; font-size:9px; letter-spacing:4px; opacity:.2; text-transform:uppercase;
+    display:flex; align-items:center; gap:12px; position:relative; z-index:1;
+  }
+  .hint-arrow { animation:hintDrift 1.8s ease-in-out infinite; display:inline-block; }
+  @keyframes hintDrift { 0%,100%{transform:translateX(0)} 50%{transform:translateX(7px)} }
+
+
+  footer {
+    border-top:1px solid var(--dim); padding:40px 60px; margin-top:80px;
+    display:flex; justify-content:space-between; align-items:center;
+    position:relative; z-index:1;
+  }
+
+  .footer-logo {
+    font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:6px;
+    color:var(--accent);
+    text-shadow:0 0 18px rgba(180,220,255,0.3);
+  }
+  .footer-copy { font-size:10px; letter-spacing:3px; opacity:.3; text-transform:uppercase; color:var(--accent); }
+
+  
+  @media (max-width:768px) {
+    nav,.hero,.carousel-header,.carousel-hint,footer { padding-left:24px; padding-right:24px; }
+    .hero-title { font-size:80px; }
+    .hero-num { font-size:150px; right:24px; }
+    .video-card { width:280px; }
+    .carousel-track { padding-left:24px; padding-right:24px; gap:32px; padding-top:40px; padding-bottom:64px; }
+    .vc-play { width:50px; height:50px; }
+    .vc-play svg { width:14px; height:14px; }
+    .video-card::after { display:none; }
+    .video-card.is-hover { box-shadow:none; }
+    .video-card.is-expanded { width:min(92vw,420px); }
+    .video-overlay { backdrop-filter:blur(6px); }
+    .hero-head { gap:16px; }
+    .tabs-bar { width:100%; justify-content:flex-start; }
+    .tabs-track { gap:6px; }
+    .tab-btn { font-size:7px; padding:7px 9px; letter-spacing:1.5px; min-width:50px; }
+  }
+  @media (hover: none), (pointer: coarse) {
+    body { cursor:auto; }
+    .cursor-dot, .cursor-ring { display:none !important; }
+    * { cursor:auto !important; }
+  }
+
+  @media (min-width:1600px){
+    nav,.hero,.block-label,.card-wrap,footer { padding-left:90px; padding-right:90px; }
+    .hero-num { right:90px; }
+  }
+
+</style>
+</head>
+<body class="loading">
+
+<div class="vignette"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">ChEN</a>
+  <div class="nav-right">
+    <a href="index.html#works" class="nav-back">
+    <svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg>
+    Back to Works
+  </a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-num">01</div>
+  <div class="hero-head">
+    <div class="hero-label">AIGC · AI Film · Brand TVC · Generative Art</div>
+    <div class="tabs-bar">
+      <div class="tabs-track">
+        <a class="tab-btn is-active" href="project-1.html" data-text="AIGC">AIGC</a><a class="tab-btn" href="project-2.html" data-text="PRODUCT">PRODUCT</a><a class="tab-btn" href="project-3.html" data-text="BRANDING">BRANDING</a><a class="tab-btn" href="project-4.html" data-text="MARKETING">MARKETING</a>
+      </div>
+    </div>
+  </div>
+  <h1 class="hero-title">AI<span class="accent">GC</span></h1>
+  <div class="hero-meta">
+    <div class="meta-chip"><div class="meta-chip-scan"></div><span class="meta-chip-label">Medium</span><span class="meta-chip-val">Video · Motion · Generative</span></div>
+    <div class="meta-chip"><div class="meta-chip-scan"></div><span class="meta-chip-label">Tools</span><span class="meta-chip-val">Sora · Kling AI · Runway · ComfyUI</span></div>
+    <div class="meta-chip wide"><div class="meta-chip-scan"></div><span class="meta-chip-label">Type</span><span class="meta-chip-val">Brand TVC · Concept Film · Art Series</span></div>
+    <div class="meta-chip status-chip"><div class="meta-chip-scan"></div><span class="meta-chip-label">Status</span><span class="meta-chip-val"><span class="status-dot"></span>ACTIVE</span></div>
+  </div>
+</div>
+
+<div class="carousel-section">
+  <div class="carousel-header">
+    <div class="section-label">SYS: AIGC.RENDER — VIDEO ARCHIVE</div>
+    <div class="carousel-progress">
+      <div class="progress-bar"><div class="progress-fill" id="vcProgressFill"></div></div>
+      <span id="vcProgressCount">1 / 8</span>
+    </div>
+  </div>
+  <div class="carousel-outer" id="vcScene">
+    <div class="carousel-track" id="vcStage">
+      <div class="video-card" data-idx="01"><video src="./videos/video-01.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/arcteryx-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">01</div></div>
+      <div class="video-card" data-idx="02"><video src="./videos/video-02.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ACG-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">02</div></div>
+      <div class="video-card" data-idx="03"><video src="./videos/video-03.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/Nike1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">03</div></div>
+      <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/salomon-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
+      <div class="video-card" data-idx="05"><video src="./videos/video-05.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ALO-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
+      <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/Nike-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
+      <div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">07</div></div>
     </div>
   </div>
   <div class="carousel-hint">DRAG TO EXPLORE <span class="hint-arrow">→</span></div>

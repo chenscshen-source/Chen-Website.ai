@@ -9,7 +9,7 @@
 <style>
 
   :root {
-    --black:  #050508
+    --black:  #050508;
     --white:  #dde8f4;
     --accent: #b8d4f0;
     --acid:  #b8d4f0;
@@ -141,7 +141,7 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     backdrop-filter:blur(12px);
   }
   .nav-logo {
-    font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:6px;
+    font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px;
     color:var(--accent); text-decoration:none;
     text-shadow:0 0 20px rgba(180,220,255,0.35);
   }
@@ -472,9 +472,10 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
 <div class="vignette"></div>
 
 <nav>
-  <a href="index.html" class="nav-logo">ChEN</a>
+  <a href="chen-portfolio.html" class="nav-logo">ChEN</a>
+  <span class="nav-tag">01 — AIGC</span>
   <div class="nav-right">
-    <a href="index.html#works" class="nav-back">
+    <a href="../index.html#works" class="nav-back">
     <svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg>
     Back to Works
   </a>
@@ -510,15 +511,294 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
   </div>
   <div class="carousel-outer" id="vcScene">
     <div class="carousel-track" id="vcStage">
-      <div class="video-card" data-idx="01"><video src="./videos/video-01.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/arcteryx-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">01</div></div>
-      <div class="video-card" data-idx="02"><video src="./videos/video-02.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ACG-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">02</div></div>
-      <div class="video-card" data-idx="03"><video src="./videos/video-03.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/Nike1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">03</div></div>
-      <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/salomon-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
-      <div class="video-card" data-idx="05"><video src="./videos/video-05.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/ALO-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
-      <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="https://raw.githubusercontent.com/chenscshen-source/Chen-Website.ai/main/Nike-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
-            <div class="video-card" data-idx="07">
-        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116216094000700&bvid=BV1zGckzMEXe&cid=36649372910&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width:100%;height:100%;position:absolute;top:0;left:0;"></iframe>
-        <div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div>
-        <div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div>
-        <div class="vc-index">07</div>
-      </div>
+      <div class="video-card" data-idx="01"><video src="./videos/video-01.mp4" poster="./images/arcteryx-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">01</div></div>
+      <div class="video-card" data-idx="02"><video src="./videos/video-02.mp4" poster="./images/ACG-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">02</div></div>
+      <div class="video-card" data-idx="03"><video src="./videos/video-03.mp4" poster="./images/Nike1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">03</div></div>
+      <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="./images/salomon-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
+      <div class="video-card" data-idx="05"><video src="./videos/video-07.mp4" poster="./images/ALO-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
+      <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="./images/Nike-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
+      <div class="video-card" data-idx="07"><video src="./videos/video-07.mp4" poster="./images/ACG1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">07</div></div>
+    </div>
+  </div>
+  <div class="carousel-hint">DRAG TO EXPLORE <span class="hint-arrow">→</span></div>
+</div>
+
+<footer>
+  <div class="footer-logo">ChEN</div>
+  <div class="footer-copy">01 — AIGC</div>
+  <div class="footer-copy">MADE WITH AI ✦</div>
+</footer>
+
+<div class="video-overlay" id="videoOverlay" aria-hidden="true"></div>
+
+<script>
+
+window.addEventListener('load',()=>{ document.body.classList.remove('loading'); });
+
+(function(){
+  const outer=document.getElementById('vcScene'),stage=document.getElementById('vcStage'),
+        fillEl=document.getElementById('vcProgressFill'),cntEl=document.getElementById('vcProgressCount');
+  if(!outer||!stage)return;
+
+  const overlay=document.getElementById('videoOverlay');
+  let cardsRef=[];
+  let expandedCard=null;
+  let expandedOrigin=null;
+  let expandedLock=false;
+  const cleanupExpanded=()=>{
+    if(!overlay) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden','true');
+    overlay.innerHTML='';
+    expandedCard=null;
+    expandedOrigin=null;
+    expandedLock=false;
+    document.body.style.overflow='';
+  };
+  const closeExpanded=(instant=false)=>{
+    if(!expandedCard || !overlay) return;
+    const origin=expandedOrigin;
+    if(!origin){ cleanupExpanded(); return; }
+    const toRect=origin.getBoundingClientRect();
+    const fromRect=expandedCard.getBoundingClientRect();
+    const dx=toRect.left-fromRect.left;
+    const dy=toRect.top-fromRect.top;
+    const sx=toRect.width/fromRect.width;
+    const sy=toRect.height/fromRect.height;
+    const finish=()=>{
+      const v=expandedCard.querySelector('video');
+      if(v){ v.pause(); v.removeAttribute('controls'); v.muted=true; }
+      cleanupExpanded();
+    };
+    if(instant){ finish(); return; }
+    expandedCard.style.transform=`translate(-50%, -50%) translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+    const onEnd=()=>{ expandedCard.removeEventListener('transitionend',onEnd); finish(); };
+    expandedCard.addEventListener('transitionend',onEnd);
+    setTimeout(onEnd, 520);
+  };
+  const openExpanded=(card)=>{
+    if(!card || !overlay) return;
+    if(expandedCard) closeExpanded(true);
+    expandedOrigin=card;
+    expandedLock=true;
+    velocity=0; drag=false; lastMoveTime=performance.now();
+    cardsRef.forEach(c=>{ const v=c.querySelector('video'); if(v){ v.pause(); } });
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden','false');
+    const rect=card.getBoundingClientRect();
+    const clone=card.cloneNode(true);
+    clone.classList.remove('is-center','is-hover');
+    clone.classList.add('is-expanded');
+    clone.style.transform='';
+    overlay.innerHTML='';
+    overlay.appendChild(clone);
+    clone.addEventListener('click',e=>e.stopPropagation());
+    const closeBtn=clone.querySelector('.vc-close') || (()=>{ const b=document.createElement('button'); b.className='vc-close'; b.type='button'; b.textContent='×'; clone.appendChild(b); return b; })();
+    closeBtn.addEventListener('click',e=>{ e.stopPropagation(); closeExpanded(); });
+    const play=clone.querySelector('.vc-play');
+    if(play) play.style.pointerEvents='none';
+    const targetRect=clone.getBoundingClientRect();
+    const dx=rect.left-targetRect.left;
+    const dy=rect.top-targetRect.top;
+    const sx=rect.width/targetRect.width;
+    const sy=rect.height/targetRect.height;
+    clone.style.transform=`translate(-50%, -50%) translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+    clone.getBoundingClientRect();
+    requestAnimationFrame(()=>{ clone.style.transform='translate(-50%, -50%) scale(1)'; });
+    const v=clone.querySelector('video');
+    const biliMap={'01':'https://player.bilibili.com/player.html?isOutside=true&aid=116216127620162&bvid=BV1PAckzLE8L&cid=36649568772&p=1&high_quality=1&quality=80&mute=0','02':'https://player.bilibili.com/player.html?isOutside=true&aid=116219499774220&bvid=BV1qsc2z1Eix&cid=36659791512&p=1&high_quality=1&quality=80&mute=0','03':'https://player.bilibili.com/player.html?isOutside=true&aid=116216077223160&bvid=BV1BVckzqEok&cid=36649371526&p=1&high_quality=1&quality=80&mute=0','04':'https://player.bilibili.com/player.html?isOutside=true&aid=116216060513457&bvid=BV1cuckz3EFh&cid=36649240215&p=1&high_quality=1&quality=80&mute=0','05':'https://player.bilibili.com/player.html?isOutside=true&aid=116216094000700&bvid=BV1zGckzMEXe&cid=36649372910&p=1&high_quality=1&quality=80&mute=0','06':'https://player.bilibili.com/player.html?isOutside=true&aid=116216110780099&bvid=BV1kPckzCEmZ&cid=36649566319&p=1&high_quality=1&quality=80&mute=0','07':'https://player.bilibili.com/player.html?isOutside=true&aid=116219550304108&bvid=BV1hzc2zTEso&cid=36660055763&p=1&high_quality=1&quality=80&mute=0'};
+    if(biliMap[card.dataset.idx]){
+      if(v){
+        const ifr=document.createElement('iframe');
+        ifr.src=biliMap[card.dataset.idx];
+        ifr.setAttribute('scrolling','no');
+        ifr.setAttribute('frameborder','0');
+        ifr.setAttribute('allowfullscreen','true');
+        ifr.style.cssText='width:100%;height:100%;position:absolute;top:0;left:0;border:none;z-index:2;';
+        v.style.display='none';
+        clone.style.position='relative';
+        clone.appendChild(ifr);
+      }
+    } else {
+      if(v){ v.muted=false; v.setAttribute('controls',''); v.play().catch(()=>{}); }
+    }
+    expandedCard=clone;
+    document.body.style.overflow='hidden';
+  };
+  if(overlay) overlay.addEventListener('click',closeExpanded);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeExpanded(); });
+
+  let tx=0,txT=0;
+  let velocity=0;
+  let drag=false;
+  let lastX=0;
+  let lastMoveTime=0;
+  let lastTick=0;
+
+  const baseCards=Array.from(stage.querySelectorAll('.video-card'));
+  const baseCount=baseCards.length;
+  baseCards.forEach(card=>{ const clone=card.cloneNode(true); clone.dataset.clone='1'; stage.appendChild(clone); });
+  const cards=Array.from(stage.querySelectorAll('.video-card'));
+  cardsRef=cards;
+  const st=cards.map(()=>({sc:.86,ry:0,op:.22,rx:0,rye:0}));
+
+  let loopWidth=0,outerW=0,cardW=0,gapPx=0,centers=[];
+  const measure=()=>{
+    cardW=baseCards[0]?baseCards[0].offsetWidth:360;
+    gapPx=parseFloat(getComputedStyle(stage).gap)||26;
+    loopWidth=(cardW+gapPx)*baseCount;
+    outerW=outer.clientWidth;
+    centers=cards.map(card=>card.offsetLeft+cardW/2);
+  };
+  const toLoop=v=>{ if(!loopWidth) return v; let r=v%loopWidth; if(r>0) r-=loopWidth; return r; };
+
+  cards.forEach(card=>{
+    card._hx=0;card._hy=0;card._over=false;
+    if(!card.querySelector('.vc-close')){
+      const btn=document.createElement('button');
+      btn.className='vc-close';
+      btn.type='button';
+      btn.textContent='×';
+      btn.addEventListener('click',e=>{ e.stopPropagation(); closeExpanded(); });
+      card.appendChild(btn);
+    }
+    const playBtn=card.querySelector('.vc-play');
+    if(playBtn){
+      playBtn.addEventListener('pointerdown',e=>e.stopPropagation());
+      playBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        if(drag || Math.abs(velocity)>30) return;
+        openExpanded(card);
+      });
+    }
+    card.addEventListener('mouseenter',()=>{card._over=true;card.classList.add('is-hover');});
+    card.addEventListener('mouseleave',()=>{card._over=false;card._hx=0;card._hy=0;card.classList.remove('is-hover');});
+    card.addEventListener('mousemove',e=>{if(drag)return;const r=card.getBoundingClientRect();card._hx=((e.clientY-r.top)/r.height-.5)*-10;card._hy=((e.clientX-r.left)/r.width-.5)*12;});
+  });
+
+  const onDown=e=>{
+    if(expandedCard) return;
+    drag=true;lastX=e.clientX;lastMoveTime=performance.now();velocity=0;
+    if(outer.setPointerCapture) outer.setPointerCapture(e.pointerId);
+  };
+  const onMove=e=>{
+    if(!drag)return;
+    const now=performance.now();
+    const dx=e.clientX-lastX;lastX=e.clientX;txT+=dx;
+    const dt=(now-lastMoveTime)/1000; if(dt>0) velocity=dx/dt;
+    lastMoveTime=now;
+  };
+  const onUp=e=>{
+    if(!drag)return;drag=false;
+    if(outer.releasePointerCapture&&outer.hasPointerCapture?.(e.pointerId)) outer.releasePointerCapture(e.pointerId);
+  };
+  outer.addEventListener('pointerdown',onDown);
+  outer.addEventListener('pointermove',onMove);
+  outer.addEventListener('pointerup',onUp);
+  outer.addEventListener('pointercancel',onUp);
+  outer.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const d=e.deltaX+e.deltaY*1.5;
+    txT-=d;
+    velocity=-d*12;
+  },{passive:false});
+
+  let cc=null;
+  const autoPlayCenter=false;
+  function uP(card){
+    if(expandedCard) return;
+    if(cc===card)return;
+    if(cc){const v=cc.querySelector('video');if(v){v.pause();v.currentTime=0;}}
+    cc=card;
+    if(!autoPlayCenter) return;
+    if(card){const v=card.querySelector('video');if(v)v.play().catch(()=>{}); }
+  }
+
+  function tick(now){
+    if(!lastTick) lastTick=now;
+    const dt=Math.min(0.05,(now-lastTick)/1000);
+    lastTick=now;
+
+    if(expandedLock){
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    if(!drag){
+      txT+=velocity*dt;
+      const friction=Math.pow(0.88,dt*60);
+      velocity*=friction;
+      if(Math.abs(velocity)<8) velocity=0;
+    }
+    const smooth=1-Math.pow(1-0.12,dt*60);
+    tx+= (txT-tx)*smooth;
+
+    const renderTx=toLoop(tx);
+    stage.style.transform=`translate3d(${renderTx.toFixed(2)}px,0,0)`;
+
+    const cx=outerW*0.5;
+    let cCard=null,mD=Infinity;
+    const maxDist=1.35;
+    cards.forEach((card,i)=>{
+      if(card===expandedCard){
+        card.style.opacity='1';
+        return;
+      }
+      const s=st[i],center=centers[i]+renderTx;
+      const raw=(center-cx)/(outerW*.42);
+      const dist=Math.max(-1,Math.min(1,raw)),abs=Math.abs(dist);
+      const isFar=abs>maxDist;
+      const depth=(1-abs)*80,hoverBoost=card._over&&!drag?16:0;
+      s.sc= (s.sc+(0.86+(1-abs)*.18 - s.sc)*smooth);
+      s.ry= (s.ry+(dist*-22 - s.ry)*smooth);
+      s.op= (s.op+((.20+(1-abs)*.80) - s.op)*smooth);
+      s.rx= (s.rx+( (card._over&&!drag?card._hx:0) - s.rx)*smooth);
+      s.rye=(s.rye+((card._over&&!drag?card._hy:0)-s.rye)*smooth);
+      if(isFar){
+        card.style.transform=`translateZ(0) scale(${s.sc.toFixed(4)})`;
+        card.style.opacity='0.08';
+      } else {
+        const rz=card._over&&!drag?-1.5:0;
+        card.style.transform=`perspective(1200px) translateZ(${(depth+hoverBoost).toFixed(1)}px) scale(${s.sc.toFixed(4)}) rotateY(${(s.ry+s.rye).toFixed(2)}deg) rotateX(${s.rx.toFixed(2)}deg) rotateZ(${rz}deg)`;
+        card.style.opacity=s.op.toFixed(3);
+      }
+      const isC=abs<.25;
+      if(isC&&!card._wc){card._wc=true;card.classList.add('is-center');}
+      if(!isC&&card._wc){card._wc=false;card.classList.remove('is-center');}
+      if(abs<mD){mD=abs;cCard=card;}
+    });
+    uP(cCard);
+    if(loopWidth){
+      const prog=(-renderTx)/loopWidth;
+      if(fillEl)fillEl.style.width=(prog*100).toFixed(1)+'%';
+    }
+    if(cntEl&&cCard){
+      const idx=parseInt(cCard.dataset.idx||'1',10);
+      if(!Number.isNaN(idx)) cntEl.textContent=idx+' / '+baseCount;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  let rafId=null;
+  const startLoop=()=>{
+    if(rafId) return;
+    const loop=(t)=>{ tick(t); rafId=requestAnimationFrame(loop); };
+    rafId=requestAnimationFrame(loop);
+  };
+  const stopLoop=()=>{
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  };
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden) stopLoop();
+    else startLoop();
+  });
+  requestAnimationFrame(()=>{
+    measure();
+    window.addEventListener('resize',measure);
+    if(centers[0]){const delta=outerW/2-centers[0];txT=delta;tx=delta;}
+    startLoop();
+  });
+})();
+</script>
+</body>
+</html>

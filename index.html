@@ -3517,14 +3517,19 @@ DESIGN</div>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 
-// iOS Safari 100vh fix — address bar causes resize loops
+// iOS Safari 100vh fix — use screen.height to avoid address-bar resize feedback loop
 (function() {
+  var isMob = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
   function setVh() {
-    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+    var h = isMob ? screen.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', h * 0.01 + 'px');
   }
   setVh();
-  // Only update on orientation change, not scroll-caused resize
-  window.addEventListener('orientationchange', function() { setTimeout(setVh, 300); });
+  // Only on orientation change — NOT resize (avoids iOS address-bar feedback loop)
+  window.addEventListener('orientationchange', function() {
+    isMob = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
+    setTimeout(setVh, 400);
+  });
 })();
 
   // PARALLAX SCROLL ENGINE
@@ -3842,7 +3847,10 @@ DESIGN</div>
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  let _parallaxResizeTimer; window.addEventListener('resize', () => { clearTimeout(_parallaxResizeTimer); _parallaxResizeTimer = setTimeout(() => { scrollY = window.scrollY; update(); }, 200); }, { passive: true });
+  let _parallaxResizeTimer; window.addEventListener('resize', () => {
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return; // iOS address bar resize trap
+  clearTimeout(_parallaxResizeTimer); _parallaxResizeTimer = setTimeout(() => { scrollY = window.scrollY; update(); }, 300);
+}, { passive: true });
   update();
 
   // ── Mouse parallax on skill cards (per-card tilt) ──
@@ -3904,6 +3912,7 @@ document.addEventListener('mousemove', e => {
 });
 
 (function animateRing() {
+  if (window._isMobileDevice) return;
   rx += (mx - rx) * 0.18;
   ry += (my - ry) * 0.18;
   ring.style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px)`;
@@ -3937,8 +3946,9 @@ resizeCanvas(); let _matrixResizeTimer; window.addEventListener('resize', () => 
 const chars = 'AIGCPROMPTDESIGNWEB3DEFICHAIN01';
 const cols = Math.floor(window.innerWidth / 28); // fewer columns = less work
 const drops = Array(cols).fill(1);
+const _isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
 let _matrixPaused = false;
-let _matrixOffscreen = false;
+let _matrixOffscreen = _isMobile; // skip matrix on mobile
 document.addEventListener('visibilitychange', () => { _matrixPaused = document.hidden; });
 // Pause matrix when hero is not visible (user scrolled away)
 const _matrixObserver = new IntersectionObserver(entries => {
@@ -4315,8 +4325,8 @@ document.addEventListener('mousemove', e => {
 
   // ── RAF LOOP ──
   function tick() {
-    // On mobile, native scroll handles everything — skip JS transforms entirely
-    if (isTouch()) { requestAnimationFrame(tick); return; }
+    // On mobile, native scroll handles everything — exit RAF loop entirely
+    if (isTouch()) { return; }
 
     // Smooth translate
     tx = lerp(tx, txTarget, 0.12);
@@ -4520,6 +4530,7 @@ document.addEventListener('mousemove', e => {
 })();
 
 (function initMagneticHeadlines() {
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768) return;
 
   const RADIUS   = 260;
   const STRENGTH = 0.60;
@@ -4641,6 +4652,7 @@ document.addEventListener('mousemove', e => {
 })();
 
 (function initHeroButtons() {
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768) return;
   const btns = document.querySelectorAll('.hero-cta .btn-primary, .hero-cta .btn-outline');
   if (!btns.length) return;
 
@@ -5555,6 +5567,7 @@ document.addEventListener('mousemove', e => {
   const canvas = document.getElementById('tv-overlay');
   const glitchLine = document.getElementById('tv-glitch-line');
   if (!canvas) return;
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 768) { canvas.style.display='none'; return; }
 
   const ctx = canvas.getContext('2d');
   let W, H;

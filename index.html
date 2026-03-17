@@ -2892,6 +2892,43 @@
     font-size: 9px; letter-spacing: 3px;
     color: var(--acid); opacity: 0.4; text-transform: uppercase;
   }
+
+
+  /* ── MOBILE: Disable all heavy continuous CSS animations ── */
+  @media (max-width: 768px), (pointer: coarse) {
+    /* wc-grain: grainShift 0.1s × 4 cards = 40 GPU repaints/sec — killed */
+    .wc-grain { animation: none !important; }
+    /* scanlineRoll on tv-scanlines */
+    #tv-scanlines { animation: none !important; background-position: 0 0 !important; }
+    /* depth-grid background drift */
+    .depth-grid { animation: none !important; }
+    /* scan beam on avatar */
+    .scan-beam { animation: none !important; opacity: 0 !important; }
+    /* wc-scan per card scanline */
+    .wc-scan { animation: none !important; }
+    /* divider shimmer */
+    .divider::after { animation: none !important; }
+    /* dot glitch */
+    .timeline-dot { animation: none !important; }
+    /* overlay-glitch full-screen flash */
+    .glitch-overlay { animation: none !important; display: none !important; }
+    /* plane pulse */
+    .plane-far, .plane-mid { animation: none !important; }
+    /* stat glitch */
+    .stat-num::after { animation: none !important; }
+    /* section label glitch */
+    .section-label-glitch::before,
+    .section-label-glitch::after { animation: none !important; }
+    /* edu logo flicker */
+    .edu-logo-main, .edu-logo-r, .edu-logo-b { animation: none !important; }
+    /* wc-statusbar dot blink OK to keep, it's tiny */
+    /* marquee: keep but slow down */
+    .marquee { animation-duration: 40s !important; }
+    /* glow pulse on avatar base */
+    .avatar-glow-base { animation: none !important; }
+    /* hint drift */
+    .works-hint-arrow { animation: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -3840,7 +3877,8 @@ DESIGN</div>
     }
 
     ticking = false;
-    if (Math.abs(targetScrollY - scrollY) > 0.5) {
+    // On mobile, don't self-loop — scroll events re-trigger update() as needed
+    if (!isMobile() && Math.abs(targetScrollY - scrollY) > 0.5) {
       requestAnimationFrame(update);
       ticking = true;
     }
@@ -3886,7 +3924,11 @@ const loaderPct = document.getElementById('loader-pct');
 let pct = 0;
 const loadInterval = setInterval(() => {
   pct += Math.random() * 15;
-  if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(() => { const l = document.getElementById('loader'); l.classList.add('hidden'); setTimeout(() => l.classList.add('gone'), 900); }, 400); }
+  if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(() => { const l = document.getElementById('loader'); l.classList.add('hidden'); setTimeout(() => l.classList.add('gone'), 900); // Pause grain animations on mobile
+      if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
+        document.querySelectorAll('.wc-grain').forEach(el => el.style.animation = 'none');
+      }
+    }, 400); }
   loaderBar.style.width = pct + '%';
   loaderPct.textContent = Math.floor(pct) + '%';
 }, 60);
@@ -4080,6 +4122,7 @@ document.addEventListener('mousemove', e => {
 // TEXT PROXIMITY BRIGHTEN
 // ════════════════════════════════════════════════════
 (function initProximityBrighten() {
+  if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return;
 
   const PROX_SELECTORS = [
     '.about-text',

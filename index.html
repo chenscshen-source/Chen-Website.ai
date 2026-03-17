@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="theme-color" content="#050505">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ChEN — AIGC Creator & Design Futurist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1936,6 +1937,9 @@
 
 
   @media (max-width: 900px) {
+  /* Reduce animation load on tablets */
+  .depth-grid, .glitch-overlay { display: none !important; }
+  #tv-scanlines { animation-play-state: paused !important; }
     nav { padding: 20px 24px; }
     .nav-links { display: none; }
     #hero { padding: 0; }
@@ -1971,6 +1975,36 @@
 
 
   @media (max-width: 600px) {
+  /* ── MOBILE PERFORMANCE: disable all decorative elements & heavy animations ── */
+  .depth-grid,
+  .hero-plane,
+  .hero-corner,
+  .scroll-indicator,
+  .glitch-overlay,
+  #tv-vignette,
+  .parallax-orb { display: none !important; }
+
+  /* Pause battery-draining CSS animations */
+  #tv-scanlines,
+  .divider::after,
+  .timeline-dot,
+  .stat-num::after,
+  .section-label-glitch::before,
+  .section-label-glitch::after,
+  .wc-glitch-r, .wc-glitch-b,
+  .depth-grid { animation-play-state: paused !important; }
+
+  /* Disable 3D transforms that trigger GPU layers */
+  .hero-stage,
+  .hero-mega-wrap,
+  .hero-name-mega,
+  .char-wrap,
+  .work-card,
+  .btn-primary,
+  .btn-outline { transform-style: flat !important; perspective: none !important; }
+
+  /* Reduce backdrop-filter cost */
+  nav { backdrop-filter: none !important; background: rgba(5,5,5,0.95) !important; }
     /* Remove compositor layer hints on mobile — saves GPU memory */
     .hero-subtitle-line, .hero-tag, .hero-title, .hero-name-mega,
     .hero-bottom, .about-stats .stat-item, .skills-grid,
@@ -3072,7 +3106,7 @@
 
 
         <div class="avatar-clip-wrap">
-          <img src="avatar.webp" alt="ChEN Avatar" class="avatar-transparent" id="avatar-main">
+          <img src="avatar.webp" alt="ChEN Avatar" class="avatar-transparent" id="avatar-main" loading="eager" fetchpriority="high">
 
           <div class="scan-overlay">
             <div class="scan-beam"></div>

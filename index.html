@@ -2039,7 +2039,7 @@
       align-items: flex-start;
       width: 100%;
       order: -1;
-      height: 220px;
+      height: 320px;
       overflow: hidden;
       margin-bottom: 8px;
     }
@@ -2051,8 +2051,8 @@
     }
 
     .avatar-float-wrap {
-      width: 180px !important;
-      height: 220px !important;
+      width: 260px !important;
+      height: 320px !important;
       transform: none !important;
       transition: none !important;
       cursor: pointer;
@@ -2096,8 +2096,8 @@
     }
 
     .scan-overlay {
-      width: 180px !important;
-      height: 220px !important;
+      width: 260px !important;
+      height: 320px !important;
     }
 
     .avatar-glow-base {
@@ -4064,7 +4064,7 @@ if (avatarWrap && window.innerWidth > 600) {
 const heroStage = document.getElementById('hero-stage');
 let _heroMouseRaf = null;
 document.addEventListener('mousemove', e => {
-  if (window.innerWidth <= 600) return;
+  if (('ontouchstart' in window) || window.innerWidth <= 600) return;
   if (_heroMouseRaf) return;
   _heroMouseRaf = requestAnimationFrame(() => {
     const x = (e.clientX / window.innerWidth - 0.5);

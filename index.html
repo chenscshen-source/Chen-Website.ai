@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ChEN — AIGC Creator & Design Futurist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1971,6 +1971,11 @@
 
 
   @media (max-width: 600px) {
+    /* Remove compositor layer hints on mobile — saves GPU memory */
+    .hero-subtitle-line, .hero-tag, .hero-title, .hero-name-mega,
+    .hero-bottom, .about-stats .stat-item, .skills-grid,
+    .timeline-dot, .section-label, .grid-bg, .marquee-wrap,
+    .cursor-dot, .cursor-ring { will-change: auto !important; }
 
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
@@ -3984,7 +3989,7 @@ document.addEventListener('mouseup',   () => { ring.classList.remove('clicking')
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
 function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeCanvas(); let _matrixResizeTimer; window.addEventListener('resize', () => { clearTimeout(_matrixResizeTimer); _matrixResizeTimer = setTimeout(resizeCanvas, 200); });
+resizeCanvas(); let _matrixResizeTimer; window.addEventListener('resize', () => { if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return; clearTimeout(_matrixResizeTimer); _matrixResizeTimer = setTimeout(resizeCanvas, 200); });
 const chars = 'AIGCPROMPTDESIGNWEB3DEFICHAIN01';
 const cols = Math.floor(window.innerWidth / 28); // fewer columns = less work
 const drops = Array(cols).fill(1);
@@ -5076,6 +5081,10 @@ document.addEventListener('mousemove', e => {
   50%  { transform:translateX(0);     opacity:1; }
   100% { transform:translateX(0);     opacity:1; }
 }
+
+@media (hover: none) {
+  #cycle-overlay, #spoint-overlay, #pwc-overlay, #stable-overlay { display: none !important; }
+}
 </style>
 
 <script>
@@ -5627,7 +5636,7 @@ document.addEventListener('mousemove', e => {
     H = canvas.height = window.innerHeight;
   }
   resize();
-  let _tvResizeTimer; window.addEventListener('resize', () => { clearTimeout(_tvResizeTimer); _tvResizeTimer = setTimeout(resize, 200); }, { passive: true });
+  let _tvResizeTimer; window.addEventListener('resize', () => { if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return; if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) return; clearTimeout(_tvResizeTimer); _tvResizeTimer = setTimeout(resize, 200); }, { passive: true });
 
   // Generates a fresh random noise tile each frame
   function makeNoiseTile(alpha) {

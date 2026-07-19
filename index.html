@@ -4194,16 +4194,18 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
   const stage = document.getElementById('hero-right-section');
   if (!sprite || !stage || window._isMobileDevice) return;
 
+  // 2026-07 依据原视频逐帧重新校准（此前 up/right 段标错导致头不跟）：
+  // 0-32 左倾→抬头 · 44-96 落向低头 · 98-160 左侧弧 · 162-184 右侧→右上 · 186-193 回正
   const ANGLE_KEYS = Object.freeze({
-    center: 186,
-    up: 178,
-    'right-up': 0,
-    right: 20,
-    'right-down': 44,
-    down: 98,
-    'left-down': 118,
-    left: 144,
-    'left-up': 164
+    center: 188,
+    up: 32,
+    'right-up': 178,
+    right: 168,
+    'right-down': 96,
+    down: 70,
+    'left-down': 112,
+    left: 140,
+    'left-up': 20
   });
 
   const FRAME_STEP = 2;
@@ -4281,7 +4283,7 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
   function targetFromPoint(clientX, clientY) {
     const rect = stage.getBoundingClientRect();
     const x = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const y = (clientY - rect.top - rect.height / 2) / (rect.height / 2);
+    const y = (clientY - rect.top - rect.height / 2) / (rect.height / 2) * 1.3; // 纵向增益：上/下更易触达
     const mag = Math.sqrt(x * x + y * y);
     if (mag < 0.12) return CENTER_FRAME; // 死区：回正
     let deg = Math.atan2(y, x) * 180 / Math.PI; // y 向下，0°=右

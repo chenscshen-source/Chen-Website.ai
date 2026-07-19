@@ -7,14 +7,15 @@
 <title>ChEN — AIGC Creator & Design Futurist</title>
 <link rel="preconnect" href="https://fonts.loli.net">
 <link rel="preconnect" href="https://gstatic.loli.net" crossorigin>
-<link href="https://fonts.loli.net/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- 字体非阻塞加载：googleapis 为主，loli.net 镜像兜底（国内可达） -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" onerror="this.remove();var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.loli.net/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap';document.head.appendChild(l)">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"></noscript>
 <style>
   :root {
     --black: #050505;
     --white: #f0ede6;
-    --acid: #dce8f0;
-    --matrix: #dce8f0;
+    --acid: #9fef00; /* 终端绿：全站唯一强调色 */
+    --matrix: #9fef00;
     --cyan: #00e5ff;
     --red: #ff2d55;
     --gold: #c8d8e4;
@@ -302,6 +303,11 @@
     text-transform: uppercase;
   }
   .nav-links a:hover { opacity: 1; color: var(--acid); }
+  .nav-links a.active {
+    opacity: 1;
+    color: var(--acid);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--acid) 60%, transparent);
+  }
 
 
   .nav-hamburger {
@@ -501,7 +507,8 @@
   .hero-name-mega {
     display: block;
     font-family: 'Bebas Neue', Impact, 'Arial Narrow Bold', sans-serif;
-    font-size: clamp(120px, 22vw, 320px);
+    font-size: clamp(96px, 16vw, 260px);
+    white-space: nowrap; /* 名字永不折行 */
     line-height: 0.85;
     letter-spacing: -2px;
     position: relative;
@@ -607,11 +614,10 @@
     flex-wrap: wrap;
   }
   .hero-subtitle {
-    font-size: 12px;
-    letter-spacing: 3px;
-    opacity: 0.45;
-    line-height: 2;
-    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    opacity: 0.72;
+    line-height: 1.9;
     max-width: 500px;
   }
 
@@ -1196,9 +1202,9 @@
     display: inline-block;
   }
   .about-text {
-    font-size: 14px;
-    line-height: 2;
-    opacity: 0.6;
+    font-size: 15px;
+    line-height: 1.9;
+    opacity: 0.78;
     margin-bottom: 32px;
   }
   .about-stats {
@@ -1257,13 +1263,15 @@
   .skill-card:hover::before { transform: scaleY(1); }
   .skill-card:hover .skill-name { color: var(--black); }
   .skill-card:hover .skill-desc { opacity: 1; color: var(--black); }
-  .skill-card:hover .skill-icon { filter: invert(1); }
+  .skill-card:hover .skill-icon { color: var(--black); }
   .skill-card * { position: relative; z-index: 1; }
   .skill-icon {
-    font-size: 32px;
+    font-size: 28px;
     margin-bottom: 20px;
     display: block;
-    transition: filter 0.3s;
+    color: var(--acid);
+    font-family: 'Space Mono', monospace;
+    transition: color 0.3s;
   }
   .skill-name {
     font-family: 'Bebas Neue', Impact, 'Arial Narrow Bold', sans-serif;
@@ -1272,11 +1280,11 @@
     transition: color 0.3s;
   }
   .skill-desc {
-    font-size: 11px;
-    opacity: 0.4;
+    font-size: 12px;
+    opacity: 0.68;
     margin-top: 8px;
     line-height: 1.8;
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
     transition: opacity 0.3s, color 0.3s;
   }
 
@@ -1331,7 +1339,7 @@
   .timeline-desc {
     font-size: 13px;
     line-height: 1.9;
-    opacity: 0.6;
+    opacity: 0.75;
     max-width: 500px;
   }
   .timeline-tags {
@@ -2969,6 +2977,24 @@
     /* hint drift */
     .works-hint-arrow { animation: none !important; }
   }
+
+  /* ── 无障碍：跟随系统"减弱动态效果"设置，关闭一切装饰动画 ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    #tv-scanlines, .wc-grain, .scan-beam, .wc-scan { display: none !important; }
+  }
+
+  /* ── 性能：hero 滚出视口后暂停其所有常驻动画 ── */
+  body.hero-offscreen .hero-stage *,
+  body.hero-offscreen .hero-stage *::before,
+  body.hero-offscreen .hero-stage *::after {
+    animation-play-state: paused !important;
+  }
 </style>
 </head>
 <body>
@@ -3550,32 +3576,32 @@ PLATFORM</div>
   <div class="section-label reveal section-label-glitch" data-text="04 — Capabilities">04 — Capabilities</div>
   <div class="skills-grid">
     <div class="skill-card reveal-scale">
-      <span class="skill-icon">⚡</span>
+      <span class="skill-icon">▞▞</span>
       <div class="skill-name">AIGC Production</div>
       <div class="skill-desc">Brand TVC creative strategy, visual expression and landing. AI-native content pipelines from prompt to final output.</div>
     </div>
     <div class="skill-card reveal-scale reveal-delay-1">
-      <span class="skill-icon">🔮</span>
+      <span class="skill-icon">◉</span>
       <div class="skill-name">Interaction Design</div>
       <div class="skill-desc">End-to-end UX for smart consumer electronics, DeFi platforms, GameFi products, and enterprise digital systems.</div>
     </div>
     <div class="skill-card reveal-scale reveal-delay-2">
-      <span class="skill-icon">🌐</span>
+      <span class="skill-icon">⬡</span>
       <div class="skill-name">Web3 & Brand</div>
       <div class="skill-desc">Web3 brand identity, product UX, and visual systems for blockchain ecosystems and DeFi/GameFi.</div>
     </div>
     <div class="skill-card reveal-scale">
-      <span class="skill-icon">🤖</span>
+      <span class="skill-icon">&gt;_</span>
       <div class="skill-name">Vibe Coding</div>
       <div class="skill-desc">Self-taught micro-tool development through AI-assisted coding. Building functional creative utilities with Claude Code.</div>
     </div>
     <div class="skill-card reveal-scale reveal-delay-1">
-      <span class="skill-icon">📐</span>
+      <span class="skill-icon">▦</span>
       <div class="skill-name">Design Systems</div>
       <div class="skill-desc">Systematic visual language, design standards, and scalable component architecture for brands and products.</div>
     </div>
     <div class="skill-card reveal-scale reveal-delay-2">
-      <span class="skill-icon">🎯</span>
+      <span class="skill-icon">⌖</span>
       <div class="skill-name">Strategy & Research</div>
       <div class="skill-desc">User research, trend analysis, opportunity definition, and systemic experience strategy from concept to deployment.</div>
     </div>
@@ -3591,21 +3617,21 @@ PLATFORM</div>
       <h2 class="contact-headline glitch parallax-enter" data-text="LET'S BUILD.">
         LET'S<br><span style="color:var(--acid)">BUILD.</span>
       </h2>
-      <p class="contact-desc" style="font-size:13px;opacity:0.4;line-height:2;margin-top:30px;letter-spacing:1px;">
+      <p class="contact-desc" style="font-size:13px;opacity:0.7;line-height:1.9;margin-top:30px;letter-spacing:0.3px;">
         Open to AIGC collaborations, brand creative<br>projects, design consulting, and interesting<br>conversations about the future of AI + design.
       </p>
     </div>
     <div class="contact-list">
-      <a href="/cdn-cgi/l/email-protection#4d2e252823633e2e633e2528230d2a202c2421632e2220" class="contact-item reveal">
+      <a href="mailto:chen.sc.shen@gmail.com" class="contact-item reveal">
         <span class="contact-icon" style="font-size:14px;">✉</span>
-        <span class="__cf_email__" data-cfemail="f2919a979cdc8191dc819a979cb2959f939b9edc919d9f">[email&#160;protected]</span>
+        chen.sc.shen@gmail.com
       </a>
       <a href="tel:18694991046" class="contact-item reveal reveal-delay-1">
         <span class="contact-icon" style="font-size:16px;">◎</span>
         186 9499 1046
       </a>
       <div class="contact-item reveal reveal-delay-2">
-        <span class="contact-icon" style="font-size:14px;">💬</span>
+        <span class="contact-icon" style="font-size:14px;">❞</span>
         WeChat: Chen10_1001
       </div>
       <a href="https://t.me/Irving11111" target="_blank" class="contact-item reveal reveal-delay-3" style="order:3">
@@ -3626,7 +3652,6 @@ PLATFORM</div>
   <div class="footer-copy" style="color:var(--acid);opacity:0.5;">MADE WITH AI ✦</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 
 // iOS Safari 100vh fix — use screen.height to avoid address-bar resize feedback loop
@@ -3993,24 +4018,61 @@ PLATFORM</div>
 
 })();
 
-// LOADER
-const loaderBar = document.getElementById('loader-bar');
-const loaderPct = document.getElementById('loader-pct');
-let pct = 0;
-const loadInterval = setInterval(() => {
-  pct += Math.random() * 15;
-  if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(() => { const l = document.getElementById('loader'); l.classList.add('hidden'); setTimeout(() => l.classList.add('gone'), 900); // Pause grain animations on mobile
-      if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
-        document.querySelectorAll('.wc-grain').forEach(el => el.style.animation = 'none');
-      }
-    }, 400); }
-  loaderBar.style.width = pct + '%';
-  loaderPct.textContent = Math.floor(pct) + '%';
-}, 60);
+// LOADER — 首访播放（加速版），同一会话回访直接跳过
+(function initLoader() {
+  const l = document.getElementById('loader');
+  const finish = () => { l.classList.add('hidden'); setTimeout(() => l.classList.add('gone'), 900); // Pause grain animations on mobile
+    if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
+      document.querySelectorAll('.wc-grain').forEach(el => el.style.animation = 'none');
+    }
+  };
+  let seen = false;
+  try { seen = sessionStorage.getItem('chen-loaded') === '1'; } catch (e) {}
+  if (seen) { l.classList.add('hidden', 'gone'); return; }
+  try { sessionStorage.setItem('chen-loaded', '1'); } catch (e) {}
+  const loaderBar = document.getElementById('loader-bar');
+  const loaderPct = document.getElementById('loader-pct');
+  let pct = 0;
+  const loadInterval = setInterval(() => {
+    pct += 12 + Math.random() * 18;
+    if (pct >= 100) { pct = 100; clearInterval(loadInterval); setTimeout(finish, 300); }
+    loaderBar.style.width = pct + '%';
+    loaderPct.textContent = Math.floor(pct) + '%';
+  }, 45);
+})();
 
 // ── NAV SCROLL SHRINK ──
 const navEl = document.querySelector('nav');
 window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+
+// ── NAV SCROLL-SPY：高亮当前分区 ──
+(function initScrollSpy() {
+  const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  const map = new Map(); // section el -> link
+  links.forEach(a => {
+    const sec = document.getElementById(a.getAttribute('href').slice(1));
+    if (sec) map.set(sec, a);
+  });
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      links.forEach(a => a.classList.remove('active'));
+      const link = map.get(en.target);
+      if (link) link.classList.add('active');
+    });
+  }, { rootMargin: '-35% 0px -55% 0px' });
+  map.forEach((_, sec) => spy.observe(sec));
+})();
+
+// ── 性能：hero 离屏时暂停其常驻动画（glitch/flicker/grid-drift 等） ──
+(function initHeroPause() {
+  const heroStage = document.getElementById('hero-stage');
+  if (!heroStage || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([en]) => {
+    document.body.classList.toggle('hero-offscreen', !en.isIntersecting);
+  }, { threshold: 0 }).observe(heroStage);
+})();
 
 // ── CURSOR ──
 const cursorDot  = document.getElementById('cursor-dot');
@@ -4352,23 +4414,16 @@ document.addEventListener('mousemove', e => {
     dragging = true;
     dsx = e.clientX;
     dsTx = txTarget;
-    vx = lvx = 0;
+    vx = 0; lvx = e.clientX;
     if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
     e.preventDefault();
   });
 
   window.addEventListener('mousemove', e => {
     if (!dragging) return;
-    vx = e.clientX - lvx;  // velocity this frame... wait, track per-frame diff
+    vx = e.clientX - lvx; // per-frame velocity（仅拖拽期间追踪）
     lvx = e.clientX;
     txTarget = clamp(dsTx + (e.clientX - dsx));
-  });
-
-  // Track velocity properly with per-frame diff
-  let prevMX = 0;
-  window.addEventListener('mousemove', e => {
-    vx = e.clientX - prevMX;
-    prevMX = e.clientX;
   });
 
   window.addEventListener('mouseup', () => {
@@ -4406,11 +4461,15 @@ document.addEventListener('mousemove', e => {
     glide();
   });
 
-  // Wheel
+  // Wheel — 轨道内横移，但到达两端后放行页面垂直滚动，避免滚动陷阱
   outer.addEventListener('wheel', e => {
+    const delta = e.deltaX + e.deltaY * 1.5;
+    const atStart = txTarget >= 0        && delta < 0;
+    const atEnd   = txTarget <= getMin() && delta > 0;
+    if (atStart || atEnd) return; // 不拦截，让页面继续滚
     e.preventDefault();
     if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
-    txTarget = clamp(txTarget - e.deltaX - e.deltaY * 1.5);
+    txTarget = clamp(txTarget - delta);
   }, { passive: false });
 
   // ── CARD TILT + FOLLOWER ──

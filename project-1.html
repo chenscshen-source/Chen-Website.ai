@@ -465,6 +465,16 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     .hero-num { right:var(--page-gutter); }
   }
 
+
+  /* ── 移动端触控与可读性下限（WCAG 2.5.5：可点区域 ≥44×44） ── */
+  @media (max-width: 900px), (pointer: coarse) {
+    .tab-btn { min-height: 44px; padding-top: 12px; padding-bottom: 12px; }
+    .nav-logo { min-height: 44px; display: inline-flex; align-items: center; }
+    .nav-back { min-height: 44px; display: inline-flex; align-items: center; }
+    .tabs-track { gap: 10px; flex-wrap: wrap; }
+    /* 正文可读性下限 */
+    .meta-chip-val, .block-body, .card-body, p { font-size: max(12px, 1em); }
+  }
 </style>
 </head>
 <body class="loading">
@@ -511,13 +521,13 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
   </div>
   <div class="carousel-outer" id="vcScene">
     <div class="carousel-track" id="vcStage">
-      <div class="video-card" data-idx="01"><video src="./videos/video-01.mp4" poster="./arcteryx-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">01</div></div>
-      <div class="video-card" data-idx="02"><video src="./videos/video-02.mp4" poster="./ACG-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">02</div></div>
-      <div class="video-card" data-idx="03"><video src="./videos/video-03.mp4" poster="./Nike1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">03</div></div>
-      <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="./salomon-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
-      <div class="video-card" data-idx="05"><video src="./videos/video-07.mp4" poster="./ALO-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
-      <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="./Nike-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
-      <div class="video-card" data-idx="07"><video src="./videos/video-07.mp4" poster="./ACG1-poster.jpg" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">07</div></div>
+      <div class="video-card" data-idx="01"><video src="./videos/video-01.mp4" poster="./arcteryx-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">01</div></div>
+      <div class="video-card" data-idx="02"><video src="./videos/video-02.mp4" poster="./ACG-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">02</div></div>
+      <div class="video-card" data-idx="03"><video src="./videos/video-03.mp4" poster="./Nike1-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">03</div></div>
+      <div class="video-card" data-idx="04"><video src="./videos/video-04.mp4" poster="./salomon-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">04</div></div>
+      <div class="video-card" data-idx="05"><video src="./videos/video-07.mp4" poster="./ALO-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">05</div></div>
+      <div class="video-card" data-idx="06"><video src="./videos/video-06.mp4" poster="./Nike-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">06</div></div>
+      <div class="video-card" data-idx="07"><video src="./videos/video-07.mp4" poster="./ACG1-poster.webp" muted playsinline loop preload="metadata"></video><div class="vc-scan"></div><div class="vc-grain"></div><div class="vc-vignette"></div><div class="vc-play"><svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg></div><div class="vc-index">07</div></div>
     </div>
   </div>
   <div class="carousel-hint">DRAG TO EXPLORE <span class="hint-arrow">→</span></div>

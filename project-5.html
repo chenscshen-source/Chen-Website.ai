@@ -380,6 +380,16 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     .hero-num { right:var(--page-gutter); }
   }
 
+
+  /* ── 移动端触控与可读性下限（WCAG 2.5.5：可点区域 ≥44×44） ── */
+  @media (max-width: 900px), (pointer: coarse) {
+    .tab-btn { min-height: 44px; padding-top: 12px; padding-bottom: 12px; }
+    .nav-logo { min-height: 44px; display: inline-flex; align-items: center; }
+    .nav-back { min-height: 44px; display: inline-flex; align-items: center; }
+    .tabs-track { gap: 10px; flex-wrap: wrap; }
+    /* 正文可读性下限 */
+    .meta-chip-val, .block-body, .card-body, p { font-size: max(12px, 1em); }
+  }
 </style>
 </head>
 <body class="loading">

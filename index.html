@@ -739,11 +739,31 @@
   .avatar-sprite {
     width: 520px;
     height: 650px;
-    background-image: url('images/pine-sprite/sprite.webp');
+    /* 首屏先用 35KB 静态正面帧秒开；7MB 图集在后台加载完成后由 JS 换上 */
+    background-image: url('images/pine-sprite/avatar-mobile.webp');
+    background-size: contain;
+    background-position: center top;
     background-repeat: no-repeat;
-    background-position: 0 0;
     mix-blend-mode: normal;
     will-change: background-position;
+    /* 自然投影：贴身短影 + 远处扩散影，跟随人物轮廓 */
+    filter:
+      drop-shadow(0 6px 10px rgba(0,0,0,0.55))
+      drop-shadow(0 26px 34px rgba(0,0,0,0.45));
+  }
+  /* 地面接触影：坐姿下方的软椭圆，让人物"落在"页面上而非漂浮 */
+  .avatar-float-wrap { position: relative; }
+  .avatar-float-wrap::after {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 4%;
+    width: 62%; height: 42px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center,
+      rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.34) 42%, transparent 72%);
+    filter: blur(9px);
+    pointer-events: none;
+    z-index: -1;
   }
   .avatar-float-wrap:hover .avatar-transparent {
     filter: brightness(1.15) contrast(1.1) saturate(1.2);
@@ -2981,6 +3001,42 @@
     .avatar-glow-base { animation: none !important; }
     /* hint drift */
     .works-hint-arrow { animation: none !important; }
+
+    /* 移动端不加载 7MB 图集：朝向跟随本就禁用，静态帧足够（省 7MB 流量）。
+       浏览器只请求胜出的那条 background-image，大图不会被下载。 */
+    .avatar-sprite {
+      background-image: url('images/pine-sprite/avatar-mobile.webp') !important;
+      background-size: contain !important;
+      background-position: center top !important;
+      will-change: auto !important;
+      /* 双层 drop-shadow 在移动 GPU 上开销高，降为单层 */
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.5)) !important;
+    }
+    .avatar-float-wrap::after { height: 26px; filter: blur(7px); }
+
+    /* 触控目标 ≥44×44（WCAG 2.5.5）：视觉尺寸不变，靠内边距扩大可点区域 */
+    .nav-hamburger {
+      min-width: 44px; min-height: 44px;
+      padding: 9px 5px;
+      box-sizing: border-box;
+      justify-content: center;
+    }
+    .nav-logo {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding-right: 12px;
+    }
+    .nav-mobile-link { padding-top: 12px; padding-bottom: 12px; }
+    .contact-item { min-height: 44px; }
+
+    /* 移动端可读性下限：正文 ≥12px、标签 ≥10px（原先低至 7–8px） */
+    .wc-desc { font-size: 12px !important; line-height: 1.7 !important; }
+    .wc-title, .skill-desc, .timeline-desc, .about-text { font-size: 12px !important; }
+    .wc-title-text, .wc-tag, .wc-num, .hero-tag, .works-hint,
+    .section-label, .timeline-period, .stat-label, .wc-statusbar {
+      font-size: 10px !important;
+    }
   }
 
   /* ── 无障碍：跟随系统"减弱动态效果"设置，关闭一切装饰动画 ── */
@@ -3304,7 +3360,7 @@ DESIGN</div>
           <div class="wc-status-dot"></div>
         </div>
         <div class="wc-body">
-          <div class="wc-bg" style="background-image:url(images/cross-platform/cover-cross.png?v=20260406c);background-position:center center;background-size:cover;background-repeat:no-repeat;"></div>
+          <div class="wc-bg" style="background-image:url(images/cross-platform/cover-cross.webp?v=20260406c);background-position:center center;background-size:cover;background-repeat:no-repeat;"></div>
          <div class="wc-card04-overlay"></div>
           <div class="wc-grid"></div>
           <div class="wc-scan"></div>
@@ -3613,6 +3669,13 @@ PLATFORM</div>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
 <script>
+
+// 移动端判定：与 CSS 断点 (max-width:768px), (pointer:coarse) 严格一致。
+// 此前代码里引用的 window._isMobileDevice 从未被赋值，两处移动端保护形同虚设。
+window._isMobileDevice = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+window.addEventListener('resize', () => {
+  window._isMobileDevice = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+}, { passive: true });
 
 // iOS Safari 100vh fix — use screen.height to avoid address-bar resize feedback loop
 (function() {
@@ -4363,7 +4426,16 @@ if (avatarWrap && window.innerWidth > 600) {
     pointerY = r.top + r.height / 2;   // 指回中心 → 自然回正
     wake();
   });
-  renderAtlasFrame(currentFrame);
+
+  // 渐进增强：首屏已由 CSS 的 35KB 静态帧撑起，7MB 图集在后台加载，
+  // 加载完成后才切换 background-image 并接管渲染 —— 首屏不被大图阻塞。
+  const atlas = new Image();
+  atlas.onload = () => {
+    sprite.style.backgroundImage = "url('images/pine-sprite/sprite.webp')";
+    renderAtlasFrame(currentFrame);
+    wake();
+  };
+  atlas.src = 'images/pine-sprite/sprite.webp';
 })();
 
 // Hero 鼠标 3D 倾斜已移除（保留头像的朝向跟随与滚动视差）
@@ -5354,7 +5426,7 @@ if (avatarWrap && window.innerWidth > 600) {
   <div class="pao-ring pao-ring-2"></div>
   <div class="pao-ring pao-ring-3"></div>
   <div class="pao-logo-wrap">
-    <img class="pao-logo pao-logo-main" src="pine-ai-horizontal.svg" alt="" />
+    <img class="pao-logo pao-logo-main" src="pine-ai-horizontal.svg" alt="" loading="lazy" decoding="async" />
     <span class="pao-logo pao-logo-r" aria-hidden="true"></span>
     <span class="pao-logo pao-logo-b" aria-hidden="true"></span>
   </div>

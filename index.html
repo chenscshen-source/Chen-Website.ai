@@ -14,8 +14,8 @@
   :root {
     --black: #050505;
     --white: #f0ede6;
-    --acid: #9fef00; /* 终端绿：全站唯一强调色 */
-    --matrix: #9fef00;
+    --acid: #a8e4ff; /* 浅冰蓝：全站唯一强调色 */
+    --matrix: #a8e4ff;
     --cyan: #00e5ff;
     --red: #ff2d55;
     --gold: #c8d8e4;
@@ -3184,7 +3184,7 @@
 <section id="works">
   <div class="works-header">
     <div class="section-label reveal section-label-glitch" data-text="00 — Works" style="margin-bottom:0">00 — Works</div>
-    <div class="works-hint reveal" id="works-hint">Drag to explore <span class="works-hint-arrow">→</span></div>
+    <div class="works-hint reveal" id="works-hint">Scroll to explore <span class="works-hint-arrow">→</span></div>
   </div>
 
   <div class="works-track-outer" id="works-scene">
@@ -3652,6 +3652,9 @@ PLATFORM</div>
   <div class="footer-copy" style="color:var(--acid);opacity:0.5;">MADE WITH AI ✦</div>
 </footer>
 
+<!-- GSAP + ScrollTrigger：works 区滚动钉住横移 -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
 
 // iOS Safari 100vh fix — use screen.height to avoid address-bar resize feedback loop
@@ -3746,21 +3749,21 @@ PLATFORM</div>
       enterTargets.push({ el, amp: amp + i * ampStep, range });
     });
   };
-  // 01 — About
-  registerEnter('#about .about-headline', 90, 0.55);
-  registerEnter('#about .about-text', 50, 0.7, 6);
+  // 01 — About（幅度整体压低，避免入场期间与相邻元素重叠）
+  registerEnter('#about .about-headline', 45, 0.5);
+  registerEnter('#about .about-text', 28, 0.55, 4);
   // (Stats + terminal card intentionally static)
   // 02 — Experience
-  registerEnter('#experience .timeline-item', 70, 0.55, 4);
+  registerEnter('#experience .timeline-item', 36, 0.5, 3);
   // 03 — Education
-  registerEnter('#education .about-headline', 80, 0.55);
-  registerEnter('#education .terminal-card', 55, 0.65);
+  registerEnter('#education .about-headline', 40, 0.5);
+  registerEnter('#education .terminal-card', 30, 0.55);
   // 04 — Capabilities
-  registerEnter('#skills .skill-card', 50, 0.6, 6);
+  registerEnter('#skills .skill-card', 28, 0.5, 4);
   // 05 — Contact
-  registerEnter('#contact .contact-headline', 90, 0.55);
-  registerEnter('#contact .contact-desc', 50, 0.7);
-  registerEnter('#contact .contact-item', 40, 0.65, 4);
+  registerEnter('#contact .contact-headline', 45, 0.5);
+  registerEnter('#contact .contact-desc', 28, 0.55);
+  registerEnter('#contact .contact-item', 24, 0.5, 3);
 
   let ticking = false;
   let scrollY = window.scrollY;
@@ -3855,8 +3858,8 @@ PLATFORM</div>
       enterTargets.forEach((t, i) => {
         const rect = enterRects[i];
         if (!rect) return;
-        const dist = centerDist(rect);
-        const prog = clamp(1 - Math.abs(dist) / t.range, 0, 1);
+        // 入场进度：从视口底部进入到顶部 range·vh 处即完成 → 到位后无残留偏移
+        const prog = clamp((_vH - rect.top) / (_vH * t.range), 0, 1);
         const ease = prog * prog * (3 - 2 * prog);
         enterMap.set(t.el, (1 - ease) * t.amp);
       });
@@ -3963,8 +3966,8 @@ PLATFORM</div>
         enterTargets.forEach((t, i) => {
           const rect = enterRects[i];
           if (!rect) return;
-          const dist = centerDist(rect);
-          const prog = clamp(1 - Math.abs(dist) / t.range, 0, 1);
+          // 入场进度：进入视口上半区即完成（同桌面端，消除到位后的残留偏移）
+          const prog = clamp((_vH - rect.top) / (_vH * t.range), 0, 1);
           const ease = prog * prog * (3 - 2 * prog);
           enterMap.set(t.el, (1 - ease) * (t.amp * 0.8));
         });
@@ -4407,70 +4410,9 @@ document.addEventListener('mousemove', e => {
   function clamp(v) { return Math.max(getMin(), Math.min(txMax, v)); }
   let txMax = 0; // normally 0, temporarily unlocked for init
 
-  // ── DRAG ──
-  let dragging = false, dsx = 0, dsTx = 0, vx = 0, lvx = 0, momentum = null;
-
-  outer.addEventListener('mousedown', e => {
-    dragging = true;
-    dsx = e.clientX;
-    dsTx = txTarget;
-    vx = 0; lvx = e.clientX;
-    if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
-    e.preventDefault();
-  });
-
-  window.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    vx = e.clientX - lvx; // per-frame velocity（仅拖拽期间追踪）
-    lvx = e.clientX;
-    txTarget = clamp(dsTx + (e.clientX - dsx));
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (!dragging) return;
-    dragging = false;
-    let v = vx * 8; // amplify for nice feel
-    function glide() {
-      v *= 0.88;
-      if (Math.abs(v) < 0.3) return;
-      txTarget = clamp(txTarget + v);
-      momentum = requestAnimationFrame(glide);
-    }
-    glide();
-  });
-
-  // Touch
-  let tsx = 0, tsTx = 0, tvx = 0, tpx = 0;
-  outer.addEventListener('touchstart', e => {
-    tsx = e.touches[0].clientX;
-    tsTx = txTarget; tvx = 0; tpx = tsx;
-    if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
-  }, { passive: true });
-  outer.addEventListener('touchmove', e => {
-    tvx = e.touches[0].clientX - tpx;
-    tpx = e.touches[0].clientX;
-    txTarget = clamp(tsTx + (tpx - tsx));
-  }, { passive: true });
-  outer.addEventListener('touchend', () => {
-    let v = tvx * 8;
-    function glide() {
-      v *= 0.88; if (Math.abs(v) < 0.3) return;
-      txTarget = clamp(txTarget + v);
-      momentum = requestAnimationFrame(glide);
-    }
-    glide();
-  });
-
-  // Wheel — 轨道内横移，但到达两端后放行页面垂直滚动，避免滚动陷阱
-  outer.addEventListener('wheel', e => {
-    const delta = e.deltaX + e.deltaY * 1.5;
-    const atStart = txTarget >= 0        && delta < 0;
-    const atEnd   = txTarget <= getMin() && delta > 0;
-    if (atStart || atEnd) return; // 不拦截，让页面继续滚
-    e.preventDefault();
-    if (momentum) { cancelAnimationFrame(momentum); momentum = null; }
-    txTarget = clamp(txTarget - delta);
-  }, { passive: false });
+  // ── 滚动驱动（GSAP ScrollTrigger 钉住横移）──
+  // 拖拽/滚轮驱动已移除：页面垂直滚动即推进横向轨道
+  let dragging = false; // 供卡片 tilt 判断保留（滚动驱动下恒为 false）
 
   // ── CARD TILT + FOLLOWER ──
   const cards = Array.from(stage.querySelectorAll('.work-card'));
@@ -4551,8 +4493,8 @@ document.addEventListener('mousemove', e => {
     requestAnimationFrame(tick);
   }
 
-  // Double rAF ensures layout is measured correctly after fonts/styles load
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  // 布局稳定后初始化（load + 短延时，不依赖 rAF——某些内嵌环境会冻结 rAF）
+  const initLayout = () => {
     // Position Card 01 at center on load
     const outerRect = outer.getBoundingClientRect();
     const firstCard  = cards[0];
@@ -4566,8 +4508,38 @@ document.addEventListener('mousemove', e => {
       txTarget = delta;
       tx = txTarget;
     }
+
+    const startTx = txTarget; // 卡片 01 居中时的起点
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.create({
+        trigger: '#works',
+        start: 'top top',
+        end: () => '+=' + Math.max(600, Math.round(startTx - getMin())),
+        pin: true,
+        scrub: 0.6,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: self => {
+          // 垂直滚动进度 → 横向轨道位置（tick 里再做平滑）
+          txTarget = startTx + (getMin() - startTx) * self.progress;
+        }
+      });
+    } else {
+      // 兜底：CDN 不可达时保留滚轮横移（两端放行页面滚动）
+      outer.addEventListener('wheel', e => {
+        const delta = e.deltaX + e.deltaY * 1.5;
+        const atStart = txTarget >= startTx  && delta < 0;
+        const atEnd   = txTarget <= getMin() && delta > 0;
+        if (atStart || atEnd) return;
+        e.preventDefault();
+        txTarget = Math.max(getMin(), Math.min(startTx, txTarget - delta));
+      }, { passive: false });
+    }
     tick();
-  }));
+  };
+  if (document.readyState === 'complete') setTimeout(initLayout, 60);
+  else window.addEventListener('load', () => setTimeout(initLayout, 60));
 
 })();
 

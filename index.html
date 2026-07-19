@@ -2581,12 +2581,19 @@
   .work-card {
     position: relative;
     flex-shrink: 0;
+    display: block;              /* 卡片已是 <a>：抵消行内默认值 */
+    text-decoration: none;
+    color: inherit;
     width: 500px;
     height: 660px;
     cursor: none;
     transform-style: preserve-3d;
     will-change: transform, opacity;
     background: #0a0a0a;
+  }
+  .work-card:focus-visible {     /* 键盘可达：给出清晰焦点环 */
+    outline: 2px solid var(--acid);
+    outline-offset: 4px;
   }
   .work-card.wide { width: 680px; }
 
@@ -3135,7 +3142,7 @@
     <div class="works-track" id="works-stage">
 
 
-      <div class="work-card wide theme-gold" id="card01" style="cursor:pointer;" onclick="window.location.href='project-1.html'">
+      <a class="work-card wide theme-gold" id="card01" href="project-1.html" aria-label="查看项目详情">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3170,9 +3177,9 @@
             <span><span class="wc-statusbar-dot"></span>STATUS: ACTIVE</span>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="work-card theme-cyan" id="card02" style="cursor:pointer;" onclick="window.location.href='project-2.html'">
+      <a class="work-card theme-cyan" id="card02" href="project-2.html" aria-label="查看项目详情">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3208,9 +3215,9 @@ DESIGN</div>
             <span><span class="wc-statusbar-dot"></span>STATUS: DEPLOYED</span>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="work-card theme-purple" id="card03" style="cursor:pointer;" onclick="window.location.href='project-3.html'">
+      <a class="work-card theme-purple" id="card03" href="project-3.html" aria-label="查看项目详情">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3246,9 +3253,9 @@ DESIGN</div>
             <span><span class="wc-statusbar-dot"></span>STATUS: DEPLOYED</span>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="work-card theme-red" id="card04" style="cursor:pointer;" onclick="window.location.href='project-4.html'">
+      <a class="work-card theme-red" id="card04" href="project-4.html" aria-label="查看项目详情">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3284,9 +3291,9 @@ DESIGN</div>
             <span><span class="wc-statusbar-dot"></span>STATUS: ONGOING</span>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="work-card theme-cyan" id="card05" style="cursor:pointer;" onclick="window.location.href='project-5.html'">
+      <a class="work-card theme-cyan" id="card05" href="project-5.html" aria-label="查看项目详情">
 
         <div class="wc-chrome"></div>
         <div class="wc-titlebar">
@@ -3319,7 +3326,7 @@ PLATFORM</div>
             <span style="float:right">STATUS: ACTIVE</span>
           </div>
         </div>
-      </div>
+      </a>
 
     </div>
   </div>
@@ -6158,6 +6165,51 @@ if (avatarWrap && window.innerWidth > 600) {
   // once 触发器会被瞬间误触发并自杀，留下 from 的隐藏态 → 内容消失。
   function buildEffects() {
 
+  // ── 统一的滚动入场助手 ──
+  // ⚠ 一律用 set+to，禁止 gsap.from()：from 的起始态会在每次 ScrollTrigger.refresh()
+  //   时被重新写回元素（immediateRender），而 once:true 的触发器此时已销毁、不会再播放，
+  //   结果就是内容被永久藏住。窗口缩放 / 图片加载完 / works pin 重算都会触发 refresh，
+  //   所以现象是"偶发性消失"。.to() 没有起始态可回写，完成后 clearProps 清掉内联样式。
+  const revealed = [];
+  function reveal(el, fromVars, opts = {}) {
+    gsap.set(el, fromVars);
+    const tw = gsap.to(el, {
+      x: 0, y: 0, yPercent: 0, opacity: 1,
+      duration: opts.duration || 0.85,
+      delay: opts.delay || 0,
+      stagger: opts.stagger || 0,
+      clearProps: 'all',
+      scrollTrigger: {
+        trigger: opts.trigger || el,
+        start: opts.start || 'top 88%',
+        once: true,
+        onEnter: opts.onEnter
+      }
+    });
+    revealed.push({ el, tw });
+    return tw;
+  }
+  const nodesOf = el => (el instanceof Element ? [el] : Array.from(el));
+  // 兜底 1：refresh 后若有已播完却仍不可见的元素，直接清掉内联样式
+  ScrollTrigger.addEventListener('refresh', () => {
+    revealed.forEach(({ el, tw }) => {
+      if (tw.progress() === 1) nodesOf(el).forEach(n => {
+        if (getComputedStyle(n).opacity === '0') gsap.set(n, { clearProps: 'all' });
+      });
+    });
+  });
+  // 兜底 2：内容永远不该因动画而永久消失。任何已进入视口却仍隐藏的元素，
+  // 一律强制显示——宁可丢一次入场动画，也不能让访客看到空白。
+  setInterval(() => {
+    revealed.forEach(({ el }) => nodesOf(el).forEach(n => {
+      if (getComputedStyle(n).opacity !== '0') return;
+      const r = n.getBoundingClientRect();
+      if (r.top < innerHeight * 0.9 && r.bottom > 0 && !gsap.isTweening(n)) {
+        gsap.set(n, { clearProps: 'all' });
+      }
+    }));
+  }, 1500);
+
   // ── 章节标签：终端解码进场（ScrambleText）──
   if (window.ScrambleTextPlugin) {
     gsap.registerPlugin(ScrambleTextPlugin);
@@ -6178,17 +6230,12 @@ if (avatarWrap && window.innerWidth > 600) {
     gsap.registerPlugin(SplitText);
     document.querySelectorAll('#about .about-headline, #education .about-headline, #contact .contact-headline').forEach(el => {
       const split = new SplitText(el, { type: 'lines', linesClass: 'st-line' });
-      gsap.from(split.lines, {
-        yPercent: 110, opacity: 0, duration: 0.9, stagger: 0.12,
-        scrollTrigger: { trigger: el, start: 'top 82%', once: true }
-      });
+      reveal(split.lines, { yPercent: 110, opacity: 0 },
+        { duration: 0.9, stagger: 0.12, trigger: el, start: 'top 82%' });
     });
     // 正文段落：整段淡入上移（保持轻量）
     document.querySelectorAll('#about .about-text').forEach((el, i) => {
-      gsap.from(el, {
-        y: 36, opacity: 0, duration: 0.8, delay: i * 0.06,
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-      });
+      reveal(el, { y: 36, opacity: 0 }, { duration: 0.8, delay: i * 0.06 });
     });
   }
 
@@ -6205,47 +6252,32 @@ if (avatarWrap && window.innerWidth > 600) {
   const experienceSignals = ['CREATE', 'AGENT', 'WEB3', 'STRATEGY', 'SYSTEM'];
   document.querySelectorAll('.timeline-item').forEach((el, i) => {
     el.dataset.signal = experienceSignals[i] || 'ACTIVE';
-    gsap.from(el, {
-      x: i % 2 ? 60 : -60, opacity: 0, duration: 0.9,
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true, onEnter: () => el.classList.add('narrative-active') },
-      clearProps: 'transform'
+    reveal(el, { x: i % 2 ? 60 : -60, opacity: 0 }, {
+      duration: 0.9, start: 'top 85%',
+      onEnter: () => el.classList.add('narrative-active')
     });
   });
 
-  // ── 技能卡：错峰浮现（挂载式触发器：refresh 自同步，绝不滞留隐藏态）──
+  // ── 技能卡：错峰浮现 ──
   document.querySelectorAll('.skill-card').forEach((card, i) => {
-    gsap.from(card, {
-      y: 68, opacity: 0, duration: 0.88, delay: (i % 3) * 0.1,
-      scrollTrigger: { trigger: card, start: 'top 92%', once: true },
-      clearProps: 'transform'
-    });
+    reveal(card, { y: 68, opacity: 0 }, { duration: 0.88, delay: (i % 3) * 0.1, start: 'top 92%' });
   });
 
   // ── Contact：最后一幕以标题、内容、联系入口三层进入 ──
   const contactIntro = document.querySelector('#contact .contact-inner > .reveal');
   const contactItems = gsap.utils.toArray('#contact .contact-item');
   if (contactIntro) {
-    gsap.from(contactIntro, {
-      y: 76, opacity: 0, duration: 1.0,
-      scrollTrigger: { trigger: '#contact', start: 'top 72%', once: true },
-      clearProps: 'transform,opacity'
-    });
+    reveal(contactIntro, { y: 76, opacity: 0 }, { duration: 1.0, trigger: '#contact', start: 'top 72%' });
   }
   if (contactItems.length) {
-    gsap.from(contactItems, {
-      x: 88, opacity: 0, duration: 0.82, stagger: 0.12,
-      scrollTrigger: { trigger: '#contact .contact-list', start: 'top 80%', once: true },
-      clearProps: 'transform,opacity'
+    reveal(contactItems, { x: 88, opacity: 0 }, {
+      duration: 0.82, stagger: 0.12, trigger: '#contact .contact-list', start: 'top 80%'
     });
   }
 
   // ── education 终端窗口：拉起 ──
   const eduCard = document.querySelector('#education .terminal-card');
-  if (eduCard) gsap.from(eduCard, {
-    y: 50, opacity: 0, duration: 0.9,
-    scrollTrigger: { trigger: eduCard, start: 'top 85%', once: true },
-    clearProps: 'transform'
-  });
+  if (eduCard) reveal(eduCard, { y: 50, opacity: 0 }, { duration: 0.9, start: 'top 85%' });
 
   ScrollTrigger.refresh(); // 全量校准
   } // buildEffects

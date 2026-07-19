@@ -4194,18 +4194,20 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
   const stage = document.getElementById('hero-right-section');
   if (!sprite || !stage || window._isMobileDevice) return;
 
-  // 2026-07 依据原视频逐帧重新校准（此前 up/right 段标错导致头不跟）：
-  // 0-32 左倾→抬头 · 44-96 落向低头 · 98-160 左侧弧 · 162-184 右侧→右上 · 186-193 回正
-  const ANGLE_KEYS = Object.freeze({
-    center: 188,
-    up: 32,
-    'right-up': 178,
-    right: 168,
-    'right-down': 96,
-    down: 70,
+  // 2026-07 全片逐帧核对（每 8 帧对照表）后的真实姿态分布：
+  //   f186-193/f0  正面      f0-f40   略偏左、下巴微抬
+  //   f40-f80      左下      f96      最低头
+  //   f104-f112    左下回升  f120-f160 强左侧脸（水平）
+  //   f168-f184    由左转回正面
+  // ⚠ 素材横向只覆盖「正面 → 左」，全片没有任何一帧是向右看的。
+  // 因此右半区不做臆造：横向回正面（=看向观众），纵向仍跟随抬头/低头。
+  const POSE = Object.freeze({
+    center: 190,   // 正面
+    up: 6,         // 下巴微抬（素材里最"上"的姿态）
+    'left-up': 26, // 偏左 + 抬头
+    left: 140,     // 强左侧脸
     'left-down': 112,
-    left: 140,
-    'left-up': 20
+    down: 96       // 最低头
   });
 
   const FRAME_STEP = 2;
@@ -4225,7 +4227,7 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
     };
   };
 
-  let currentFrame = Math.round(ANGLE_KEYS.center / FRAME_STEP);
+  let currentFrame = Math.round(POSE.center / FRAME_STEP);
   let framePos = currentFrame;   // 浮点帧位置（缓动用）
   let targetFrame = currentFrame; // 浮点目标帧
   let animationFrame = null;
@@ -4254,41 +4256,55 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
     return delta;
   }
 
-  // ── 连续方向环：屏幕角度（deg，y 向下）→ 校准帧号（FRAME_STEP 换算后）──
-  // 相邻锚点之间线性插值，鼠标任意角度都有精确对应帧，不再量化成 9 档。
-  const RING = [
-    { deg: 0,   f: ANGLE_KEYS.right        / FRAME_STEP },
-    { deg: 45,  f: ANGLE_KEYS['right-down'] / FRAME_STEP },
-    { deg: 90,  f: ANGLE_KEYS.down         / FRAME_STEP },
-    { deg: 135, f: ANGLE_KEYS['left-down'] / FRAME_STEP },
-    { deg: 180, f: ANGLE_KEYS.left         / FRAME_STEP },
-    { deg: 225, f: ANGLE_KEYS['left-up']   / FRAME_STEP },
-    { deg: 270, f: ANGLE_KEYS.up           / FRAME_STEP },
-    { deg: 315, f: ANGLE_KEYS['right-up']  / FRAME_STEP },
-    { deg: 360, f: ANGLE_KEYS.right        / FRAME_STEP } // 闭环
-  ];
-  const CENTER_FRAME = ANGLE_KEYS.center / FRAME_STEP;
+  const A = f => f / FRAME_STEP;              // 视频帧号 → 图集索引
+  const CENTER_FRAME = A(POSE.center);
 
-  function frameFromAngle(deg) {
-    for (let i = 0; i < RING.length - 1; i++) {
-      const a = RING[i], b = RING[i + 1];
+  // 沿最短弧在两个姿态之间插值
+  function lerpFrame(a, b, t) {
+    return (a + shortestFrameDelta(a, b) * t + FRAME_COUNT) % FRAME_COUNT;
+  }
+
+  // 左半区可达的方向弧：上(270°) → 左上 → 左(180°) → 左下 → 下(90°)
+  const LEFT_ARC = [
+    { deg: 90,  f: A(POSE.down) },
+    { deg: 135, f: A(POSE['left-down']) },
+    { deg: 180, f: A(POSE.left) },
+    { deg: 225, f: A(POSE['left-up']) },
+    { deg: 270, f: A(POSE.up) }
+  ];
+
+  function frameFromLeftArc(deg) {
+    for (let i = 0; i < LEFT_ARC.length - 1; i++) {
+      const a = LEFT_ARC[i], b = LEFT_ARC[i + 1];
       if (deg >= a.deg && deg <= b.deg) {
-        const t = (deg - a.deg) / (b.deg - a.deg);
-        return (a.f + shortestFrameDelta(a.f, b.f) * t + FRAME_COUNT) % FRAME_COUNT;
+        return lerpFrame(a.f, b.f, (deg - a.deg) / (b.deg - a.deg));
       }
     }
-    return RING[0].f;
+    return CENTER_FRAME;
   }
+
+  const smooth = t => t * t * (3 - 2 * t);
 
   function targetFromPoint(clientX, clientY) {
     const rect = stage.getBoundingClientRect();
-    const x = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const y = (clientY - rect.top - rect.height / 2) / (rect.height / 2) * 1.3; // 纵向增益：上/下更易触达
-    const mag = Math.sqrt(x * x + y * y);
-    if (mag < 0.12) return CENTER_FRAME; // 死区：回正
-    let deg = Math.atan2(y, x) * 180 / Math.PI; // y 向下，0°=右
-    if (deg < 0) deg += 360;
-    return frameFromAngle(deg);
+    const nx = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const ny = (clientY - rect.top - rect.height / 2) / (rect.height / 2) * 1.3; // 纵向增益
+    if (Math.sqrt(nx * nx + ny * ny) < 0.12) return CENTER_FRAME; // 死区：回正
+
+    if (nx < 0) {
+      // 左半区：素材完整覆盖，按角度沿真实姿态弧插值
+      let deg = Math.atan2(ny, nx) * 180 / Math.PI;
+      if (deg < 0) deg += 360;               // 左半区落在 90°..270°
+      const arc = frameFromLeftArc(Math.max(90, Math.min(270, deg)));
+      // 靠近中线时收敛到正面，避免越过 nx=0 时姿态跳变
+      const lateral = smooth(Math.min(1, -nx / 0.35));
+      return lerpFrame(CENTER_FRAME, arc, lateral);
+    }
+
+    // 右半区：无向右素材 → 横向保持正面（看向观众），纵向仍跟随抬头/低头
+    const vert = smooth(Math.min(1, Math.abs(ny)));
+    const pose = ny > 0 ? A(POSE.down) : A(POSE.up);
+    return lerpFrame(CENTER_FRAME, pose, vert);
   }
 
   // ── 缓动追帧：浮点帧位置以比例逼近目标，速度快时最多跨 2.5 帧保持姿态连贯 ──

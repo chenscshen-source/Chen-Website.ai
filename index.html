@@ -25,6 +25,8 @@
     /* spacing scale */
     --section-pad-y: 120px;
     --section-pad-x: 60px;
+    /* 全站左右基准边距：与 1400px 居中容器对齐（nav / hero / works 共用） */
+    --page-gutter: max(60px, calc((100vw - 1400px) / 2 + 60px));
     --gap-xl: 100px;
     --gap-lg: 60px;
     --gap-md: 40px;
@@ -226,7 +228,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 60px;
+    padding: 24px var(--page-gutter);
     border-bottom: 1px solid var(--dim);
     backdrop-filter: blur(20px);
     background: rgba(5,5,5,0.7);
@@ -240,7 +242,7 @@
     color: var(--acid);
     text-decoration: none;
   }
-  nav.scrolled { padding: 16px 60px; border-bottom-color: rgba(240,237,230,0.12); }
+  nav.scrolled { padding: 16px var(--page-gutter); border-bottom-color: rgba(240,237,230,0.12); }
   nav { transition: padding 0.3s ease, border-bottom-color 0.3s ease; }
   .nav-links {
     display: flex;
@@ -337,7 +339,7 @@
     flex-direction: column;
     justify-content: center;
     transform-style: preserve-3d;
-    padding: 140px 60px 100px;
+    padding: 140px var(--page-gutter) 100px;
     transform-origin: center center;
   }
   .hero-handoff-scan {
@@ -2520,7 +2522,7 @@
     overflow: hidden;
     background: var(--black);
     isolation: isolate;
-    --works-page-gutter: max(60px, calc((100vw - 1400px) / 2 + 60px));
+    --works-page-gutter: var(--page-gutter);
   }
   #works::after {
     content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -4160,15 +4162,11 @@ setInterval(() => {
   });
 }, 5000);
 
-// AVATAR HOVER: magnetic floating tags + tilt
+// AVATAR HOVER: magnetic floating tags（倾斜已移除，仅保留标签避让）
 const avatarWrap = document.getElementById('cinematic-wrap');
-if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-sprite')) {
+if (avatarWrap && window.innerWidth > 600) {
   avatarWrap.addEventListener('mousemove', e => {
     const rect = avatarWrap.getBoundingClientRect();
-    const cx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const cy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    avatarWrap.style.transform = `perspective(1000px) rotateY(${cx * 22}deg) rotateX(${-cy * 16}deg) scale(1.02)`;
-    // Make tags repel from cursor
     avatarWrap.querySelectorAll('.floating-tag').forEach(tag => {
       const tr = tag.getBoundingClientRect();
       const tdx = (e.clientX - (tr.left + tr.width/2)) / rect.width;
@@ -4180,7 +4178,6 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
     });
   });
   avatarWrap.addEventListener('mouseleave', () => {
-    avatarWrap.style.transform = '';
     avatarWrap.querySelectorAll('.floating-tag').forEach(tag => {
       tag.style.transform = '';
     });
@@ -4231,7 +4228,6 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
   let currentFrame = Math.round(ANGLE_KEYS.center / FRAME_STEP);
   let framePos = currentFrame;   // 浮点帧位置（缓动用）
   let targetFrame = currentFrame; // 浮点目标帧
-  let animationFrame = null;
 
   function renderAtlasFrame(index) {
     const current = framePosition(index);
@@ -4290,78 +4286,80 @@ if (avatarWrap && window.innerWidth > 600 && !avatarWrap.querySelector('.avatar-
 
   const smooth = t => t * t * (3 - 2 * t);
 
+  // stage 矩形缓存：避免每帧 getBoundingClientRect 触发强制同步布局
+  let rectCache = null;
+  const invalidateRect = () => { rectCache = null; };
+  const stageRect = () => (rectCache || (rectCache = stage.getBoundingClientRect()));
+
+  const DEAD = 0.10;   // 死区半径
+  const RAMP = 0.42;   // 由正面过渡到完整转头所需的额外距离
+
   function targetFromPoint(clientX, clientY) {
-    const rect = stage.getBoundingClientRect();
+    const rect = stageRect();
     const nx = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
     const ny = (clientY - rect.top - rect.height / 2) / (rect.height / 2) * 1.2; // 纵向增益
     const mag = Math.sqrt(nx * nx + ny * ny);
-    if (mag < 0.12) return CENTER_FRAME;      // 死区：回正
+    if (mag < DEAD) return CENTER_FRAME;      // 死区：回正
 
     let deg = Math.atan2(ny, nx) * 180 / Math.PI; // y 向下
     if (deg < 0) deg += 360;
     const arc = frameFromAngle(deg);
     // 离中心越远转头越充分；近中心收敛到正面，避免小幅抖动放大成大转头
-    return lerpFrame(CENTER_FRAME, arc, smooth(Math.min(1, (mag - 0.12) / 0.5)));
+    return lerpFrame(CENTER_FRAME, arc, smooth(Math.min(1, (mag - DEAD) / RAMP)));
   }
 
-  // ── 缓动追帧：浮点帧位置以比例逼近目标，速度快时最多跨 2.5 帧保持姿态连贯 ──
-  function animateTowardTarget() {
+  // ── 追帧循环：帧率无关的指数平滑，每帧重算目标 → 连续跟随、无振荡 ──
+  // ⚠ 绝不能给 step 设"最小步长"：之前强制 0.3 帧的最小步会在 |delta| 落在
+  //   收敛阈值与最小步之间时反复越过目标、每帧翻转方向，造成相邻两帧间的抖动。
+  const RESPONSE = 19;    // 平滑速度：越大越跟手
+  const SNAP = 0.02;      // 收敛阈值（帧）
+  let rafId = null, lastT = 0;
+
+  function tickFollow(now) {
+    const dt = lastT ? Math.min(0.05, (now - lastT) / 1000) : 1 / 60;
+    lastT = now;
+
+    targetFrame = targetFromPoint(pointerX, pointerY); // 每帧重算，指针静止时也能跟随布局变化
     const delta = shortestFrameDelta(framePos, targetFrame);
-    if (Math.abs(delta) < 0.05) {
+
+    if (Math.abs(delta) < SNAP) {                      // 已稳定 → 停机，等指针唤醒
       framePos = targetFrame;
-      animationFrame = null;
+      const i = Math.round(framePos) % FRAME_COUNT;
+      if (i !== currentFrame) renderAtlasFrame(i);
+      rafId = null; lastT = 0;
       return;
     }
-    let step = delta * 0.18; // easing 系数：越大越跟手
-    step = Math.max(-2.5, Math.min(2.5, step));
-    if (Math.abs(step) < 0.3) step = Math.sign(step) * 0.3; // 收尾不拖沓
-    framePos = (framePos + step + FRAME_COUNT) % FRAME_COUNT;
+
+    // 指数平滑：与刷新率无关，60Hz / 120Hz 手感一致；大跨度也自然减速，无需钳制
+    framePos = (framePos + delta * (1 - Math.exp(-RESPONSE * dt)) + FRAME_COUNT) % FRAME_COUNT;
     const idx = Math.round(framePos) % FRAME_COUNT;
     if (idx !== currentFrame) renderAtlasFrame(idx);
-    animationFrame = requestAnimationFrame(animateTowardTarget);
+    rafId = requestAnimationFrame(tickFollow);
   }
 
-  function setSpriteTarget(frame) {
-    targetFrame = frame;
-    if (!animationFrame && Math.abs(shortestFrameDelta(framePos, targetFrame)) >= 0.05) {
-      animationFrame = requestAnimationFrame(animateTowardTarget);
-    }
-  }
+  const wake = () => { if (rafId === null) { lastT = 0; rafId = requestAnimationFrame(tickFollow); } };
 
   // 监听整个页面，而不是只监听人物模块；鼠标在 Hero 任意位置都能控制朝向。
-  let pointerFrame = null;
   let pointerX = stage.getBoundingClientRect().left + stage.offsetWidth / 2;
   let pointerY = stage.getBoundingClientRect().top + stage.offsetHeight / 2;
   document.addEventListener('pointermove', event => {
     pointerX = event.clientX;
     pointerY = event.clientY;
-    if (pointerFrame) return;
-    pointerFrame = requestAnimationFrame(() => {
-      pointerFrame = null;
-      setSpriteTarget(targetFromPoint(pointerX, pointerY));
-    });
+    wake();
   }, { passive: true });
-  document.addEventListener('mouseleave', () => setSpriteTarget(CENTER_FRAME));
+  // 滚动时头像位置改变 → 目标角度随之变化，唤醒一次让它跟上
+  addEventListener('scroll', () => { invalidateRect(); wake(); }, { passive: true });
+  addEventListener('resize', () => { invalidateRect(); wake(); }, { passive: true });
+  document.addEventListener('mouseleave', () => {
+    const r = stageRect();
+    pointerX = r.left + r.width / 2;
+    pointerY = r.top + r.height / 2;   // 指回中心 → 自然回正
+    wake();
+  });
   renderAtlasFrame(currentFrame);
 })();
 
-// PARALLAX HERO — 3D Stage tilt on mouse (rAF throttled)
-const heroStage = document.getElementById('hero-stage');
-let _heroMouseRaf = null;
-document.addEventListener('mousemove', e => {
-  if (('ontouchstart' in window) || window.innerWidth <= 600) return;
-  if (_heroMouseRaf) return;
-  _heroMouseRaf = requestAnimationFrame(() => {
-    const x = (e.clientX / window.innerWidth - 0.5);
-    const y = (e.clientY / window.innerHeight - 0.5);
-    if (heroStage) heroStage.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 4}deg)`;
-    const wrap = document.querySelector('.avatar-float-wrap');
-    if (wrap && !wrap.querySelector('.avatar-sprite')) {
-      wrap.style.transform = `perspective(1000px) rotateY(${x*18}deg) rotateX(${-y*14}deg) scale(1.01)`;
-    }
-    _heroMouseRaf = null;
-  });
-}, { passive: true });
+// Hero 鼠标 3D 倾斜已移除（保留头像的朝向跟随与滚动视差）
 
 // ════════════════════════════════════════════════════
 // TEXT PROXIMITY BRIGHTEN

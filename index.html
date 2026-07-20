@@ -1306,8 +1306,8 @@
   }
   @keyframes narrative-signal { 0% { opacity: 0; transform: translateX(-12px); } 30%,75% { opacity: .7; } 100% { opacity: 0; transform: translateX(10px); } }
   .pine-scroll-signal { display: flex; align-items: center; gap: 7px; margin: 16px 0 0; opacity: 0; transition: opacity .45s ease; }
-  .pine-scroll-signal::before { content: ''; width: 68px; height: 1px; background: linear-gradient(90deg, #35ee04, transparent); box-shadow: 0 0 12px rgba(53,238,4,.7); }
-  .pine-scroll-signal span { width: 5px; height: 5px; border-radius: 50%; background: #35ee04; box-shadow: 0 0 10px rgba(53,238,4,.85); }
+  .pine-scroll-signal::before { content: ''; width: 68px; height: 1px; background: linear-gradient(90deg, var(--acid), transparent); box-shadow: 0 0 12px rgba(255,90,46,.7); }
+  .pine-scroll-signal span { width: 5px; height: 5px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px rgba(255,90,46,.85); }
   #pineai-item.narrative-active .pine-scroll-signal { opacity: 1; }
   #pineai-item.narrative-active .pine-scroll-signal span { animation: pine-signal 1s steps(1) 3; }
   @keyframes pine-signal { 0%,45% { opacity: 1; transform: scale(1); } 50%,100% { opacity: .12; transform: scale(.55); } }
@@ -1884,6 +1884,9 @@
     transform: translateY(var(--enter-y, 0px));
     will-change: transform;
   }
+
+  /* GSAP 接管的元素：禁用 CSS 过渡，避免与逐帧写入的 transform 抢属性 */
+  .gsap-managed { transition: none !important; }
 
   /* SplitText 行升起时的遮罩容器 */
   #about .about-headline, #education .about-headline, #contact .contact-headline { overflow: hidden; }
@@ -6243,21 +6246,36 @@ if (avatarWrap && window.innerWidth > 600) {
   //   结果就是内容被永久藏住。窗口缩放 / 图片加载完 / works pin 重算都会触发 refresh，
   //   所以现象是"偶发性消失"。.to() 没有起始态可回写，完成后 clearProps 清掉内联样式。
   const revealed = [];
+  // 交给 GSAP 的元素必须先退出旧的 .reveal 系统：
+  // .reveal 带 transition: opacity, transform，而"运行中的 CSS transition
+  // 优先级高于内联样式"，会把 GSAP 每帧写入的 transform 全部接管掉——
+  // 两套动画抢同一属性，视差和入场都会失效或抖动。
+  function takeOver(el) {
+    (el instanceof Element ? [el] : Array.from(el)).forEach(n => {
+      n.classList.remove('reveal', 'reveal-left', 'reveal-right', 'reveal-scale', 'reveal-clip');
+      n.classList.add('gsap-managed');
+    });
+    return el;
+  }
   function reveal(el, fromVars, opts = {}) {
+    takeOver(el);
     gsap.set(el, fromVars);
-    const tw = gsap.to(el, {
-      x: 0, y: 0, yPercent: 0, opacity: 1,
+    // 只把"自己设过的"属性动回原位：不碰未声明的通道，
+    // 这样同一元素上的滚动视差（y）可以和入场（x/opacity）并存而不互相覆盖。
+    const to = {
       duration: opts.duration || 0.85,
       delay: opts.delay || 0,
       stagger: opts.stagger || 0,
-      clearProps: 'all',
+      clearProps: opts.clear || 'all',
       scrollTrigger: {
         trigger: opts.trigger || el,
         start: opts.start || 'top 88%',
         once: true,
         onEnter: opts.onEnter
       }
-    });
+    };
+    Object.keys(fromVars).forEach(k => { to[k] = (k === 'opacity') ? 1 : 0; });
+    const tw = gsap.to(el, to);
     revealed.push({ el, tw });
     return tw;
   }
@@ -6324,11 +6342,31 @@ if (avatarWrap && window.innerWidth > 600) {
   const experienceSignals = ['CREATE', 'AGENT', 'WEB3', 'STRATEGY', 'SYSTEM'];
   document.querySelectorAll('.timeline-item').forEach((el, i) => {
     el.dataset.signal = experienceSignals[i] || 'ACTIVE';
+    // 入场：左右滑入 + 淡入。clear 只清 opacity，把 y 通道留给下面的视差，
+    // 否则 clearProps:'all' 会在入场结束时把视差的位移一并抹掉。
     reveal(el, { x: i % 2 ? 60 : -60, opacity: 0 }, {
-      duration: 0.9, start: 'top 85%',
+      duration: 0.9, start: 'top 85%', clear: 'opacity',
       onEnter: () => el.classList.add('narrative-active')
     });
+    // 滚动视差：随页面滚动持续上浮，左右两列速度错开产生纵深层次
+    if (!touch) {
+      const drift = i % 2 ? 34 : 52;   // 交错幅度
+      gsap.fromTo(takeOver(el),
+        { y: drift },
+        { y: -drift * 0.8, ease: 'none',
+          scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 0.9 } });
+    }
   });
+
+  // 章节标签走更慢的一层，和条目拉开速度差
+  // （不给 .exp-grid 列容器加视差：条目在其内部，父子叠加会让位移翻倍）
+  if (!touch) {
+    const expLabel = document.querySelector('#experience .section-label');
+    if (expLabel) gsap.fromTo(takeOver(expLabel), { y: 24 }, {
+      y: -20, ease: 'none',
+      scrollTrigger: { trigger: '#experience', start: 'top bottom', end: 'bottom top', scrub: 1.2 }
+    });
+  }
 
   // ── 技能卡：错峰浮现 ──
   document.querySelectorAll('.skill-card').forEach((card, i) => {

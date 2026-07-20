@@ -3133,8 +3133,6 @@
     <div class="hero-grid">
       <div class="hero-left">
 
-        <div class="hero-title">ChEN Portfolio</div>
-
         <div class="hero-tag">AIGC Creator · Design Futurist</div>
 
 
@@ -4131,7 +4129,8 @@ requestAnimationFrame(drawMatrix);
 const revealClasses = ['.reveal', '.reveal-left', '.reveal-right', '.reveal-scale', '.reveal-clip'];
 const allRevealEls = document.querySelectorAll(revealClasses.join(','));
 
-const revealObserver = new IntersectionObserver((entries) => {
+// 暴露到 window：GSAP 接管全部 .reveal 元素后要停用它，避免两套系统并存
+const revealObserver = window.revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
@@ -6260,6 +6259,7 @@ if (avatarWrap && window.innerWidth > 600) {
   function reveal(el, fromVars, opts = {}) {
     takeOver(el);
     gsap.set(el, fromVars);
+    let played = false;
     // 只把"自己设过的"属性动回原位：不碰未声明的通道，
     // 这样同一元素上的滚动视差（y）可以和入场（x/opacity）并存而不互相覆盖。
     const to = {
@@ -6271,33 +6271,39 @@ if (avatarWrap && window.innerWidth > 600) {
         trigger: opts.trigger || el,
         start: opts.start || 'top 88%',
         once: true,
-        onEnter: opts.onEnter
+        onEnter: () => { played = true; if (opts.onEnter) opts.onEnter(); },
+        // refresh 会清掉尚未播放元素的隐藏态，导致入场动画被跳过（元素提前显形）；
+        // 播放过的则绝不再碰，避免把内容重新藏起来 —— 两个方向的失效都堵住。
+        onRefresh: () => { if (!played) gsap.set(el, fromVars); }
       }
     };
-    Object.keys(fromVars).forEach(k => { to[k] = (k === 'opacity') ? 1 : 0; });
+    // 各属性的"归位值"：位移类归 0，缩放/透明度归 1，clip-path 归完全展开
+    const REST = { opacity: 1, scale: 1, scaleX: 1, scaleY: 1, clipPath: 'inset(0 0% 0 0)' };
+    Object.keys(fromVars).forEach(k => { to[k] = (k in REST) ? REST[k] : 0; });
     const tw = gsap.to(el, to);
-    revealed.push({ el, tw });
+    // force(): 兜底强制显形。必须同时把 played 置真，
+    // 否则下一次 refresh 的 onRefresh 会再把它藏回去，形成闪烁循环。
+    revealed.push({ el, tw, force: () => { played = true; gsap.set(el, { clearProps: 'all' }); } });
     return tw;
   }
   const nodesOf = el => (el instanceof Element ? [el] : Array.from(el));
   // 兜底 1：refresh 后若有已播完却仍不可见的元素，直接清掉内联样式
   ScrollTrigger.addEventListener('refresh', () => {
-    revealed.forEach(({ el, tw }) => {
-      if (tw.progress() === 1) nodesOf(el).forEach(n => {
-        if (getComputedStyle(n).opacity === '0') gsap.set(n, { clearProps: 'all' });
-      });
+    revealed.forEach(({ el, tw, force }) => {
+      if (tw.progress() === 1 && nodesOf(el).some(n => getComputedStyle(n).opacity === '0')) force();
     });
   });
-  // 兜底 2：内容永远不该因动画而永久消失。任何已进入视口却仍隐藏的元素，
-  // 一律强制显示——宁可丢一次入场动画，也不能让访客看到空白。
+  // 兜底 2：内容永远不该因动画而永久消失。任何已进入视口却仍隐藏、
+  // 且没有动画在跑的元素，一律强制显示——宁可丢一次入场动画，也不能让访客看到空白。
   setInterval(() => {
-    revealed.forEach(({ el }) => nodesOf(el).forEach(n => {
-      if (getComputedStyle(n).opacity !== '0') return;
-      const r = n.getBoundingClientRect();
-      if (r.top < innerHeight * 0.9 && r.bottom > 0 && !gsap.isTweening(n)) {
-        gsap.set(n, { clearProps: 'all' });
-      }
-    }));
+    revealed.forEach(({ el, force }) => {
+      const stuck = nodesOf(el).some(n => {
+        if (getComputedStyle(n).opacity !== '0') return false;
+        const r = n.getBoundingClientRect();
+        return r.top < innerHeight * 0.75 && r.bottom > 0 && !gsap.isTweening(n);
+      });
+      if (stuck) force();
+    });
   }, 1500);
 
   // ── 章节标签：终端解码进场（ScrambleText）──
@@ -6388,6 +6394,31 @@ if (avatarWrap && window.innerWidth > 600) {
   // ── education 终端窗口：拉起 ──
   const eduCard = document.querySelector('#education .terminal-card');
   if (eduCard) reveal(eduCard, { y: 50, opacity: 0 }, { duration: 0.9, start: 'top 85%' });
+
+  // ── 收编所有仍留在旧 .reveal 系统里的元素 ──
+  // 之前是"两套系统各管一半"：容器归旧的 IntersectionObserver，子元素归 GSAP。
+  // 任一侧没触发，整块就是空白 —— 这正是"有时 work 有时不 work"的来源。
+  // 典型案例：.timeline 容器停在 opacity:0 / translateX(±60px)，
+  // 里面的条目动画再正确也看不见。此处统一由 GSAP 接管，只留一套系统。
+  const LEGACY = {
+    'reveal-left':  { x: -60, skewX: 3,  opacity: 0 },
+    'reveal-right': { x: 60,  skewX: -3, opacity: 0 },
+    'reveal-scale': { scale: 0.88, y: 20, opacity: 0 },
+    'reveal-clip':  { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+    'reveal':       { y: 68, opacity: 0 }
+  };
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-clip')
+    .forEach(el => {
+      const key = ['reveal-left','reveal-right','reveal-scale','reveal-clip','reveal']
+        .find(k => el.classList.contains(k));
+      if (!key) return;
+      // 沿用原有的 reveal-delay-N 节奏
+      const d = ['reveal-delay-1','reveal-delay-2','reveal-delay-3','reveal-delay-4','reveal-delay-5']
+        .findIndex(c => el.classList.contains(c));
+      reveal(el, { ...LEGACY[key] }, { duration: 0.9, delay: d >= 0 ? (d + 1) * 0.12 : 0, start: 'top 90%' });
+    });
+  // 旧观察器不再需要：类已被 takeOver 摘除，它加的 .visible 也不会再有作用。
+  if (window.revealObserver) window.revealObserver.disconnect();
 
   ScrollTrigger.refresh(); // 全量校准
   } // buildEffects

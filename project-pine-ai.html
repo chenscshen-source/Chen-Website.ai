@@ -336,6 +336,46 @@
       .tl-lane.up,.tl-lane.down{margin:0}
       .tl-rail{display:none}
     }
+
+    /* 所有案例截图统一小圆角 + 细边，杜绝方角白底裸图 */
+    .case-visual img,.media img,.feature-media img,.computer-grid img,
+    .split-item .feature-media img,.ladder-step img,.ab-col img,
+    .shot img,.shot-row img{border-radius:12px;border:1px solid var(--dim);background:#0b0b0b}
+    .media{border-radius:14px;overflow:hidden}
+
+    /* 通用截图行：等宽多图并排 */
+    .shot-row{display:grid;gap:20px;margin-top:34px}
+    .shot-row.c2{grid-template-columns:repeat(2,1fr)}
+    .shot-row.c3{grid-template-columns:repeat(3,1fr)}
+    .shot .lvl{font-size:10.5px;letter-spacing:2.2px;color:var(--pine);text-transform:uppercase;margin-bottom:12px}
+    .shot img{width:100%;display:block}
+    .shot p{margin:14px 0 0;font-size:13px;line-height:1.65;color:var(--muted)}
+    .shot-wide img{width:100%;display:block;border-radius:12px;border:1px solid var(--dim)}
+    .shot-wide p{margin:14px 0 0;font-size:13px;color:var(--muted)}
+
+    /* 决策树 */
+    .policy{margin-top:38px;border:1px solid var(--dim);border-radius:20px;padding:34px 32px;background:rgba(240,237,230,.02)}
+    .policy h4{margin:0 0 6px;font-size:19px;color:var(--white);font-weight:700}
+    .policy .sub{margin:0 0 26px;font-size:13.5px;color:var(--muted)}
+    .policy-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .pill{border:1px solid var(--dim);border-radius:999px;padding:11px 20px;font-size:13px;color:var(--white)}
+    .pill.start{background:var(--pine);color:#0b1a0e;border-color:transparent;font-weight:700}
+    .pill.yes{background:rgba(185,239,104,.12);border-color:rgba(185,239,104,.4);color:var(--pine)}
+    .policy-row .arrow{color:var(--muted);font-size:14px}
+    .policy-row .lead-to{font-size:13px;letter-spacing:.4px;color:var(--pine);font-weight:700}
+    .policy .no-branch{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#e0806f;margin:22px 0 16px}
+
+    /* 数据条 */
+    .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:44px;padding-top:32px;border-top:1px solid var(--dim)}
+    .stat-strip b{display:block;font-family:'Bebas Neue',Impact,sans-serif;font-size:34px;color:var(--pine);line-height:1}
+    .stat-strip span{display:block;margin-top:6px;font-size:12px;line-height:1.5;color:var(--muted)}
+
+    @media (max-width:900px){
+      .shot-row.c2,.shot-row.c3{grid-template-columns:1fr}
+      .stat-strip{grid-template-columns:repeat(2,1fr)}
+      .policy{padding:24px 20px}
+    }
+    main img{border-radius:12px}
   </style>
 </head>
 <body>
@@ -371,29 +411,35 @@
   </header>
 
   <main>
-    <!-- 01 THE PROBLEM -->
+    <!-- 01 BACKGROUND -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">01</div><div class="kicker">The problem</div></div>
-        <h2 class="section-title">DELEGATION IS AN ACT OF TRUST</h2>
-        <p class="section-lead">Pine makes real phone calls, negotiates bills and drives a computer on your behalf. Its output is not an answer — it is an outcome in the world. That changes the design problem entirely: <strong>the more capable the agent becomes, the less the user can see, and the more it feels like losing control.</strong></p>
+        <div><div class="section-index">01</div><div class="kicker">Background &amp; goal</div></div>
+        <h2 class="section-title">AN AGENT THAT ACTS IN THE REAL WORLD</h2>
+        <p class="section-lead">Pine is a personal AI assistant that gets things done by acting — it places real phone calls to negotiate your bills, books appointments, fills forms, and drives a computer to finish multi-step jobs. Unlike a chatbot, <strong>its output is not an answer; it is an outcome in the real world.</strong></p>
       </div>
       <div class="overview-grid reveal">
         <article class="brief">
           <div class="kicker">The core tension</div>
-          <h3>ANXIETY, NOT CAPABILITY, IS THE CEILING</h3>
-          <p>Every task handed to Pine puts something real on the line — money, appointments, personal data. Adoption is not limited by what the model can do. It is limited by what a person is willing to hand over.</p>
+          <h3>DELEGATION ANXIETY IS THE REAL CEILING</h3>
+          <p>The more capable the agent becomes, the less the user can see — and the more it feels like losing control. Every task handed to Pine is an act of trust: money, appointments, personal data. Delegation anxiety, not capability, is the real adoption ceiling.</p>
           <dl>
-            <div class="brief-row"><dt>Context</dt><dd>A personal AI agent acting across phone, web and connected services.</dd></div>
-            <div class="brief-row"><dt>Problem</dt><dd>Capability grows faster than the user's ability to observe and steer it.</dd></div>
-            <div class="brief-row"><dt>Approach</dt><dd>Design the status, control and evidence systems that make delegation feel safe.</dd></div>
-            <div class="brief-row"><dt>Scope</dt><dd>Sprints 8–13 — agent status, Computer Use, human handoff, task results.</dd></div>
+            <div class="brief-row"><dt>Role</dt><dd>Product Designer — Interaction &amp; UI</dd></div>
+            <div class="brief-row"><dt>Scope</dt><dd>Sprints 8–13, mobile app and desktop web</dd></div>
+            <div class="brief-row"><dt>Focus</dt><dd>Agent status, feedback and control systems</dd></div>
+            <div class="brief-row"><dt>Surfaces</dt><dd>Voice · chat · computer use</dd></div>
           </dl>
         </article>
-        <div class="media"><img src="images/pine-ai/computer-use-overview.png" alt="Pine AI computer use across desktop and mobile" fetchpriority="high"></div>
+        <div class="media"><img src="images/pine-ai/case-task-progress.png" alt="A live task in chat — Pine lowering a user's Xfinity bill" fetchpriority="high"></div>
+      </div>
+      <div class="stat-strip reveal">
+        <div><b>6 sprints</b><span>Sprints 8–13 owned end-to-end</span></div>
+        <div><b>100+</b><span>screens across mobile &amp; web</span></div>
+        <div><b>3 surfaces</b><span>voice · chat · computer use</span></div>
+        <div><b>1 system</b><span>status, control and evidence</span></div>
       </div>
       <div class="reveal">
-        <div class="kicker" style="margin-top:52px">What actually stops people — three anxieties behind every hand-off</div>
+        <div class="kicker" style="margin-top:56px">What actually stops people — three anxieties behind every hand-off</div>
         <div class="pain-grid">
           <div class="pain-card"><b>01</b><h4>“Did it understand me?”</h4><p>Voice is fast but lossy. Users fear the agent misheard a name, a date or an amount — and will act on the wrong thing without them noticing.</p><small>Miscommitment</small></div>
           <div class="pain-card"><b>02</b><h4>“What is it doing right now?”</h4><p>Minutes of silence while an AI makes real calls in your name. No progress, no proof — the black box is where trust dies.</p><small>The black box</small></div>
@@ -405,34 +451,30 @@
     <!-- 02 TRUST FRAMEWORK -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">02</div><div class="kicker">Analysis</div></div>
+        <div><div class="section-index">02</div><div class="kicker">Analysis · how trust forms around an agent</div></div>
         <h2 class="section-title">TRUST IS BUILT — OR LOST — ACROSS THE TASK LIFECYCLE</h2>
-        <p class="section-lead">I mapped user anxiety across the three stages of delegating a task. Each stage has one dominant question in the user's head and one failure mode that destroys trust. <strong>These three questions became the backbone of every design decision that follows.</strong></p>
+        <p class="section-lead">I mapped user anxiety across the three stages of delegating a task to Pine. Each stage has one dominant question in the user's head, and one failure mode that destroys trust. <strong>These three questions became the backbone of every design decision that follows.</strong></p>
       </div>
       <div class="anxiety reveal">
         <div class="anxiety-top">
           <div class="kicker">User anxiety across a delegated task</div>
-          <div class="anxiety-legend"><i>– – –</i> without design support &nbsp;&nbsp; <b>———</b> with the trust system</div>
+          <div class="anxiety-legend"><i>– – –</i> without design support &nbsp;&nbsp; <b>———</b> with the trust system (touchpoints marked)</div>
         </div>
         <svg viewBox="0 0 1040 190" preserveAspectRatio="none" role="img" aria-label="Anxiety rises without design support and is pushed down at four touchpoints">
           <path d="M 20 150 C 280 130 620 70 1020 26" fill="none" stroke="#ff5a2e" stroke-width="2.5" stroke-dasharray="8 7" opacity=".85"/>
           <path d="M 20 150 C 110 146 170 138 240 146 C 320 154 340 120 420 128 C 500 136 530 108 610 118 C 690 128 730 106 820 118 C 910 130 970 142 1020 152" fill="none" stroke="#b9ef68" stroke-width="3"/>
-          <g fill="#b9ef68">
-            <circle cx="240" cy="146" r="5"/><circle cx="420" cy="128" r="5"/><circle cx="610" cy="118" r="5"/><circle cx="820" cy="118" r="5"/>
-          </g>
+          <g fill="#b9ef68"><circle cx="240" cy="146" r="5"/><circle cx="420" cy="128" r="5"/><circle cx="610" cy="118" r="5"/><circle cx="820" cy="118" r="5"/></g>
           <g fill="rgba(240,237,230,.62)" font-size="11" font-family="'Space Mono',monospace">
-            <text x="240" y="172" text-anchor="middle">Task card</text>
-            <text x="420" y="172" text-anchor="middle">Thinking states</text>
-            <text x="610" y="172" text-anchor="middle">Live view</text>
-            <text x="820" y="172" text-anchor="middle">Summary</text>
+            <text x="240" y="172" text-anchor="middle">Task card</text><text x="420" y="172" text-anchor="middle">Thinking states</text>
+            <text x="610" y="172" text-anchor="middle">Live view</text><text x="820" y="172" text-anchor="middle">Summary</text>
           </g>
         </svg>
         <div class="anxiety-x"><span>Delegate</span><span>Execute</span><span>Deliver</span></div>
       </div>
       <div class="reveal">
         <div class="stage-grid">
-          <div class="stage-card"><div class="st">Stage 1 · Delegate</div><h4>“What exactly is it about to do?”</h4><p class="fail">Failure mode: the blind hand-off — the user submits a task into a void and immediately regrets it.</p><p class="fix">Design answer → set expectations before execution: task cards state the goal, the plan and what Pine may need from you.</p></div>
-          <div class="stage-card"><div class="st">Stage 2 · Execute</div><h4>“What is it doing right now?”</h4><p class="fail">Failure mode: the black box — minutes of silence while an AI makes calls with your name on them.</p><p class="fix">Design answer → continuous visibility: thinking states, live progress and a real-time window into every action.</p></div>
+          <div class="stage-card"><div class="st">Stage 1 · Delegate</div><h4>“What exactly is it about to do?”</h4><p class="fail">Failure mode: the blind hand-off — user submits a task into a void and immediately regrets it.</p><p class="fix">Design answer → set expectations before execution: task cards state the goal, the plan and what Pine may need from you.</p></div>
+          <div class="stage-card"><div class="st">Stage 2 · Execute</div><h4>“What is it doing right now?”</h4><p class="fail">Failure mode: the black box — minutes of silence while an AI makes calls with your name on them.</p><p class="fix">Design answer → continuous visibility: thinking states, live progress, and a real-time window into every action.</p></div>
           <div class="stage-card"><div class="st">Stage 3 · Deliver</div><h4>“What did I actually get?”</h4><p class="fail">Failure mode: the unverifiable claim — “done!” with nothing the user can check or keep.</p><p class="fix">Design answer → structured proof: summaries, artifacts and next steps the user can verify and reuse.</p></div>
         </div>
         <div class="conclusion-bar">Three questions → three design goals: SEE IT · STEER IT · GET IT</div>
@@ -459,26 +501,22 @@
         <h2 class="section-title">MAKE THE AGENT'S WORK VISIBLE — AT THE FIDELITY YOU CHOOSE</h2>
         <p class="section-lead">Visibility is not one component — it is a system of altitudes. A glanceable status for the 95% of the time users don't care, and a full live window for the moments they do. <strong>Two surfaces carry this: thinking states in chat, and the Computer Use view.</strong></p>
       </div>
-      <div class="case-module reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Thinking</div><img src="images/pine-ai/core-thinking.png" alt="Pine AI thinking state in chat"></div>
-        <div class="case-analysis">
-          <div class="kicker">A · Thinking states</div>
-          <h3>REASONING YOU CAN GLANCE, NOT A WALL OF LOGS</h3>
-          <p>Trust needs calm, not spectacle. Streaming every token of reasoning reads as noise and makes errors louder. Progressive disclosure keeps confidence high and reading cost low.</p>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>Collapsed by default</h4><p>One calm line signals “I'm working” without taxing attention.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>Expandable on demand</h4><p>The live step list is one tap away for users who want to follow the reasoning.</p></div></div>
-            <div class="design-point"><b>03</b><div><h4>Folds when done</h4><p>Thinking collapses into a compact trace so the answer stays the hero.</p></div></div>
-          </div>
+      <div class="reveal">
+        <div class="kicker">A · Thinking states — reasoning you can glance, not a wall of logs</div>
+        <div class="shot-row c3">
+          <div class="shot"><img src="images/pine-ai/case-thinking-collapsed.png" alt="Thinking collapsed by default"><p>Collapsed by default — one calm line signals “I'm working”, no cognitive tax.</p></div>
+          <div class="shot"><img src="images/pine-ai/case-thinking-expanded.png" alt="Thinking expanded to a live step list"><p>Tap to expand — the live step list, for users who want to follow the reasoning.</p></div>
+          <div class="shot"><img src="images/pine-ai/case-thinking-done.png" alt="Thinking folded into a compact trace"><p>Done — thinking folds into a compact trace; the answer stays the hero.</p></div>
         </div>
+        <div class="decision-note" style="margin-top:30px"><b>Why collapsed by default</b><p>Trust needs calm, not spectacle. Showing every token of reasoning reads as noise and makes errors louder. Progressive disclosure keeps confidence high and cost low.</p></div>
       </div>
       <div class="reveal">
-        <div class="kicker" style="margin-top:56px">B · Computer Use — a window, not a log</div>
+        <div class="kicker" style="margin-top:60px">B · Computer Use — a window, not a log</div>
         <p class="section-lead" style="margin-top:14px">When Pine drives a real computer, users deserve to watch. I designed one truth at three altitudes — the same live session, progressively disclosed. Read-only by design: you can always look, and the playback scrubber lets you rewind any step.</p>
-        <div class="ladder">
-          <div class="ladder-step"><div class="lvl">L1 · Glance</div><img src="images/pine-ai/computer-use-banner.png" alt="Computer Use banner in chat"><p>Banner in chat — one line plus a live thumbnail. Enough to know it is running.</p></div>
-          <div class="ladder-step"><div class="lvl">L2 · Monitor</div><img src="images/pine-ai/core-computer-mobile.png" alt="Computer Use panel on mobile"><p>Bottom panel — live screen, step 4/5, thinking timer and playback controls.</p></div>
-          <div class="ladder-step"><div class="lvl">L3 · Inspect</div><img src="images/pine-ai/core-computer-desktop.png" alt="Computer Use full screen on desktop"><p>Full screen — the whole session, scrubbable like a recording.</p></div>
+        <div class="shot-row c3">
+          <div class="shot"><div class="lvl">L1 · Glance</div><img src="images/pine-ai/case-cu-banner.png" alt="Computer Use banner in chat"><p>Banner in chat — one line + live thumbnail. Enough to know it's running.</p></div>
+          <div class="shot"><div class="lvl">L2 · Monitor</div><img src="images/pine-ai/case-cu-panel.png" alt="Computer Use bottom panel"><p>Bottom panel — live screen, step 4/5, thinking timer, playback controls.</p></div>
+          <div class="shot"><div class="lvl">L3 · Inspect</div><img src="images/pine-ai/case-cu-fullscreen.png" alt="Computer Use full screen"><p>Full screen — the whole session, scrubbable like a recording.</p></div>
         </div>
         <div class="decision-note" style="margin-top:30px"><b>The ladder rule</b><p>Every level answers one question and offers exactly one step deeper. Glance → Monitor → Inspect. No level dead-ends; no level forces the next.</p></div>
       </div>
@@ -487,19 +525,19 @@
     <!-- 05 UI ANATOMY -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">05</div><div class="kicker">UI anatomy</div></div>
+        <div><div class="section-index">05</div><div class="kicker">UI anatomy · one surface, dissected</div></div>
         <h2 class="section-title">WHY THE LIVE PANEL EARNS TRUST</h2>
         <p class="section-lead">Every element of this panel answers a specific fear. <strong>Nothing here is decoration — each detail was argued for.</strong></p>
       </div>
       <div class="case-module reverse reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Computer view</div><img src="images/pine-ai/core-computer-mobile.png" alt="Pine AI live computer panel dissected"></div>
+        <div class="case-visual"><div class="screen-label">Core screen / Computer view</div><img src="images/pine-ai/case-cu-panel.png" alt="Pine AI live computer panel dissected"></div>
         <div class="case-analysis">
           <div class="design-points">
             <div class="design-point"><b>01</b><div><h4>Read-only by design</h4><p>Watching is free; intervening is a separate, deliberate act. The badge is a visual contract — the agent cannot be nudged by accident.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>Time made visible</h4><p>The elapsed thinking timer turns silence into progress, so nothing ever feels stuck.</p></div></div>
+            <div class="design-point"><b>02</b><div><h4>Time made visible</h4><p>The elapsed thinking timer turns silence into progress. Nothing ever feels stuck.</p></div></div>
             <div class="design-point"><b>03</b><div><h4>Bounded progress</h4><p>Step 4 / 5 — a numbered plan makes the wait finite. Users forgive slowness they can measure.</p></div></div>
-            <div class="design-point"><b>04</b><div><h4>The past is auditable</h4><p>A playback scrubber, not a log. Every action can be replayed — accountability built into the surface.</p></div></div>
-            <div class="design-point"><b>05</b><div><h4>One step deeper</h4><p>A single obvious exit to full-screen inspection. The disclosure ladder never dead-ends.</p></div></div>
+            <div class="design-point"><b>04</b><div><h4>The past is auditable</h4><p>A playback scrubber, not a log. Every action can be replayed — accountability is built into the surface itself.</p></div></div>
+            <div class="design-point"><b>05</b><div><h4>One step deeper</h4><p>A single, obvious exit to full-screen inspection. The disclosure ladder never dead-ends.</p></div></div>
           </div>
         </div>
       </div>
@@ -508,32 +546,32 @@
     <!-- 06 ITERATION -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">06</div><div class="kicker">Iteration</div></div>
+        <div><div class="section-index">06</div><div class="kicker">Iteration · showing the model's mind, twice</div></div>
         <h2 class="section-title">WE SHIPPED THE WRONG TRANSPARENCY FIRST</h2>
         <p class="section-lead">Chain-of-thought is a double-edged surface. Our first experiment streamed the model's full reasoning into chat — maximum transparency, catastrophic experience. <strong>The iteration taught us that trust comes from legible reasoning, not visible reasoning.</strong></p>
       </div>
       <div class="ab reveal">
-        <div class="ab-col v1"><span class="tag">V1 · Experiment</span><img src="images/pine-ai/thinking-process.png" alt="First version streamed full reasoning"><p>Full reasoning, always expanded. Users read every token — hesitations amplified, hallucinated sub-steps became visible promises, and reading cost grew with model verbosity.</p></div>
+        <div class="ab-col v1"><span class="tag">V1 · Experiment</span><img src="images/pine-ai/case-thinking-legacy.png" alt="First version streamed full reasoning"><p>Full reasoning, always expanded. Users read every token — hesitations amplified, hallucinated sub-steps became visible promises, and reading cost grew with model verbosity.</p></div>
         <div class="ab-arrow">→</div>
-        <div class="ab-col v2"><span class="tag">Shipped</span><img src="images/pine-ai/core-thinking.png" alt="Shipped version summarises reasoning"><p>One calm summary line, expandable on demand. The model's verbosity no longer taxes the user; transparency became a choice instead of a burden.</p></div>
+        <div class="ab-col v2"><span class="tag">Shipped</span><img src="images/pine-ai/case-thinking-collapsed.png" alt="Shipped version summarises reasoning"><p>One calm summary line, expandable on demand. The model's verbosity no longer taxes the user; transparency became a choice instead of a burden.</p></div>
       </div>
       <div class="decision-note reveal" style="margin-top:30px"><b>What this taught us about LLM UX</b><p>Model output length is not under the designer's control — the UI must be. Any surface bound to raw generation inherits its variance. Summarise by default; disclose by intent.</p></div>
     </section>
 
-    <!-- 07 MULTIMODAL PRINCIPLE -->
+    <!-- 07 MULTIMODAL -->
     <section class="section">
       <div class="multimodal reveal">
         <div class="kicker">The first principle · why these patterns exist at all</div>
         <h3><em>Voice for the gist,</em><br>UI for the rest.</h3>
-        <p class="lead">Pine's bet: voice is the highest-bandwidth way into a computer — you speak roughly 4× faster than you type, and tone and urgency come for free. But the way back is different. Reading beats listening for anything dense, exact or private. So the product is not “a voice assistant” — it is a multimodal loop, and my job was to design the half that voice cannot carry.</p>
+        <p class="lead">Pine's bet: voice is the highest-bandwidth way into a computer — you speak roughly 4× faster than you type, and tone and urgency come for free. But the way back is different. Reading beats listening for anything dense, exact, or private. So the product is not “a voice assistant” — it is a multimodal loop, and my job was to design the half that voice can't carry.</p>
         <div class="mm-grid">
           <div class="mm-card"><span class="ic">🗣</span><h5>Talk to decide</h5><p>Discussion, options, judgment. Voice keeps the conversation flowing — the gist, not every detail read back aloud.</p></div>
           <div class="mm-card"><span class="ic">👆</span><h5>Tap to confirm</h5><p>Exact constraints — a booking time, a hard no-go window — become a scannable card. You tap through the spec instead of reciting it.</p></div>
           <div class="mm-card"><span class="ic">⌨</span><h5>Type in private</h5><p>An SSN or password must never land in the voice channel. Pine stops you mid-sentence and opens a secure typed field instead.</p></div>
         </div>
         <div class="mm-dual">
-          <div class="mm-lane"><small>Fast thinking</small><h6>Keeps the conversation flowing</h6><p>Real-time, low-latency. Tracks pauses, hesitation, interruptions and back-channels — the live voice loop.</p></div>
-          <div class="mm-lane"><small>Slow thinking</small><h6>Gets things done</h6><p>Runs alongside: plans, retrieves, calls tools, manages long tasks — surfaced as the screens in this case study.</p></div>
+          <div class="mm-lane"><small>Fast thinking</small><h6>Keeps the conversation flowing</h6><p>Real-time, low-latency. Tracks pauses, hesitation, interruptions, back-channels — the live voice loop.</p></div>
+          <div class="mm-lane"><small>Slow thinking</small><h6>Gets things done</h6><p>Runs alongside: plans, retrieves, calls tools, manages long tasks — surfaced as the screens in this study.</p></div>
         </div>
       </div>
     </section>
@@ -541,9 +579,9 @@
     <!-- 08 TASK TIMELINE -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">07</div><div class="kicker">Anatomy of one task</div></div>
+        <div><div class="section-index">07</div><div class="kicker">Anatomy of one task · where my screens live in time</div></div>
         <h2 class="section-title">“LOWER MY XFINITY BILL” — TWO MINDS, ONE TIMELINE</h2>
-        <p class="section-lead">One spoken sentence sets off two parallel minds. Fast thinking holds the live conversation; slow thinking runs the real work in the background. <strong>Every screen I designed is a moment where background work has to surface to the human.</strong></p>
+        <p class="section-lead">One spoken sentence sets off two parallel minds. Fast thinking holds the live conversation; slow thinking runs the real work in the background. <strong>Every screen I designed is a moment where the background work has to surface to the human.</strong></p>
       </div>
       <div class="tl reveal">
         <div class="tl-lane up">
@@ -554,10 +592,10 @@
         </div>
         <div class="tl-rail"></div>
         <div class="tl-lane down">
-          <div class="tl-node mine"><div class="t">Slow thinking</div><h5>Task card appears</h5><p>Goal, plan and what Pine may need — set before acting.</p><span class="badge">◆ My screen</span></div>
-          <div class="tl-node mine"><div class="t">Slow thinking</div><h5>Live Computer-Use view</h5><p>Read-only window into the real call, step 4 / 5.</p><span class="badge">◆ My screen</span></div>
+          <div class="tl-node mine"><div class="t">Delegate</div><h5>Task card appears</h5><p>Goal, plan and what Pine may need — set before acting.</p><span class="badge">◆ My screen</span></div>
+          <div class="tl-node mine"><div class="t">Execute</div><h5>Live Computer-Use view</h5><p>Read-only window into the real call, step 4 / 5.</p><span class="badge">◆ My screen</span></div>
           <div class="tl-node mine"><div class="t">Human handoff</div><h5>Verification call</h5><p>The provider needs a human — three-way call card.</p><span class="badge">◆ My screen</span></div>
-          <div class="tl-node mine"><div class="t">Deliver</div><h5>Result card</h5><p>Savings, new speed, next steps — verifiable and keepable.</p><span class="badge">◆ My screen</span></div>
+          <div class="tl-node mine"><div class="t">Deliver</div><h5>Result card</h5><p>Outcome, next steps — verifiable and keepable.</p><span class="badge">◆ My screen</span></div>
         </div>
         <div class="tl-legend"><span>Fast thinking — live voice</span><span><b>Slow thinking — background work + my UI</b></span></div>
       </div>
@@ -569,51 +607,37 @@
       <div class="section-head reveal">
         <div><div class="section-index">08</div><div class="kicker">Strategy 2 · Steer it</div></div>
         <h2 class="section-title">HAND THE WHEEL BACK AT THE MOMENTS THAT MATTER</h2>
-        <p class="section-lead">Full autonomy is not the goal — earned autonomy is. I designed human-in-the-loop patterns placed exactly where a wrong move would be irreversible: <strong>personal data, standing permissions and identity verification.</strong></p>
+        <p class="section-lead">Full autonomy is not the goal — earned autonomy is. I designed five human-in-the-loop patterns, each placed exactly where a wrong move would be irreversible: <strong>personal data, standing permissions, and identity verification.</strong></p>
       </div>
-      <div class="case-module reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Form</div><img src="images/pine-ai/core-form.png" alt="Structured form inside the task thread"></div>
-        <div class="case-analysis">
-          <div class="kicker">P1 · Structured ask</div>
-          <h3>ASK ONCE, INLINE, STRUCTURED</h3>
-          <p>When Pine needs your details it asks once as an embedded task artifact — not an interrogation spread over ten messages.</p>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>Question grouping</h4><p>Related fields form one scannable object instead of multiple assistant messages.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>Local validation</h4><p>Errors sit beside the affected field while the primary action reflects overall completeness.</p></div></div>
-            <div class="design-point"><b>03</b><div><h4>Two display modes</h4><p>Inline review supports quick answers; a focused panel handles longer or overflow forms.</p></div></div>
-          </div>
+      <div class="reveal">
+        <div class="shot-row c3">
+          <div class="shot"><div class="lvl">P1 · Structured ask</div><img src="images/pine-ai/case-form-card.png" alt="In-chat structured form"><p>In-chat forms — when Pine needs your details it asks once, structured and inline, instead of an interrogation over ten messages.</p></div>
+          <div class="shot"><div class="lvl">P2 · Approval gate</div><img src="images/pine-ai/case-need-actions.png" alt="Need-action approval card"><p>Need-action cards — routines pause and wait for an explicit human sign-off before anything runs on your behalf.</p></div>
+          <div class="shot"><div class="lvl">P3 · Human handoff</div><img src="images/pine-ai/case-verify-calling.png" alt="Three-way verification call"><p>Three-way verification — when a bank insists on a human, Pine dials you in for the sensitive moment, then takes the call back.</p></div>
+        </div>
+        <div class="shot-row c2" style="margin-top:26px">
+          <div class="shot"><div class="lvl">P4 · Send review</div><img src="images/pine-ai/case-email-review.png" alt="Outbound email review"><p>Outbound email review — nothing leaves in your name without your eyes on it first.</p></div>
+          <div class="shot"><div class="lvl">P5 · Scoped access</div><img src="images/pine-ai/case-gcal-connect.png" alt="Scoped calendar permission"><p>Connecting Google Calendar — permissions asked in context, scoped to the task, never a blanket grant.</p></div>
         </div>
       </div>
-      <div class="case-module reverse reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Need Actions</div><img src="images/pine-ai/core-need-action.png" alt="Blocked task surfaced at three levels"></div>
-        <div class="case-analysis">
-          <div class="kicker">P2 · Approval gate</div>
-          <h3>MAKE A BLOCKED TASK VISIBLE AT THREE LEVELS</h3>
-          <p>Routines pause and wait for explicit human sign-off. The interruption repeats in the task list, the conversation and the composer, so a blocked task cannot disappear when context changes.</p>
-          <div class="ia-map">
-            <div class="ia-node"><small>Navigation</small><span>Task badge</span></div>
-            <div class="ia-node"><small>Conversation</small><span>Reason and context</span></div>
-            <div class="ia-node"><small>Action</small><span>Required response</span></div>
-          </div>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>Persistent discoverability</h4><p>Need Actions labels make blocked tasks visible before users open the thread.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>Non-error language</h4><p>The agent is waiting for judgment, so the UI frames this as continuation rather than failure.</p></div></div>
-          </div>
+      <div class="policy reveal">
+        <h4>The interruption policy — when does Pine stop and ask?</h4>
+        <p class="sub">Interruptions are spent like a budget. One policy decides every pause — designed once, applied everywhere.</p>
+        <div class="policy-row">
+          <span class="pill start">Pine needs to act</span>
+          <span class="arrow">→</span>
+          <span class="pill">Reversible · in-scope · low-stakes?</span>
+          <span class="arrow">YES →</span>
+          <span class="pill yes">Act autonomously — and log every step</span>
         </div>
+        <div class="no-branch">NO ↓ &nbsp; what is at stake?</div>
+        <div class="policy-row"><span class="pill">Needs your personal data</span><span class="arrow">→</span><span class="lead-to">P1 · Structured ask — an inline form, once</span></div>
+        <div class="policy-row"><span class="pill">Moves money or makes a commitment</span><span class="arrow">→</span><span class="lead-to">P2 · Approval gate — explicit sign-off</span></div>
+        <div class="policy-row"><span class="pill">Institution insists on a human</span><span class="arrow">→</span><span class="lead-to">P3 · Human handoff — three-way call</span></div>
+        <div class="policy-row"><span class="pill">Speaks in your name (email, messages)</span><span class="arrow">→</span><span class="lead-to">P4 · Send review — you see it before it leaves</span></div>
+        <div class="policy-row" style="margin-bottom:0"><span class="pill">Touches a connected account</span><span class="arrow">→</span><span class="lead-to">P5 · Scoped access — permission in context</span></div>
       </div>
-      <div class="case-module reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Verification call</div><img src="images/pine-ai/call-verification.png" alt="Three-way verification call"></div>
-        <div class="case-analysis">
-          <div class="kicker">P3 · Human handoff</div>
-          <h3>WHEN AN INSTITUTION INSISTS ON A HUMAN</h3>
-          <p>Some providers require the account holder on the line. Pine dials the user into the sensitive moment, then takes the call back — the handoff is designed, not improvised.</p>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>Scheduled, not ambushed</h4><p>The user is told why and when they are needed, and can reschedule.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>State is explicit</h4><p>Calling, confirmed, expired and rescheduled each read differently at a glance.</p></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="decision-note reveal" style="margin-top:8px"><b>The pause rule</b><p>Pine only interrupts when regret would be irreversible: money moves, identity, standing permissions. Everything else keeps flowing — interruptions are spent like a budget.</p></div>
+      <div class="decision-note reveal" style="margin-top:28px"><b>The pause rule</b><p>Pine only interrupts when regret would be irreversible: money moves, identity, standing permissions. Everything else keeps flowing — interruptions spent like a budget.</p></div>
     </section>
 
     <!-- 10 GET IT -->
@@ -621,59 +645,82 @@
       <div class="section-head reveal">
         <div><div class="section-index">09</div><div class="kicker">Strategy 3 · Get it</div></div>
         <h2 class="section-title">END EVERY TASK WITH PROOF, NOT A PROMISE</h2>
-        <p class="section-lead">An agent's word is worthless without receipts. The result system bookends every task: expectations set in a structured card before execution, and <strong>a record the user can verify, keep and act on</strong> when it ends.</p>
+        <p class="section-lead">An agent's word is worthless without receipts. The result system bookends every task: expectations are set in a structured card before execution, and <strong>every run ends in a record the user can verify, keep, and act on.</strong></p>
       </div>
-      <div class="case-module reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Task Summary</div><img src="images/pine-ai/core-task-summary.png" alt="Structured task summary"></div>
-        <div class="case-analysis">
-          <div class="kicker">R1 · Structured record</div>
-          <h3>ONE STATE MACHINE, ONE CARD FAMILY</h3>
-          <p>New → Started → In progress → Done → Continue. One card family carries the task through every state, so users learn it once and then read every task at a glance.</p>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>What changed</h4><p>The summary states the outcome and the delta, not just that work happened.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>What's next</h4><p>Follow-up actions are part of the result, so the task can continue without re-explaining.</p></div></div>
-          </div>
+      <div class="reveal">
+        <div class="shot-row c3">
+          <div class="shot"><div class="lvl">R1 · Kickoff</div><img src="images/pine-ai/case-task-started.png" alt="Task card at start"><p>Task card at start — goal, plan, and what Pine may need. Expectations before execution.</p></div>
+          <div class="shot"><div class="lvl">R2 · Task summary</div><img src="images/pine-ai/case-task-summary.png" alt="Structured task summary"><p>One structured record per task — what was done, what changed, what's next.</p></div>
+          <div class="shot"><div class="lvl">R3 · Call record</div><img src="images/pine-ai/case-call-summary.png" alt="Auditable call record"><p>Every call ends in an auditable to-do trail — outcomes become checkable items.</p></div>
         </div>
-      </div>
-      <div class="case-module reverse reveal">
-        <div class="case-visual"><div class="screen-label">Core screen / Call Summary</div><img src="images/pine-ai/core-call-summary.png" alt="Call summary returned to the task"></div>
-        <div class="case-analysis">
-          <div class="kicker">R2 · Call record</div>
-          <h3>RETURN VOICE OUTPUT TO THE TASK</h3>
-          <p>After the call, the result is no longer ephemeral audio. Summary, follow-up actions and call evidence become part of the same task architecture.</p>
-          <div class="design-points">
-            <div class="design-point"><b>01</b><div><h4>Cross-channel continuity</h4><p>The call result uses the same task language as chat and computer execution.</p></div></div>
-            <div class="design-point"><b>02</b><div><h4>Review before action</h4><p>Users can inspect the outcome before the agent proceeds with a dependent step.</p></div></div>
-          </div>
+        <div class="decision-note" style="margin-top:30px"><b>One state machine</b><p>New → Started → In progress → Done → Continue. One card family carries the task through every state — users learn it once, then read every task at a glance.</p></div>
+        <div class="shot-wide" style="margin-top:44px">
+          <div class="kicker" style="margin-bottom:14px">R4 · Cross-surface — the same result system scales to desktop web</div>
+          <img src="images/pine-ai/case-todo-inchat-web.png" alt="Result system on desktop web">
         </div>
       </div>
     </section>
 
-    <!-- 11 PRINCIPLES -->
+    <!-- 11 STANDING DELEGATION -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">10</div><div class="kicker">Principles</div></div>
+        <div><div class="section-index">10</div><div class="kicker">When trust compounds · standing delegation</div></div>
+        <h2 class="section-title">FROM ONE TASK TO A STANDING RELATIONSHIP</h2>
+        <p class="section-lead">Once the see–steer–get loop proves itself, users graduate from single errands to standing delegation: tasks that run on a schedule, a notebook that remembers every outcome, and replay highlights that keep long-running work auditable. <strong>This is trust compounding into a relationship.</strong></p>
+      </div>
+      <div class="shot-wide reveal">
+        <img src="images/pine-ai/case-sched-home-clean.png" alt="Scheduled tasks home">
+        <p>Scheduled tasks home — recurring work Pine runs without being asked twice.</p>
+      </div>
+      <div class="reveal">
+        <div class="shot-row c3" style="margin-top:44px">
+          <div class="shot"><div class="lvl">Schedule it</div><img src="images/pine-ai/case-sched-setting.png" alt="Task scheduling settings"><p>Task settings — cadence, scope and limits set once, editable anytime.</p></div>
+          <div class="shot"><div class="lvl">Remember it</div><img src="images/pine-ai/case-notebook-mobile.png" alt="Task notebook on mobile"><p>Task Notebook — every run leaves structured memory Pine builds on.</p></div>
+          <div class="shot"><div class="lvl">Audit it</div><img src="images/pine-ai/case-replay-highlight.png" alt="Replay highlights"><p>Replay highlights — key moments of long runs, auto-marked for review.</p></div>
+        </div>
+        <div class="shot-wide" style="margin-top:44px">
+          <div class="kicker" style="margin-bottom:14px">Task Notebook on desktop — the standing record of everything Pine has done for you</div>
+          <img src="images/pine-ai/case-notebook-web.png" alt="Task notebook on desktop">
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 SELECTED SCREENS -->
+    <section class="section">
+      <div class="section-head reveal">
+        <div><div class="section-index">11</div><div class="kicker">Selected screens</div></div>
+        <h2 class="section-title">THE SYSTEM IN THE WILD</h2>
+      </div>
+      <div class="reveal">
+        <div class="shot-wide"><img src="images/pine-ai/case-cu-popup.png" alt="Computer Use pop-up live view on web"><p>Computer Use on web — pop-up live view.</p></div>
+        <div class="shot-wide" style="margin-top:36px"><img src="images/pine-ai/case-cu-sideview.png" alt="Computer Use docked side view on web"><p>Computer Use on web — docked side view while you keep chatting.</p></div>
+      </div>
+    </section>
+
+    <!-- 13 PRINCIPLES -->
+    <section class="section">
+      <div class="section-head reveal">
+        <div><div class="section-index">12</div><div class="kicker">Principles · what conversational AI demands from design</div></div>
         <h2 class="section-title">FOUR RULES I NOW DESIGN BY</h2>
-        <p class="section-lead">What designing for a conversational agent demands that ordinary product design does not.</p>
       </div>
       <div class="principle-grid reveal">
         <div class="principle-card"><b>01</b><h4>Design for probability, not the happy path</h4><p>LLM output is a distribution, not a result. Every surface needs a “partially right” state — confidence framing, editable results, graceful correction — not just success and failure.</p></div>
         <div class="principle-card"><b>02</b><h4>Latency is a material</h4><p>Streaming tokens, thinking states, elapsed timers: pacing is to AI products what typography is to print. We design the wait, not just the answer.</p></div>
-        <div class="principle-card"><b>03</b><h4>Context is the real UI</h4><p>What the model remembers, what it is allowed to touch and what it forgets shape user trust more than any single screen.</p></div>
-        <div class="principle-card"><b>04</b><h4>Failure is a first-class flow</h4><p>Misheard calls, wrong forms, refused requests — repair paths get the same design care as the golden path, because they carry the most trust weight.</p></div>
+        <div class="principle-card"><b>03</b><h4>Context is the real UI</h4><p>What the model remembers (the Notebook), what it is allowed to touch (scoped access) and what it forgets shape user trust more than any single screen.</p></div>
+        <div class="principle-card"><b>04</b><h4>Failure is a first-class flow</h4><p>Misheard calls, wrong forms, refused requests — repair paths (edit, retry, escalate to human) get the same design care as the golden path, because they carry the most trust weight.</p></div>
       </div>
     </section>
 
-    <!-- 12 REFLECTION -->
+    <!-- 14 REFLECTION -->
     <section class="section">
       <div class="section-head reveal">
-        <div><div class="section-index">11</div><div class="kicker">Reflection</div></div>
-        <h2 class="section-title">DESIGNING BEHAVIOR, NOT ONLY SCREENS</h2>
+        <div><div class="section-index">13</div><div class="kicker">Beyond features · reflection</div></div>
+        <h2 class="section-title">WHAT DESIGNING FOR AN AGENT TAUGHT ME</h2>
       </div>
       <div class="reflection-grid reveal">
-        <div class="tension"><div class="signal">Systems, not screens</div><h3>THE QUIET WORK</h3><p>Alongside features I maintained the icon library, upgraded the button component family and kept chat spacing rules consistent across sprints — the work that makes 100+ screens feel like one product.</p></div>
-        <div class="tension"><div class="signal">Status is the product</div><h3>FEEDBACK IS THE CORE LOOP</h3><p>In agent UX, feedback design is not polish. Users do not evaluate the model; they evaluate what they can see of it. The status system is the product.</p></div>
-        <div class="tension"><div class="signal">Design the pauses</div><h3>WHEN NOT TO AUTOMATE</h3><p>The hardest decisions were about where the agent stops and asks. Choosing those moments mattered more than any single screen.</p></div>
+        <div class="tension"><div class="signal">Systems, not screens</div><h3>THE QUIET WORK</h3><p>Alongside features I maintained the icon library, upgraded the button component family, and kept chat spacing rules consistent across sprints — the quiet work that makes 100+ screens feel like one product.</p></div>
+        <div class="tension"><div class="signal">Status is the product</div><h3>FEEDBACK IS THE CORE LOOP</h3><p>In agent UX, feedback design is not polish — it is the core loop. Users don't evaluate the model; they evaluate what they can see of it. The status system is the product.</p></div>
+        <div class="tension"><div class="signal">Design the pauses</div><h3>WHEN NOT TO AUTOMATE</h3><p>The hardest decisions were about when NOT to automate. Choosing where the agent stops and asks turned out to matter more than any single screen.</p></div>
       </div>
     </section>
   </main>

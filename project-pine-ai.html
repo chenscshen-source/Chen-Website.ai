@@ -640,6 +640,122 @@
 
     .policy-row .arrow{font-size:var(--t-body)!important}
     .multimodal h3 em{font-size:inherit!important}
+
+    /* Case-study proof layer: Pine brand, six-sprint evolution, real UI evidence */
+    .proof-section{background:#f5f4ef;color:#081d11;padding:104px var(--gutter) 118px;border-bottom:1px solid #d7d3d0}
+    .proof-intro{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:60px;align-items:start;margin-bottom:62px}
+    .proof-kicker{color:#144629;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+    .proof-title{max-width:980px;margin:18px 0;font-family:Arial,sans-serif;font-size:clamp(48px,6.2vw,88px);font-weight:700;line-height:.95;letter-spacing:-.055em}
+    .proof-lead{max-width:760px;color:#79716b;font-size:16px;line-height:1.75}
+    .proof-brand{height:220px;padding:22px;border-radius:18px;background:#144629;color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+    .proof-brand .eyes{font:700 44px/1 Arial,sans-serif;letter-spacing:-13px;color:#fff}
+    .proof-brand span{color:#d9f99d;font-size:10px;line-height:1.6;letter-spacing:1px;text-transform:uppercase}
+    .evolution{display:grid;grid-template-columns:.78fr 1fr 1.34fr;gap:14px;align-items:stretch}
+    .era{min-width:0;padding:24px;border:1px solid #d7d3d0;border-radius:22px;background:#fff;display:flex;flex-direction:column}
+    .era.agent{background:#144629;border-color:#144629;color:#fff;transform:translateY(-24px)}
+    .era-time{color:#144629;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .agent .era-time{color:#d9f99d}
+    .era h3{margin:10px 0 6px;font:700 clamp(22px,2vw,30px)/1.05 Arial,sans-serif;letter-spacing:-.03em}
+    .era-sub{margin-bottom:20px;color:#79716b;font-size:11px;line-height:1.5}
+    .agent .era-sub{color:#b6c6bd}
+    .era-canvas{display:grid;gap:10px;margin-bottom:22px}
+    .era-canvas.two{grid-template-columns:1fr 1fr}
+    .era-canvas img{width:100%;height:220px;object-fit:contain;border-radius:12px;background:#f7f7f5}
+    .era.task .era-canvas img:first-child{grid-column:1/-1;height:190px}
+    .era.agent .era-canvas img{height:260px;background:#081d11}
+    .era-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto}
+    .era-tags span{padding:7px 10px;border-radius:999px;background:#d9f99d;color:#081d11;font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+    .era-tags span:nth-child(2){background:#bfdbfe}.era-tags span:nth-child(3){background:#fed7aa}
+    .era-outcome{margin-top:18px;font-size:14px;line-height:1.5;color:#144629}
+    .agent .era-outcome{color:#fff}
+    .work-map{margin-top:76px;border-top:2px solid #081d11}
+    .work-row{display:grid;grid-template-columns:120px 190px minmax(0,1fr) 150px;gap:22px;align-items:start;padding:22px 0;border-bottom:1px solid #cfcac5}
+    .work-row .sprint{color:#144629;font-size:12px;font-weight:700}.work-row h4{font:700 17px/1.3 Arial,sans-serif}.work-row p{color:#655f5a;font-size:11px;line-height:1.65}.work-row strong{color:#144629;font-size:10px;line-height:1.5;text-transform:uppercase}
+    .proof-note{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:54px;background:#d7d3d0;border:1px solid #d7d3d0}
+    .proof-note div{padding:30px;background:#fff}.proof-note small{color:#144629;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}.proof-note p{margin-top:12px;color:#4e4945;font-size:13px;line-height:1.7}
+    @media(max-width:900px){.proof-section{padding:78px 24px}.proof-intro{grid-template-columns:1fr}.proof-brand{height:126px}.evolution{grid-template-columns:1fr}.era.agent{transform:none}.era-canvas img,.era.task .era-canvas img:first-child,.era.agent .era-canvas img{height:auto;max-height:460px}.work-row{grid-template-columns:70px 1fr}.work-row p,.work-row strong{grid-column:2}.proof-note{grid-template-columns:1fr}}
+
+    /* ═══ 对齐与尺寸校正 ═══════════════════════════════ */
+    /* 1 · decision-note 回到左栏线，宽度并入主容器 */
+    .decision-note{max-width:none!important;margin:var(--s6) 0 0 0!important;
+      padding:var(--s5) var(--s5) var(--s5) var(--s5)!important;
+      border-left:2px solid var(--accent)!important;background:var(--dim-2)}
+    .decision-note b{font-size:var(--t-label)!important;letter-spacing:1.8px!important}
+
+    /* 2 · overview-grid 的 1px 是描边分隔（保留），但内格留白纳入刻度 */
+    .overview-grid > *{padding:var(--s5)!important}
+
+    /* 3 · 图片在容器内绝对居中 */
+    .shot img,.shot-wide img,.ab-col img,.media img,.case-visual img{
+      display:block;margin-inline:auto}
+    .shot,.ab-col{text-align:left}
+
+    /* 4 · 卡片正文左对齐、标签基线一致 */
+    .pain-card,.stage-card,.principle-card,.goal-card,.mm-card{text-align:left}
+
+    /* 5 · 章节内边距统一（120 上下 → 刻度 96） */
+    main .section{padding-top:var(--s9)!important;padding-bottom:var(--s9)!important}
+    .multimodal{padding-top:var(--s9)!important;padding-bottom:var(--s9)!important}
+
+    /* 6 · 结论条与政策块拉满主容器宽度 */
+    .conclusion-bar,.policy,.anxiety,.tl{width:100%;box-sizing:border-box}
+
+    /* 7 · 三列/两列栅格在窄屏统一降级 */
+    @media (max-width:900px){
+      .pain-grid,.stage-grid,.goal-grid,.principle-grid,.mm-grid,
+      .shot-row,.mm-dual,.overview-grid{grid-template-columns:1fr!important}
+      .decision-note{padding:var(--s4)!important}
+      main .section{padding-top:var(--s8)!important;padding-bottom:var(--s8)!important}
+    }
+
+    /* ═══ Evolution 区块纳入排版与间距系统 ═══════════════ */
+    .proof-kicker,.era-time,.era-sub,.era-tags span,.proof-brand span,
+    .proof-note b,.proof-note .lbl
+      {font-size:var(--t-label)!important;line-height:1.4!important;letter-spacing:1.8px!important}
+    .proof-lead,.era-outcome,.proof-note p,.proof-note div
+      {font-size:var(--t-body)!important;line-height:1.7!important;letter-spacing:0!important}
+    .era h3{font-size:var(--t-title)!important;line-height:1.4!important;letter-spacing:0!important}
+    .proof-title{font-size:clamp(32px,4vw,52px)!important;line-height:1.05!important;letter-spacing:1px!important}
+
+    /* 间距归入 4px 网格 */
+    .proof-section{padding:var(--s9) var(--gutter)!important}
+    .proof-intro{gap:var(--s7)!important;margin-bottom:var(--s7)}
+    .proof-brand{padding:var(--s5)!important}
+    .evolution{gap:var(--s5)!important}
+    .era{padding:var(--s5)!important}
+    .era-canvas{gap:var(--s3)!important;margin:var(--s4) 0!important}
+    .era-tags{gap:var(--s2)!important;margin-top:var(--s4)!important}
+    .era-tags span{padding:var(--s1) var(--s3)!important}
+    .era-time{margin-bottom:var(--s2)!important}
+    .era h3{margin:0 0 var(--s1)!important}
+    .era-sub{margin-bottom:var(--s3)!important}
+    .era-outcome{margin:var(--s4) 0 0!important}
+    .proof-note{margin-top:var(--s7)!important}
+    .proof-note > *{padding:var(--s5)!important}
+
+    /* 图片尺寸与圆角对齐全站 */
+    .era-canvas img{max-height:320px;width:auto;max-width:100%;border-radius:10px;
+      display:block;margin-inline:auto;object-fit:contain}
+
+    @media (max-width:900px){
+      .proof-section{padding:var(--s8) var(--gutter)!important}
+      .proof-intro{gap:var(--s5)!important}
+      .era,.proof-brand,.proof-note > *{padding:var(--s4)!important}
+      .era-canvas img{max-height:240px}
+    }
+
+    /* work-row 区块纳入系统 */
+    .work-row .sprint,.work-row small{font-size:var(--t-label)!important;letter-spacing:1.8px!important;line-height:1.4!important}
+    .work-row p{font-size:var(--t-body)!important;line-height:1.7!important}
+    .work-row h4{font-size:var(--t-title)!important;line-height:1.4!important;letter-spacing:0!important;margin:0 0 var(--s2)!important}
+    .work-row{padding:var(--s5)!important;gap:var(--s5)!important}
+    .work-row .sprint{margin-bottom:var(--s2)!important}
+    .work-row p{margin:0!important}
+    /* 全局兜底：任何遗留的 small / em 归入刻度 */
+    main small,.proof-section small{font-size:var(--t-label)!important;letter-spacing:1.8px!important}
+    main em,.proof-section em{font-size:inherit!important;font-style:normal}
+    .proof-title{margin:0 0 var(--s5)!important}
+    .case-module.reverse{margin-top:var(--s7)!important}
   </style>
 </head>
 <body>
@@ -675,6 +791,47 @@
   </header>
 
   <main>
+    <section class="proof-section">
+      <div class="proof-intro reveal">
+        <div>
+          <div class="proof-kicker">Six sprints / Product evolution</div>
+          <h2 class="proof-title">From chat interface<br>to delegated agency.</h2>
+          <p class="proof-lead">Six months of interaction design across mobile and desktop. The work was not a sequence of isolated features. It was one continuous shift: helping people express intent, making long-running work understandable, then giving them control over an agent acting in the real world.</p>
+        </div>
+        <div class="proof-brand"><div class="eyes">● ●</div><span>Pine product design<br>Sprint 8 to 13</span></div>
+      </div>
+
+      <div class="evolution reveal">
+        <article class="era">
+          <div class="era-time">S8 to S9</div><h3>Foundation</h3><div class="era-sub">Express intent</div>
+          <div class="era-canvas two"><img src="images/pine-ai/case-thinking-collapsed.png" alt="Pine thinking state"><img src="images/pine-ai/case-form-card.png" alt="Pine structured form"><img src="images/pine-ai/case-need-actions.png" alt="Pine human approval gate"></div>
+          <div class="era-tags"><span>Chat and forms</span><span>Human gates</span></div>
+          <p class="era-outcome">Intent became structured, reviewable and actionable.</p>
+        </article>
+        <article class="era task">
+          <div class="era-time">S10 to S12</div><h3>Task operating system</h3><div class="era-sub">See, steer and repeat work</div>
+          <div class="era-canvas two"><img src="images/pine-ai/case-sched-home-clean.png" alt="Scheduled tasks desktop"><img src="images/pine-ai/case-task-summary.png" alt="Task summary"><img src="images/pine-ai/case-replay-highlight.png" alt="Replay highlight"></div>
+          <div class="era-tags"><span>Schedule</span><span>Memory</span><span>Replay</span></div>
+          <p class="era-outcome">Tasks gained history, continuity and repeatability.</p>
+        </article>
+        <article class="era agent">
+          <div class="era-time">S13</div><h3>Delegated agency</h3><div class="era-sub">Watch and control Computer Use</div>
+          <div class="era-canvas two"><img src="images/pine-ai/core-computer-desktop.png" alt="Pine Computer Use on desktop"><img src="images/pine-ai/case-cu-panel.png" alt="Pine Computer Use mobile panel"></div>
+          <div class="era-tags"><span>Monitor</span><span>Inspect</span><span>Take over</span></div>
+          <p class="era-outcome">The interface became a control room for an agent acting in the real world.</p>
+        </article>
+      </div>
+
+      <div class="work-map reveal">
+        <div class="work-row"><div class="sprint">S08</div><h4>Intent foundation</h4><p>Chat input, sample prompts, thinking experiments, inline forms, Need Actions, verification and three-way calling.</p><strong>Input and control</strong></div>
+        <div class="work-row"><div class="sprint">S09</div><h4>Task feedback</h4><p>To-do, task summary, call summary, voice states, settings, connections, artifacts and task-card behavior.</p><strong>Status and evidence</strong></div>
+        <div class="work-row"><div class="sprint">S10</div><h4>Continuity</h4><p>Google Calendar, Task Notebook, responsive settings, task sharing and referrals across web and mobile.</p><strong>Memory and ecosystem</strong></div>
+        <div class="work-row"><div class="sprint">S11</div><h4>Ambient feedback</h4><p>Full-screen voice and toast patterns for low-attention moments, interruptions and lightweight confirmations.</p><strong>Presence and pacing</strong></div>
+        <div class="work-row"><div class="sprint">S12</div><h4>Standing delegation</h4><p>Scheduled tasks, Replay Highlight, email review, intention collection, Task Home and repeatable Task Runs.</p><strong>Repeatability and trust</strong></div>
+        <div class="work-row"><div class="sprint">S13</div><h4>Agent control room</h4><p>Computer Use across desktop, mobile, pop-up and side view, plus downloadable artifacts and inspectable steps.</p><strong>Agency and oversight</strong></div>
+      </div>
+      <div class="proof-note reveal"><div><small>What shipped</small><p>A cross-platform interaction system spanning intent capture, planning, live execution, human approval, result artifacts and memory.</p></div><div><small>What I learned</small><p>AI product design is the design of uncertainty: making probability legible, latency meaningful, autonomy bounded and failure recoverable.</p></div></div>
+    </section>
     <!-- 01 BACKGROUND -->
     <section class="section">
       <div class="section-head reveal">
@@ -949,19 +1106,7 @@
       </div>
     </section>
 
-    <!-- 12 SELECTED SCREENS -->
-    <section class="section">
-      <div class="section-head reveal">
-        <div><div class="section-index">11</div><div class="kicker">Selected screens</div></div>
-        <h2 class="section-title">THE SYSTEM IN THE WILD</h2>
-      </div>
-      <div class="reveal">
-        <div class="shot-wide"><img src="images/pine-ai/case-cu-popup.png" alt="Computer Use pop-up live view on web"><p>Computer Use on web — pop-up live view.</p></div>
-        <div class="shot-wide"><img src="images/pine-ai/case-cu-sideview.png" alt="Computer Use docked side view on web"><p>Computer Use on web — docked side view while you keep chatting.</p></div>
-      </div>
-    </section>
-
-    <!-- 13 PRINCIPLES -->
+    <!-- 12 PRINCIPLES -->
     <section class="section">
       <div class="section-head reveal">
         <div><div class="section-index">12</div><div class="kicker">Principles · what conversational AI demands from design</div></div>
@@ -975,7 +1120,7 @@
       </div>
     </section>
 
-    <!-- 14 REFLECTION -->
+    <!-- 13 REFLECTION -->
     <section class="section">
       <div class="section-head reveal">
         <div><div class="section-index">13</div><div class="kicker">Beyond features · reflection</div></div>

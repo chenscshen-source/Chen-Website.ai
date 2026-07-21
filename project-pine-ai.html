@@ -597,6 +597,49 @@
     .design-point p{margin:0!important}
     .ab-col p{margin-top:var(--s4)!important}
     .ab-col .tag{margin-bottom:var(--s3)!important}
+
+    /* ═══ 最终排版音阶：4 级正文 + 2 级展示 ═══════════════
+       LABEL 10 · BODY 13 · TITLE 18 · LEAD 24
+       DISPLAY-M 40 · DISPLAY-L clamp                       */
+    :root{--t-label:10px; --t-body:13px; --t-title:18px; --t-lead:24px;}
+
+    /* 1 · LABEL 10px — 所有大写小标签、元信息、编号 */
+    .kicker,.hero-label,.screen-label,.lvl,.st,.tagline,.badge,
+    .pain-card small,.mm-lane small,.tl-node .t,.anxiety-x,.tl-legend,
+    .no-branch,.stat-strip span,.design-point b,.caption b,.signal,
+    .section-index,.meta small,.anxiety-legend,.ab-col .tag,.mm-card h5,
+    .ia-node small,.tab,.policy .sub,.brief dt
+    {font-size:var(--t-label)!important;line-height:1.4!important;letter-spacing:1.8px!important}
+
+    /* 2 · BODY 13px — 一切正文、说明、卡片描述 */
+    .section-lead,.multimodal .lead,.meta span,.shot p,.shot-wide p,
+    .caption p,.tl-node p,.mm-card p,.mm-lane p,.stage-card .fail,
+    .stage-card .fix,.pain-card p,.goal-card p,.principle-card p,
+    .brief p,.brief dd,.design-point p,.decision-note p,.case-analysis > p,
+    .tension p,.pill,.policy-row .lead-to,.ia-node span,.flow-step p,
+    .feature-copy p,.ab-col p,.state p
+    {font-size:var(--t-body)!important;line-height:1.7!important;letter-spacing:0!important}
+
+    /* 3 · TITLE 18px — 卡片标题、小节标题 */
+    .pain-card h4,.stage-card h4,.principle-card h4,.tl-node h5,
+    .mm-lane h6,.design-point h4,.flow-step h4,.state h3,.goal-card h4,
+    .policy h4,.decision-note b,.brief h3,.case-analysis h3,.tension h3
+    {font-size:var(--t-title)!important;line-height:1.4!important;letter-spacing:0!important}
+
+    /* 4 · LEAD 24px — 章节导语、结论条 */
+    .conclusion-bar{font-size:var(--t-lead)!important;line-height:1.4!important}
+
+    /* 展示级：仅 Bebas 大标题两档 */
+    .section-title{font-size:clamp(32px,4vw,52px)!important;line-height:1.05!important;letter-spacing:1px!important}
+    .multimodal h3{font-size:clamp(28px,3.4vw,44px)!important;line-height:1.1!important}
+    .hero-title{font-size:clamp(56px,7.5vw,96px)!important}
+    .hero-num{font-size:clamp(60px,9vw,120px)!important}
+    /* 数字装饰统一 40px */
+    .pain-card b,.goal-card b,.principle-card b,.stat-strip b,.ab-arrow,.mm-card .ic
+    {font-size:40px!important;line-height:1!important}
+
+    .policy-row .arrow{font-size:var(--t-body)!important}
+    .multimodal h3 em{font-size:inherit!important}
   </style>
 </head>
 <body>

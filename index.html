@@ -720,10 +720,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    isolation: isolate;
+  }
+  .avatar-reactive-field {
+    position: absolute;
+    inset: -14% -10%;
+    z-index: 0;
+    width: 120%;
+    height: 128%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .hero-right:hover .avatar-reactive-field { opacity: 0.72; }
+  .avatar-sprite {
+    position: relative;
+    z-index: 1;
   }
   .avatar-sprite {
-    width: 520px;
-    height: 650px;
+    width: 600px;
+    height: 750px;
     cursor: none;
     flex: 0 0 auto;
   }
@@ -737,8 +753,8 @@
     transition: transform 0.4s ease, filter 0.4s ease;
   }
   .avatar-sprite {
-    width: 520px;
-    height: 650px;
+    width: 600px;
+    height: 750px;
     /* 首屏先用 35KB 静态正面帧秒开；7MB 图集在后台加载完成后由 JS 换上 */
     background-image: url('images/pine-sprite/avatar-mobile.webp');
     background-size: contain;
@@ -1408,6 +1424,35 @@
     position: relative;
     overflow: hidden;
   }
+  .contact-link,
+  .contact-value {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+  }
+  .contact-copy {
+    width: 32px;
+    height: 32px;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 32px;
+    margin-left: auto;
+    padding: 0;
+    color: rgba(240, 240, 235, 0.48);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  .contact-copy svg { width: 14px; height: 14px; }
+  .contact-copy:hover { color: var(--acid); }
+  .contact-copy:focus-visible { color: var(--acid); outline: 1px solid rgba(205, 255, 0, 0.55); outline-offset: 3px; }
+  .contact-copy:active { transform: scale(0.9); }
+  .contact-copy.is-copied { color: var(--acid); }
   .contact-item::before {
     content: '';
     position: absolute;
@@ -1741,6 +1786,18 @@
     overflow: hidden;
     position: relative;
   }
+
+  /* Keep the Education title and terminal on one row. The title owns a stable
+     column; the terminal fills every remaining pixel and stays against the right gutter. */
+  .education-layout {
+    display: grid;
+    grid-template-columns: clamp(280px, 23vw, 360px) minmax(0, 1fr);
+    align-items: center;
+    gap: 60px;
+  }
+  .education-intro { min-width: 0; }
+  .education-terminal { min-width: 0; width: 100%; }
+  #education .education-terminal .terminal-card { width: 100%; }
   .terminal-header {
     background: rgba(240,237,230,0.05);
     padding: 14px 20px;
@@ -1965,6 +2022,7 @@
     #contact { min-height: 0; padding: 72px 24px 56px; }
     footer { padding: 28px 24px; flex-direction: column; gap: 12px; text-align: center; }
     .hero-grid, .about-grid, .contact-inner, .exp-grid { grid-template-columns: 1fr; gap: 60px; }
+    .education-layout { grid-template-columns: 1fr; gap: 40px; }
     .hero-right { display: none; }
     .skills-grid { grid-template-columns: 1fr 1fr; }
     .hero-name-mega { font-size: clamp(80px, 28vw, 160px); }
@@ -2035,14 +2093,14 @@
     .nav-mobile-drawer { display: block; }
 
 
-    #hero { padding: 0; }
-    .hero-stage { padding: 70px 20px 50px; }
+    #hero { min-height: auto; padding: 0; }
+    .hero-stage { min-height: auto; padding: 92px 20px 48px; }
     .hero-name-mega { font-size: clamp(64px, 22vw, 120px); }
-    .hero-subtitle { font-size: 11px; letter-spacing: 2px; max-width: 100%; }
-    .hero-subtitle-line { gap: 16px; margin-top: 14px; }
-    .hero-bottom { margin-top: 24px; gap: 16px; }
-    .hero-cta { gap: 12px; }
-    .hero-tag { font-size: 9px; letter-spacing: 2px; padding: 6px 12px; margin-bottom: 12px; }
+    .hero-subtitle { font-size: 10px; letter-spacing: .7px; line-height: 1.65; max-width: 340px; }
+    .hero-subtitle-line { gap: 16px; margin-top: 12px; }
+    .hero-bottom { width: 100%; margin-top: 22px; gap: 12px; }
+    .hero-cta { gap: 10px; }
+    .hero-tag { font-size: 9px; letter-spacing: 1.6px; line-height: 1.6; padding: 0; margin-bottom: 10px; }
     .hero-bg-text { display: none; }
     .hero-mega-wrap { margin-top: 0; }
 
@@ -2072,16 +2130,15 @@
     .hero-bottom {
       align-items: center;
     }
-    .hero-cta {
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
+    .hero-cta { justify-content: center; flex-direction: row; align-items: center; width: 100%; }
     .hero-cta .btn-primary,
     .hero-cta .btn-outline {
-      width: 100%;
-      max-width: 320px;
+      width: calc(50% - 5px);
+      max-width: none;
+      min-height: 48px;
+      padding: 12px 8px;
+      font-size: 9px;
+      letter-spacing: 1.4px;
       justify-content: center;
     }
     .hero-year-badge {
@@ -2095,15 +2152,18 @@
       align-items: flex-start;
       width: 100%;
       order: -1;
-      height: 320px;
+      height: 250px;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 22px;
     }
+
+    .avatar-reactive-field { display: none !important; }
 
     .hero-grid {
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 24px;
     }
 
     .avatar-float-wrap {
@@ -2115,6 +2175,14 @@
       position: relative;
       flex-shrink: 0;
       overflow: hidden !important;
+    }
+
+    .hero-right .avatar-sprite {
+      width: 280px !important;
+      height: 350px !important;
+      flex: 0 0 280px;
+      background-position: center top !important;
+      background-size: contain !important;
     }
 
     .avatar-svg-clip {
@@ -3058,6 +3126,7 @@
     }
     #tv-scanlines, .wc-grain, .scan-beam, .wc-scan { display: none !important; }
     .timeline { --line-progress: 1 !important; }
+    .avatar-reactive-field { display: none !important; }
   }
 
   /* ── 性能：hero 滚出视口后暂停其所有常驻动画 ── */
@@ -3167,6 +3236,7 @@
       </div>
 
       <div class="hero-right" id="hero-right-section">
+        <canvas class="avatar-reactive-field" id="avatar-reactive-field" aria-hidden="true"></canvas>
         <div class="avatar-transparent avatar-sprite" id="avatar-main" role="img" aria-label="ChEN avatar following cursor direction"></div>
       </div>
     </div>
@@ -3204,6 +3274,25 @@
   <div class="works-track-outer" id="works-scene">
     <div class="works-track" id="works-stage">
 
+      <a class="work-card wide theme-green" id="card06" href="project-pine-ai.html" aria-label="查看 Pine AI 项目详情">
+        <div class="wc-chrome"></div>
+        <div class="wc-titlebar">
+          <div class="wc-dot d-r"></div><div class="wc-dot d-y"></div><div class="wc-dot d-g"></div>
+          <div class="wc-title-text">Pine AI · Agent UX</div><div class="wc-status-dot"></div>
+        </div>
+        <div class="wc-body">
+          <div class="wc-bg" style="background-image:url(images/pine-ai/computer-use-banner.png);background-position:center;background-size:cover;"></div>
+          <div class="wc-card01-overlay"></div><div class="wc-grid"></div><div class="wc-scan"></div><div class="wc-grain"></div><div class="wc-follower"></div><div class="wc-glitch-r"></div><div class="wc-glitch-b"></div>
+          <div class="wc-num">01</div><div class="wc-bignum">01</div>
+          <div class="wc-content">
+            <div class="wc-tag">AI Agent · Interaction Design · UI System</div>
+            <div class="wc-title">PINE AI</div>
+            <div class="wc-desc">Making AI execution visible, controllable and trustworthy across desktop and mobile.</div>
+            <div class="wc-cta">View Case Study <span class="wc-cta-arrow">→</span></div>
+          </div>
+          <div class="wc-statusbar"><span>SYS: PINE.AGENT</span><span><span class="wc-statusbar-dot"></span>STATUS: ACTIVE</span></div>
+        </div>
+      </a>
 
       <a class="work-card wide theme-gold" id="card01" href="project-1.html" aria-label="查看项目详情">
 
@@ -3225,8 +3314,8 @@
           <div class="wc-follower"></div>
           <div class="wc-glitch-r"></div>
           <div class="wc-glitch-b"></div>
-          <div class="wc-num">01</div>
-          <div class="wc-bignum">01</div>
+          <div class="wc-num">02</div>
+          <div class="wc-bignum">02</div>
 
           <div class="wc-content">
             <div class="wc-tag">AI Film · Brand TVC · Generative Art</div>
@@ -3262,8 +3351,8 @@
           <div class="wc-follower"></div>
           <div class="wc-glitch-r"></div>
           <div class="wc-glitch-b"></div>
-          <div class="wc-num">02</div>
-          <div class="wc-bignum">02</div>
+          <div class="wc-num">03</div>
+          <div class="wc-bignum">03</div>
 
           <div class="wc-content">
             <div class="wc-tag">UX · Web3 · Dashboard · Vibe Coding</div>
@@ -3300,8 +3389,8 @@ DESIGN</div>
           <div class="wc-follower"></div>
           <div class="wc-glitch-r"></div>
           <div class="wc-glitch-b"></div>
-          <div class="wc-num">03</div>
-          <div class="wc-bignum">03</div>
+          <div class="wc-num">04</div>
+          <div class="wc-bignum">04</div>
 
           <div class="wc-content">
             <div class="wc-tag">Brand Identity · Guidelines · Visual System</div>
@@ -3338,8 +3427,8 @@ DESIGN</div>
           <div class="wc-follower"></div>
           <div class="wc-glitch-r"></div>
           <div class="wc-glitch-b"></div>
-          <div class="wc-num">04</div>
-          <div class="wc-bignum">04</div>
+          <div class="wc-num">05</div>
+          <div class="wc-bignum">05</div>
 
           <div class="wc-content">
             <div class="wc-tag">Campaign · Social · Content Design</div>
@@ -3375,8 +3464,8 @@ DESIGN</div>
           <div class="wc-follower"></div>
           <div class="wc-glitch-r"></div>
           <div class="wc-glitch-b"></div>
-          <div class="wc-num">05</div>
-          <div class="wc-bignum">05</div>
+          <div class="wc-num">06</div>
+          <div class="wc-bignum">06</div>
           <div class="wc-content">
             <div class="wc-tag">Bank App · HMI · Dashboard · Web</div>
             <div class="wc-title">CROSS
@@ -3550,13 +3639,13 @@ PLATFORM</div>
 
 <section id="education">
   <div class="section-label reveal section-label-glitch" data-text="03 — Education">03 — Education</div>
-  <div style="display:flex;align-items:center;gap:60px;flex-wrap:wrap;">
-    <div class="reveal" style="flex:1;min-width:280px;">
+  <div class="education-layout">
+    <div class="education-intro reveal">
       <div style="font-size:11px;letter-spacing:3px;color:var(--acid);margin-bottom:16px;text-transform:uppercase;">2019 · Melbourne, Australia</div>
       <div class="about-headline parallax-enter">Monash<br>University</div>
       <div style="font-size:13px;opacity:0.5;letter-spacing:2px;margin-top:12px;text-transform:uppercase;">MSc Interaction Design</div>
     </div>
-    <div class="reveal reveal-delay-1" style="flex:2;min-width:300px;position:relative;">
+    <div class="education-terminal reveal reveal-delay-1">
       <div class="terminal-card edu-terminal-card" id="edu-terminal">
         <!-- Monash logo glitch layer -->
         <div class="edu-logo-wrap" id="edu-logo">
@@ -3637,29 +3726,73 @@ PLATFORM</div>
       </p>
     </div>
     <div class="contact-list">
-      <a href="mailto:chen.sc.shen@gmail.com" class="contact-item reveal">
-        <span class="contact-icon" style="font-size:14px;">✉</span>
-        chen.sc.shen@gmail.com
-      </a>
-      <a href="tel:18694991046" class="contact-item reveal reveal-delay-1">
-        <span class="contact-icon" style="font-size:16px;">◎</span>
-        186 9499 1046
-      </a>
-      <div class="contact-item reveal reveal-delay-2">
-        <span class="contact-icon" style="font-size:14px;">❞</span>
-        WeChat: Chen10_1001
+      <div class="contact-item reveal">
+        <a href="mailto:chen.sc.shen@gmail.com" class="contact-link">
+          <span class="contact-icon" style="font-size:14px;">✉</span>
+          chen.sc.shen@gmail.com
+        </a>
+        <button class="contact-copy" type="button" data-copy="chen.sc.shen@gmail.com" aria-label="复制邮箱地址" title="复制邮箱地址"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="8" stroke="currentColor"/><path d="M11 5V3H3v8h2" stroke="currentColor"/></svg></button>
       </div>
-      <a href="https://t.me/Irving11111" target="_blank" class="contact-item reveal reveal-delay-3" style="order:3">
-        <span class="contact-icon" style="font-size:13px;color:var(--cyan)">✈</span>
-        Telegram: @Irving11111
-      </a>
-      <a href="https://linkedin.cn/incareer/in/chen-shen-64a2421b3" target="_blank" class="contact-item reveal">
-        <span class="contact-icon" style="font-size:13px;font-weight:700;font-family:Georgia,serif;">in</span>
-        linkedin.cn/in/chen-shen
-      </a>
+      <div class="contact-item reveal reveal-delay-1">
+        <a href="tel:18694991046" class="contact-link">
+          <span class="contact-icon" style="font-size:16px;">◎</span>
+          186 9499 1046
+        </a>
+        <button class="contact-copy" type="button" data-copy="18694991046" aria-label="复制电话号码" title="复制电话号码"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="8" stroke="currentColor"/><path d="M11 5V3H3v8h2" stroke="currentColor"/></svg></button>
+      </div>
+      <div class="contact-item reveal reveal-delay-2">
+        <span class="contact-value"><span class="contact-icon" style="font-size:14px;">❞</span>WeChat: Chen10_1001</span>
+        <button class="contact-copy" type="button" data-copy="Chen10_1001" aria-label="复制微信号" title="复制微信号"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="8" stroke="currentColor"/><path d="M11 5V3H3v8h2" stroke="currentColor"/></svg></button>
+      </div>
+      <div class="contact-item reveal reveal-delay-3" style="order:3">
+        <a href="https://t.me/Irving11111" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <span class="contact-icon" style="font-size:13px;color:var(--cyan)">✈</span>
+          Telegram: @Irving11111
+        </a>
+        <button class="contact-copy" type="button" data-copy="@Irving11111" aria-label="复制 Telegram 用户名" title="复制 Telegram 用户名"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="8" stroke="currentColor"/><path d="M11 5V3H3v8h2" stroke="currentColor"/></svg></button>
+      </div>
+      <div class="contact-item reveal">
+        <a href="https://linkedin.cn/incareer/in/chen-shen-64a2421b3" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <span class="contact-icon" style="font-size:13px;font-weight:700;font-family:Georgia,serif;">in</span>
+          linkedin.cn/in/chen-shen
+        </a>
+        <button class="contact-copy" type="button" data-copy="https://linkedin.cn/incareer/in/chen-shen-64a2421b3" aria-label="复制 LinkedIn 地址" title="复制 LinkedIn 地址"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="8" height="8" stroke="currentColor"/><path d="M11 5V3H3v8h2" stroke="currentColor"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll('.contact-copy').forEach(button => {
+    button.addEventListener('click', async () => {
+      const value = button.dataset.copy;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          const input = document.createElement('textarea');
+          input.value = value;
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          input.remove();
+        }
+        button.classList.add('is-copied');
+        button.setAttribute('aria-label', '已复制');
+        button.title = '已复制';
+        setTimeout(() => {
+          button.classList.remove('is-copied');
+          button.setAttribute('aria-label', `复制${button.dataset.copy}`);
+          button.title = '复制';
+        }, 1400);
+      } catch (_) {
+        button.title = '复制失败';
+      }
+    });
+  });
+</script>
 
 <footer>
   <div class="footer-logo">ChEN</div>
@@ -4195,11 +4328,6 @@ const animateCounter = el => {
   el._counterFrame = requestAnimationFrame(tick);
 };
 
-const parseCssTime = value => {
-  const time = value.trim().split(',')[0] || '0s';
-  return time.endsWith('ms') ? Number.parseFloat(time) : Number.parseFloat(time) * 1000;
-};
-
 const countObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting || entry.target.dataset.counted === 'true') return;
@@ -4211,17 +4339,18 @@ const countObserver = new IntersectionObserver(entries => {
     countObserver.unobserve(stat);
 
     // Reveal first, then start counting while the stat card is visibly entering.
-    // This avoids completing the animation while the card is still transparent.
-    const startWhenVisible = () => {
-      if (!stat.classList.contains('visible')) {
-        requestAnimationFrame(startWhenVisible);
+    // 入场态的唯一真相是 .pre-reveal（GSAP 系统），不是早已废弃的 .visible ——
+    // 等一个永远不会出现的 class 会让计数器永久停在 0。
+    // 兜底：最多等 1.2s 就开数，任何入场异常都不该把数字卡死。
+    const deadline = performance.now() + 1200;
+    const startWhenRevealed = () => {
+      if (stat.classList.contains('pre-reveal') && performance.now() < deadline) {
+        requestAnimationFrame(startWhenRevealed);
         return;
       }
-      const style = getComputedStyle(stat);
-      const revealDelay = parseCssTime(style.transitionDelay);
-      window.setTimeout(() => animateCounter(counter), revealDelay + 220);
+      window.setTimeout(() => animateCounter(counter), 220);
     };
-    startWhenVisible();
+    startWhenRevealed();
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
@@ -4371,16 +4500,33 @@ if (avatarWrap && window.innerWidth > 600) {
 
   const DEAD = 0.10;   // 死区半径
   const RAMP = 0.42;   // 由正面过渡到完整转头所需的额外距离
+  let publishedDirection = null;
+
+  // 供人物背后的空间场复用同一套 360° 朝向，不新增第二套鼠标追踪逻辑。
+  function publishDirection(deg) {
+    const next = Number.isFinite(deg) ? deg : null;
+    if (next === null && publishedDirection === null) return;
+    if (next !== null && publishedDirection !== null) {
+      const delta = Math.abs(((next - publishedDirection + 540) % 360) - 180);
+      if (delta < 0.35) return;
+    }
+    publishedDirection = next;
+    stage.dispatchEvent(new CustomEvent('avatar-direction', { detail: { deg: next } }));
+  }
 
   function targetFromPoint(clientX, clientY) {
     const rect = stageRect();
     const nx = (clientX - rect.left - rect.width / 2) / (rect.width / 2);
     const ny = (clientY - rect.top - rect.height / 2) / (rect.height / 2) * 1.2; // 纵向增益
     const mag = Math.sqrt(nx * nx + ny * ny);
-    if (mag < DEAD) return CENTER_FRAME;      // 死区：回正
+    if (mag < DEAD) {
+      publishDirection(null);
+      return CENTER_FRAME;                    // 死区：回正
+    }
 
     let deg = Math.atan2(ny, nx) * 180 / Math.PI; // y 向下
     if (deg < 0) deg += 360;
+    publishDirection(deg);
     const arc = frameFromAngle(deg);
     // 离中心越远转头越充分；近中心收敛到正面，避免小幅抖动放大成大转头
     return lerpFrame(CENTER_FRAME, arc, smooth(Math.min(1, (mag - DEAD) / RAMP)));
@@ -4446,7 +4592,138 @@ if (avatarWrap && window.innerWidth > 600) {
   atlas.src = 'images/pine-sprite/sprite.webp';
 })();
 
-// Hero 鼠标 3D 倾斜已移除（保留头像的朝向跟随与滚动视差）
+// HERO REACTIVE FIELD — 首次悬停再加载 Three.js；复用上方角色朝向的 avatar-direction 事件。
+(function initAvatarReactiveField() {
+  const stage = document.getElementById('hero-right-section');
+  const canvas = document.getElementById('avatar-reactive-field');
+  if (!stage || !canvas || window._isMobileDevice || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let active = false;
+  let booting = false;
+  let initialized = false;
+  let direction = null;
+  let frame = null;
+  let lastTime = 0;
+  let renderer, scene, camera, field, particles, reticle;
+
+  stage.addEventListener('avatar-direction', event => {
+    direction = event.detail.deg;
+  });
+
+  const resize = () => {
+    if (!renderer) return;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    if (!width || !height) return;
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  };
+
+  const draw = time => {
+    if (!active || !renderer) { frame = null; return; }
+    const delta = lastTime ? Math.min(0.05, (time - lastTime) / 1000) : 1 / 60;
+    lastTime = time;
+    const radians = Number.isFinite(direction) ? direction * Math.PI / 180 : null;
+    const targetX = radians === null ? 0 : Math.cos(radians) * 0.42;
+    const targetY = radians === null ? 0 : -Math.sin(radians) * 0.18;
+    const easing = 1 - Math.exp(-7 * delta);
+    camera.position.x += (targetX - camera.position.x) * easing;
+    camera.position.y += (targetY - camera.position.y) * easing;
+    field.rotation.y += ((radians === null ? 0 : -Math.sin(radians) * 0.13) - field.rotation.y) * easing;
+    reticle.position.x += ((radians === null ? 0 : Math.cos(radians) * 0.58) - reticle.position.x) * easing;
+    reticle.position.y += ((radians === null ? 0 : -Math.sin(radians) * 0.32) - reticle.position.y) * easing;
+    particles.rotation.z += delta * 0.012;
+    camera.lookAt(0, 0, -1.4);
+    renderer.render(scene, camera);
+    frame = requestAnimationFrame(draw);
+  };
+
+  const start = async () => {
+    active = true;
+    if (initialized) {
+      if (frame === null) { lastTime = 0; frame = requestAnimationFrame(draw); }
+      return;
+    }
+    if (booting) return;
+    booting = true;
+    try {
+      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+      renderer.setClearColor(0x000000, 0);
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(29, 1, 0.1, 100);
+      camera.position.set(0, 0, 8.2);
+      field = new THREE.Group();
+      field.position.set(0, -0.15, -1.4);
+      scene.add(field);
+
+      const grid = new THREE.GridHelper(8.6, 14, 0xff5a2e, 0x6d2518);
+      grid.position.set(0, -2.65, -1.45);
+      grid.rotation.x = Math.PI * 0.44;
+      grid.material.transparent = true;
+      grid.material.opacity = 0.24;
+      field.add(grid);
+
+      const tickVertices = [];
+      for (let i = 0; i < 32; i++) {
+        const angle = i / 32 * Math.PI * 2;
+        const inner = i % 4 === 0 ? 3.25 : 3.48;
+        const outer = 3.72;
+        tickVertices.push(Math.cos(angle) * inner, Math.sin(angle) * inner, -2.82);
+        tickVertices.push(Math.cos(angle) * outer, Math.sin(angle) * outer, -2.82);
+      }
+      const tickGeometry = new THREE.BufferGeometry();
+      tickGeometry.setAttribute('position', new THREE.Float32BufferAttribute(tickVertices, 3));
+      const ticks = new THREE.LineSegments(tickGeometry, new THREE.LineBasicMaterial({ color: 0xffb08a, transparent: true, opacity: 0.32, depthWrite: false }));
+      field.add(ticks);
+
+      const count = 86;
+      const positions = new Float32Array(count * 3);
+      let seed = 16807;
+      const random = () => ((seed = seed * 48271 % 2147483647) / 2147483647);
+      for (let i = 0; i < count; i++) {
+        const radius = 1.4 + random() * 3.1;
+        const angle = random() * Math.PI * 2;
+        positions[i * 3] = Math.cos(angle) * radius;
+        positions[i * 3 + 1] = (random() - 0.5) * 5.1;
+        positions[i * 3 + 2] = -random() * 3.2;
+      }
+      const particleGeometry = new THREE.BufferGeometry();
+      particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const particleMaterial = new THREE.PointsMaterial({ color: 0xffb08a, size: 0.043, transparent: true, opacity: 0.62, depthWrite: false });
+      particles = new THREE.Points(particleGeometry, particleMaterial);
+      field.add(particles);
+
+      // 准星只在朝向变化时偏移，制造老式终端坐标锁定的迟滞感。
+      const reticleGeometry = new THREE.BufferGeometry();
+      reticleGeometry.setAttribute('position', new THREE.Float32BufferAttribute([
+        -0.22, 0, -2.72, 0.22, 0, -2.72,
+        0, -0.22, -2.72, 0, 0.22, -2.72
+      ], 3));
+      reticle = new THREE.LineSegments(reticleGeometry, new THREE.LineBasicMaterial({ color: 0xf0ede6, transparent: true, opacity: 0.48, depthWrite: false }));
+      field.add(reticle);
+
+      initialized = true;
+      resize();
+      new ResizeObserver(resize).observe(stage);
+      if (active) { lastTime = 0; frame = requestAnimationFrame(draw); }
+    } catch (_) {
+      active = false;
+      canvas.remove();
+    } finally {
+      booting = false;
+    }
+  };
+
+  stage.addEventListener('pointerenter', start, { passive: true });
+  stage.addEventListener('pointerleave', () => {
+    active = false;
+    if (frame !== null) cancelAnimationFrame(frame);
+    frame = null;
+  }, { passive: true });
+})();
 
 // ════════════════════════════════════════════════════
 // TEXT PROXIMITY BRIGHTEN
@@ -4632,7 +4909,7 @@ if (avatarWrap && window.innerWidth > 600) {
 
   // ── LERP STATE per card ──
   const N = cards.length;
-  const workThemes = ['aigc', 'product', 'brand', 'marketing', 'cross'];
+  const workThemes = ['aigc', 'product', 'brand', 'marketing', 'cross', 'pine'];
   const st = cards.map(() => ({ sc: 0.82, ry: 0, op: 0.3, rx: 0, rye: 0 }));
   function lerp(a,b,t) { return a + (b-a)*t; }
 
@@ -6279,6 +6556,10 @@ if (avatarWrap && window.innerWidth > 600) {
     Object.keys(fromVars).forEach(k => { toVars[k] = (k in REST) ? REST[k] : 0; });
     const show = () => {
       nodes.forEach(n => { n.classList.remove('pre-reveal'); n.classList.add('revealing'); });
+      // fromTo 的 immediateRender 会先把隐藏起始态写进元素。若此刻 ticker 正在睡
+      // （标签页被切走 / 后台加载），补间永远停在 progress 0，元素就永久隐身 ——
+      // 这正是"刷新后标题还在，切一次标签页就没了"的来源。先唤醒再建补间。
+      gsap.ticker.wake();
       gsap.fromTo(el, { ...fromVars }, toVars);
       if (opts.onEnter) opts.onEnter();
     };
@@ -6290,15 +6571,25 @@ if (avatarWrap && window.innerWidth > 600) {
     });
     return show;
   }
-  // 唯一的兜底：进了视口却还挂着 .pre-reveal 的元素，直接摘掉 class 显形。
+  // 兜底：进了视口却仍然看不见的元素，一律强制显形。
   // 宁可丢一次入场动画，也不能让访客看到空白。
+  const inView = n => {
+    const r = n.getBoundingClientRect();
+    return r.top < innerHeight * 0.8 && r.bottom > 0;
+  };
+  const forceShow = n => {
+    n.classList.remove('pre-reveal', 'revealing');
+    gsap.killTweensOf(n);
+    gsap.set(n, { clearProps: 'all' });
+  };
   setInterval(() => {
-    document.querySelectorAll('.pre-reveal').forEach(n => {
-      const r = n.getBoundingClientRect();
-      if (r.top < innerHeight * 0.8 && r.bottom > 0) {
-        n.classList.remove('pre-reveal');
-        gsap.set(n, { clearProps: 'all' });
-      }
+    // ① 从没被触发过的
+    document.querySelectorAll('.pre-reveal').forEach(n => { if (inView(n)) forceShow(n); });
+    // ② 触发了但补间没推进的（隐藏起始态已写入、ticker 却没跑）。入场只有 ~1s，
+    //    连续两轮（>1.2s）仍是全透明，就不是"正在播"，是卡死了。
+    document.querySelectorAll('.revealing').forEach(n => {
+      if (!inView(n) || Number(getComputedStyle(n).opacity) > 0.02) { n._stalled = false; return; }
+      if (n._stalled) forceShow(n); else n._stalled = true;
     });
   }, 1200);
 

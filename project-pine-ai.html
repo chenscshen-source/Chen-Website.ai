@@ -415,6 +415,59 @@
       .section-title{font-size:clamp(30px,7vw,40px)!important}
       .hero-title{font-size:clamp(46px,13vw,68px)!important}
     }
+
+    /* ── 间距刻度：全部 8 的倍数，杜绝随手 margin ── */
+    :root{--s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px}
+
+    /* 章节内统一节奏：相邻块之间恒定 48px，块组之间 64px */
+    main .section > * + *{margin-top:var(--s5)}
+    main .section > .block-group + .block-group{margin-top:var(--s7)}
+
+    /* 语义化工具类，替代散落的 inline margin */
+    .mt-0{margin-top:0!important}
+    .mt-s{margin-top:var(--s3)!important}   /* 24 说明紧跟其上元素 */
+    .mt-m{margin-top:var(--s5)!important}   /* 48 常规块间距 */
+    .mt-l{margin-top:var(--s6)!important}   /* 64 子章节起始 */
+    .mb-s{margin-bottom:var(--s2)!important}
+
+    /* 子章节标题（A· / B· / R4· 这类）统一样式与留白 */
+    .subhead{margin-top:var(--s6);margin-bottom:var(--s3)}
+    .subhead + .section-lead{margin-top:calc(var(--s2) * -1 + 0px)}
+
+    /* 组件内部节奏统一 */
+    .shot-row{margin-top:var(--s4)}
+    .shot-row + .shot-row{margin-top:var(--s3)}
+    .decision-note{margin-top:var(--s4)}
+    .conclusion-bar{margin-top:var(--s4)}
+    .policy{margin-top:var(--s4)}
+    .stat-strip{margin-top:var(--s5);padding-top:var(--s4)}
+    .shot-wide + .shot-wide{margin-top:var(--s4)}
+    .anxiety{margin-top:var(--s4)}
+    .pain-grid,.stage-grid,.goal-grid,.principle-grid{margin-top:var(--s4)}
+    .tl{margin-top:var(--s4)}
+
+    /* 卡片内部留白统一 */
+    .pain-card,.stage-card,.principle-card{padding:var(--s3) var(--s3) var(--s4)}
+    .mm-card{padding:var(--s3)}
+
+    /* 同排卡片等高对齐 */
+    .principle-grid,.pain-grid,.stage-grid,.goal-grid,.mm-grid{align-items:stretch}
+    .principle-card,.pain-card,.stage-card,.mm-card{display:flex;flex-direction:column}
+    .principle-card p,.pain-card p,.stage-card .fix{margin-top:auto}
+    .pain-card small{margin-top:var(--s2)}
+
+    /* 三列截图行：底部说明基线对齐 */
+    .shot-row .shot{display:flex;flex-direction:column}
+    .shot-row .shot p{margin-top:auto;padding-top:var(--s2)}
+    .policy-row.last{margin-bottom:0}
+
+    /* section-head 底部留白纳入刻度（原 66px 溢出网格） */
+    .section-head{margin-bottom:var(--s6)}
+    /* 三列截图行等高：图片区固定高度，说明基线对齐 */
+    .shot-row .shot img{height:var(--shot-h,440px);object-fit:contain;object-position:center bottom}
+    .shot-row.c2 .shot img{--shot-h:480px}
+    .shot-wide img{object-fit:contain}
+    @media (max-width:900px){.shot-row .shot img{--shot-h:360px}.shot-row.c2 .shot img{--shot-h:360px}}
   </style>
 </head>
 <body>
@@ -478,7 +531,7 @@
         <div><b>1 system</b><span>status, control and evidence</span></div>
       </div>
       <div class="reveal">
-        <div class="kicker" style="margin-top:56px">What actually stops people — three anxieties behind every hand-off</div>
+        <div class="kicker subhead">What actually stops people — three anxieties behind every hand-off</div>
         <div class="pain-grid">
           <div class="pain-card"><b>01</b><h4>“Did it understand me?”</h4><p>Voice is fast but lossy. Users fear the agent misheard a name, a date or an amount — and will act on the wrong thing without them noticing.</p><small>Miscommitment</small></div>
           <div class="pain-card"><b>02</b><h4>“What is it doing right now?”</h4><p>Minutes of silence while an AI makes real calls in your name. No progress, no proof — the black box is where trust dies.</p><small>The black box</small></div>
@@ -547,17 +600,17 @@
           <div class="shot"><img src="images/pine-ai/case-thinking-expanded.png" alt="Thinking expanded to a live step list"><p>Tap to expand — the live step list, for users who want to follow the reasoning.</p></div>
           <div class="shot"><img src="images/pine-ai/case-thinking-done.png" alt="Thinking folded into a compact trace"><p>Done — thinking folds into a compact trace; the answer stays the hero.</p></div>
         </div>
-        <div class="decision-note" style="margin-top:30px"><b>Why collapsed by default</b><p>Trust needs calm, not spectacle. Showing every token of reasoning reads as noise and makes errors louder. Progressive disclosure keeps confidence high and cost low.</p></div>
+        <div class="decision-note"><b>Why collapsed by default</b><p>Trust needs calm, not spectacle. Showing every token of reasoning reads as noise and makes errors louder. Progressive disclosure keeps confidence high and cost low.</p></div>
       </div>
       <div class="reveal">
-        <div class="kicker" style="margin-top:60px">B · Computer Use — a window, not a log</div>
-        <p class="section-lead" style="margin-top:14px">When Pine drives a real computer, users deserve to watch. I designed one truth at three altitudes — the same live session, progressively disclosed. Read-only by design: you can always look, and the playback scrubber lets you rewind any step.</p>
+        <div class="kicker subhead">B · Computer Use — a window, not a log</div>
+        <p class="section-lead mt-0">When Pine drives a real computer, users deserve to watch. I designed one truth at three altitudes — the same live session, progressively disclosed. Read-only by design: you can always look, and the playback scrubber lets you rewind any step.</p>
         <div class="shot-row c3">
           <div class="shot"><div class="lvl">L1 · Glance</div><img src="images/pine-ai/case-cu-banner.png" alt="Computer Use banner in chat"><p>Banner in chat — one line + live thumbnail. Enough to know it's running.</p></div>
           <div class="shot"><div class="lvl">L2 · Monitor</div><img src="images/pine-ai/case-cu-panel.png" alt="Computer Use bottom panel"><p>Bottom panel — live screen, step 4/5, thinking timer, playback controls.</p></div>
           <div class="shot"><div class="lvl">L3 · Inspect</div><img src="images/pine-ai/case-cu-fullscreen.png" alt="Computer Use full screen"><p>Full screen — the whole session, scrubbable like a recording.</p></div>
         </div>
-        <div class="decision-note" style="margin-top:30px"><b>The ladder rule</b><p>Every level answers one question and offers exactly one step deeper. Glance → Monitor → Inspect. No level dead-ends; no level forces the next.</p></div>
+        <div class="decision-note"><b>The ladder rule</b><p>Every level answers one question and offers exactly one step deeper. Glance → Monitor → Inspect. No level dead-ends; no level forces the next.</p></div>
       </div>
     </section>
 
@@ -594,7 +647,7 @@
         <div class="ab-arrow">→</div>
         <div class="ab-col v2"><span class="tag">Shipped</span><img src="images/pine-ai/case-thinking-collapsed.png" alt="Shipped version summarises reasoning"><p>One calm summary line, expandable on demand. The model's verbosity no longer taxes the user; transparency became a choice instead of a burden.</p></div>
       </div>
-      <div class="decision-note reveal" style="margin-top:30px"><b>What this taught us about LLM UX</b><p>Model output length is not under the designer's control — the UI must be. Any surface bound to raw generation inherits its variance. Summarise by default; disclose by intent.</p></div>
+      <div class="decision-note reveal"><b>What this taught us about LLM UX</b><p>Model output length is not under the designer's control — the UI must be. Any surface bound to raw generation inherits its variance. Summarise by default; disclose by intent.</p></div>
     </section>
 
     <!-- 07 MULTIMODAL -->
@@ -638,7 +691,7 @@
         </div>
         <div class="tl-legend"><span>Fast thinking — live voice</span><span><b>Slow thinking — background work + my UI</b></span></div>
       </div>
-      <div class="conclusion-bar reveal" style="margin-top:34px">4 of the 6 moments on this timeline are screens — voice starts the task, but the UI is what makes it trustworthy enough to finish.</div>
+      <div class="conclusion-bar reveal">4 of the 6 moments on this timeline are screens — voice starts the task, but the UI is what makes it trustworthy enough to finish.</div>
     </section>
 
     <!-- 09 STEER IT -->
@@ -654,7 +707,7 @@
           <div class="shot"><div class="lvl">P2 · Approval gate</div><img src="images/pine-ai/case-need-actions.png" alt="Need-action approval card"><p>Need-action cards — routines pause and wait for an explicit human sign-off before anything runs on your behalf.</p></div>
           <div class="shot"><div class="lvl">P3 · Human handoff</div><img src="images/pine-ai/case-verify-calling.png" alt="Three-way verification call"><p>Three-way verification — when a bank insists on a human, Pine dials you in for the sensitive moment, then takes the call back.</p></div>
         </div>
-        <div class="shot-row c2" style="margin-top:26px">
+        <div class="shot-row c2">
           <div class="shot"><div class="lvl">P4 · Send review</div><img src="images/pine-ai/case-email-review.png" alt="Outbound email review"><p>Outbound email review — nothing leaves in your name without your eyes on it first.</p></div>
           <div class="shot"><div class="lvl">P5 · Scoped access</div><img src="images/pine-ai/case-gcal-connect.png" alt="Scoped calendar permission"><p>Connecting Google Calendar — permissions asked in context, scoped to the task, never a blanket grant.</p></div>
         </div>
@@ -674,9 +727,9 @@
         <div class="policy-row"><span class="pill">Moves money or makes a commitment</span><span class="arrow">→</span><span class="lead-to">P2 · Approval gate — explicit sign-off</span></div>
         <div class="policy-row"><span class="pill">Institution insists on a human</span><span class="arrow">→</span><span class="lead-to">P3 · Human handoff — three-way call</span></div>
         <div class="policy-row"><span class="pill">Speaks in your name (email, messages)</span><span class="arrow">→</span><span class="lead-to">P4 · Send review — you see it before it leaves</span></div>
-        <div class="policy-row" style="margin-bottom:0"><span class="pill">Touches a connected account</span><span class="arrow">→</span><span class="lead-to">P5 · Scoped access — permission in context</span></div>
+        <div class="policy-row last"><span class="pill">Touches a connected account</span><span class="arrow">→</span><span class="lead-to">P5 · Scoped access — permission in context</span></div>
       </div>
-      <div class="decision-note reveal" style="margin-top:28px"><b>The pause rule</b><p>Pine only interrupts when regret would be irreversible: money moves, identity, standing permissions. Everything else keeps flowing — interruptions spent like a budget.</p></div>
+      <div class="decision-note reveal"><b>The pause rule</b><p>Pine only interrupts when regret would be irreversible: money moves, identity, standing permissions. Everything else keeps flowing — interruptions spent like a budget.</p></div>
     </section>
 
     <!-- 10 GET IT -->
@@ -692,9 +745,9 @@
           <div class="shot"><div class="lvl">R2 · Task summary</div><img src="images/pine-ai/case-task-summary.png" alt="Structured task summary"><p>One structured record per task — what was done, what changed, what's next.</p></div>
           <div class="shot"><div class="lvl">R3 · Call record</div><img src="images/pine-ai/case-call-summary.png" alt="Auditable call record"><p>Every call ends in an auditable to-do trail — outcomes become checkable items.</p></div>
         </div>
-        <div class="decision-note" style="margin-top:30px"><b>One state machine</b><p>New → Started → In progress → Done → Continue. One card family carries the task through every state — users learn it once, then read every task at a glance.</p></div>
-        <div class="shot-wide" style="margin-top:44px">
-          <div class="kicker" style="margin-bottom:14px">R4 · Cross-surface — the same result system scales to desktop web</div>
+        <div class="decision-note"><b>One state machine</b><p>New → Started → In progress → Done → Continue. One card family carries the task through every state — users learn it once, then read every task at a glance.</p></div>
+        <div class="shot-wide">
+          <div class="kicker mb-s">R4 · Cross-surface — the same result system scales to desktop web</div>
           <img src="images/pine-ai/case-todo-inchat-web.png" alt="Result system on desktop web">
         </div>
       </div>
@@ -712,13 +765,13 @@
         <p>Scheduled tasks home — recurring work Pine runs without being asked twice.</p>
       </div>
       <div class="reveal">
-        <div class="shot-row c3" style="margin-top:44px">
+        <div class="shot-row c3">
           <div class="shot"><div class="lvl">Schedule it</div><img src="images/pine-ai/case-sched-setting.png" alt="Task scheduling settings"><p>Task settings — cadence, scope and limits set once, editable anytime.</p></div>
           <div class="shot"><div class="lvl">Remember it</div><img src="images/pine-ai/case-notebook-mobile.png" alt="Task notebook on mobile"><p>Task Notebook — every run leaves structured memory Pine builds on.</p></div>
           <div class="shot"><div class="lvl">Audit it</div><img src="images/pine-ai/case-replay-highlight.png" alt="Replay highlights"><p>Replay highlights — key moments of long runs, auto-marked for review.</p></div>
         </div>
-        <div class="shot-wide" style="margin-top:44px">
-          <div class="kicker" style="margin-bottom:14px">Task Notebook on desktop — the standing record of everything Pine has done for you</div>
+        <div class="shot-wide">
+          <div class="kicker mb-s">Task Notebook on desktop — the standing record of everything Pine has done for you</div>
           <img src="images/pine-ai/case-notebook-web.png" alt="Task notebook on desktop">
         </div>
       </div>
@@ -732,7 +785,7 @@
       </div>
       <div class="reveal">
         <div class="shot-wide"><img src="images/pine-ai/case-cu-popup.png" alt="Computer Use pop-up live view on web"><p>Computer Use on web — pop-up live view.</p></div>
-        <div class="shot-wide" style="margin-top:36px"><img src="images/pine-ai/case-cu-sideview.png" alt="Computer Use docked side view on web"><p>Computer Use on web — docked side view while you keep chatting.</p></div>
+        <div class="shot-wide"><img src="images/pine-ai/case-cu-sideview.png" alt="Computer Use docked side view on web"><p>Computer Use on web — docked side view while you keep chatting.</p></div>
       </div>
     </section>
 

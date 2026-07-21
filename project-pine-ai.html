@@ -468,6 +468,135 @@
     .shot-row.c2 .shot img{--shot-h:480px}
     .shot-wide img{object-fit:contain}
     @media (max-width:900px){.shot-row .shot img{--shot-h:360px}.shot-row.c2 .shot img{--shot-h:360px}}
+
+    /* ═══ DESIGN SYSTEM · 排版与间距的唯一真相 ═══════════════
+       字号：8 级模块化音阶   间距：4px 基准网格
+       任何新样式必须落在这两套刻度上                        */
+    :root{
+      --t-micro:10px;  --t-meta:12px;   --t-body:14px;  --t-lead:16px;
+      --t-h5:18px;     --t-h4:20px;     --t-h3:24px;    --t-h2:32px;
+      --lh-tight:1.25; --lh-snug:1.4;   --lh-body:1.7;
+      --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+      --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+    }
+
+    /* ── 字号：全部归入 8 级 ────────────────────────────── */
+    .kicker,.hero-label,.screen-label,.lvl,.st,.tagline,.badge,
+    .pain-card small,.mm-lane small,.tl-node .t,.anxiety-x,
+    .tl-legend,.no-branch,.stat-strip span,.design-point b,
+    .caption b,.signal{font-size:var(--t-micro)!important;letter-spacing:1.8px!important}
+
+    .section-index,.meta small,.anxiety-legend,.shot p,.shot-wide p,
+    .caption p,.policy .sub,.tl-node p,.mm-card p,.mm-lane p,
+    .stage-card .fail,.stage-card .fix,.pain-card p,.goal-card p,
+    .principle-card p,.brief p,.brief dd,.brief dt,.design-point p,
+    .decision-note p,.case-analysis > p,.tension p,.pill,
+    .policy-row .lead-to,.ia-node span,.ia-node small,
+    .flow-step p,.feature-copy p{font-size:var(--t-meta)!important;line-height:var(--lh-body)!important}
+
+    .section-lead,.multimodal .lead,.meta span{font-size:var(--t-body)!important;line-height:var(--lh-body)!important}
+
+    .pain-card h4,.stage-card h4,.principle-card h4,.tl-node h5,
+    .mm-lane h6,.design-point h4,.flow-step h4,.state h3{font-size:var(--t-h5)!important;line-height:var(--lh-snug)!important;letter-spacing:0!important}
+
+    .goal-card h4,.policy h4,.conclusion-bar,.decision-note b{font-size:var(--t-h4)!important;line-height:var(--lh-snug)!important}
+
+    .brief h3,.case-analysis h3,.tension h3{font-size:var(--t-h3)!important;line-height:var(--lh-snug)!important;letter-spacing:0!important}
+
+    /* 展示级字号（Bebas，独立音阶） */
+    .section-title{font-size:clamp(32px,4vw,52px)!important;line-height:var(--lh-tight)!important;letter-spacing:1px!important}
+    .multimodal h3{font-size:clamp(28px,3.4vw,44px)!important;line-height:1.1!important}
+    .hero-title{font-size:clamp(56px,7.5vw,96px)!important}
+    .pain-card b{font-size:40px!important;line-height:1!important}
+    .goal-card b{font-size:56px!important;line-height:1!important}
+    .principle-card b{font-size:32px!important;line-height:1!important}
+    .stat-strip b{font-size:28px!important;line-height:1!important}
+    .hero-num{font-size:clamp(60px,9vw,120px)!important}
+
+    /* ── 间距：卡片内边距统一 24px，元素间 4 的倍数 ──────── */
+    .pain-card,.stage-card,.principle-card,.mm-card,.decision-note,
+    .policy,.anxiety,.tension,.brief,.case-analysis{padding:var(--s5)!important}
+    .tl-node,.ia-node,.flow-step{padding:var(--s4)!important}
+    .conclusion-bar{padding:var(--s5)!important}
+    .pill{padding:var(--s3) var(--s4)!important}
+
+    /* 卡片内元素间距 */
+    .pain-card b{margin-bottom:var(--s3)}
+    .pain-card h4,.stage-card h4,.principle-card h4{margin:0 0 var(--s3)!important}
+    .pain-card p,.principle-card p{margin:0!important}
+    .pain-card small{margin-top:var(--s4)!important}
+    .stage-card .st{margin-bottom:var(--s3)}
+    .stage-card .fail{margin:0 0 var(--s3)!important}
+    .stage-card .fix{margin:0!important}
+    .goal-card b{margin-bottom:var(--s2)}
+    .goal-card h4{margin:0 0 var(--s1)!important}
+    .goal-card .tagline{margin-bottom:var(--s3)}
+    .goal-card p{margin:0!important}
+    .principle-card b{margin-bottom:var(--s2)}
+    .mm-card .ic{margin-bottom:var(--s3)!important}
+    .mm-card h5{margin:0 0 var(--s2)!important}
+    .mm-card p{margin:0!important}
+    .tl-node .t{margin-bottom:var(--s2)!important}
+    .tl-node h5{margin:0 0 var(--s2)!important}
+    .tl-node p{margin:0!important}
+    .tl-node .badge{margin-top:var(--s3)!important}
+    .decision-note b{display:block;margin-bottom:var(--s2)!important}
+    .decision-note p{margin:0!important}
+    .policy h4{margin:0 0 var(--s2)!important}
+    .policy .sub{margin:0 0 var(--s5)!important}
+    .policy-row{margin-bottom:var(--s3)!important;gap:var(--s3)!important}
+    .policy .no-branch{margin:var(--s5) 0 var(--s4)!important}
+    .brief h3{margin:var(--s3) 0 var(--s4)!important}
+    .brief p{margin:0 0 var(--s5)!important}
+    .shot .lvl{margin-bottom:var(--s3)!important}
+    .shot p,.shot-wide p{margin-top:var(--s4)!important;padding-top:0!important}
+    .section-lead{margin-top:var(--s4)}
+    .stat-strip span{margin-top:var(--s2)!important}
+    .anxiety-top{margin-bottom:var(--s4)!important}
+    .anxiety-x{margin-top:var(--s2)!important}
+    .tl-legend{margin-top:var(--s4)!important;gap:var(--s6)!important}
+
+    /* 栅格间距统一 24px */
+    .pain-grid,.stage-grid,.goal-grid,.principle-grid,.mm-grid,
+    .shot-row,.ladder,.mm-dual{gap:var(--s5)!important}
+
+    @media (max-width:900px){
+      :root{--t-h2:26px}
+      .pain-card,.stage-card,.principle-card,.mm-card,.decision-note,
+      .policy,.anxiety,.tension,.brief,.case-analysis{padding:var(--s4)!important}
+    }
+
+    /* ── 漏网元素补齐到刻度 ────────────────────────────── */
+    .ab-col .tag{font-size:var(--t-micro)!important;letter-spacing:1.8px!important}
+    .ab-col p{font-size:var(--t-meta)!important;line-height:var(--lh-body)!important}
+    .ab-arrow{font-size:28px!important}
+    .mm-card .ic{font-size:24px!important}
+    .anxiety svg text{font-size:10px!important}
+    .multimodal{padding:var(--s8) var(--s8)!important}
+    .mm-lane{padding:var(--s5)!important}
+    .brief-row{padding:var(--s3) 0!important}
+    .brief dl{margin-top:var(--s4)!important}
+    .mm-grid{margin-top:var(--s6)!important}
+    .mm-dual{margin-top:var(--s6)!important}
+    .multimodal h3{margin:var(--s3) 0 var(--s5)!important}
+    .multimodal .kicker{margin-bottom:0!important}
+    .case-analysis h3{margin:0 0 var(--s4)!important}
+    .case-analysis > p{margin:0 0 var(--s5)!important}
+    .tension h3{margin:var(--s3) 0 var(--s3)!important}
+    .tension p{margin:0!important}
+    .signal{margin-bottom:0!important}
+    @media (max-width:900px){ .multimodal{padding:var(--s6) var(--s5)!important} }
+
+    /* 最后的碎值：h4/p 的浏览器默认 margin 归零 */
+    main h3,main h4,main h5,main h6{margin-block:0}
+    main p:last-child{margin-bottom:0}
+    .feature-copy h3,.state h3{margin:0 0 var(--s3)!important}
+    .feature-copy p,.state p{margin:0!important}
+
+    .design-point h4{margin:0 0 var(--s2)!important}
+    .design-point p{margin:0!important}
+    .ab-col p{margin-top:var(--s4)!important}
+    .ab-col .tag{margin-bottom:var(--s3)!important}
   </style>
 </head>
 <body>

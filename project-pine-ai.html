@@ -376,6 +376,20 @@
       .policy{padding:24px 20px}
     }
     main img{border-radius:12px}
+
+    /* 截图尺寸约束：手机竖图按高度收敛并居中，避免整屏一张 */
+    .shot img{max-height:440px;width:auto;max-width:100%;margin:0 auto;display:block}
+    .shot-row.c2 .shot img{max-height:480px}
+    .shot-wide img{max-height:560px;width:auto;max-width:100%;margin:0 auto;display:block}
+    .case-visual img{max-height:520px;width:auto;max-width:100%;margin:0 auto;display:block}
+    .media{max-height:560px}
+    .media img{max-height:560px;width:auto;object-fit:contain;margin:0 auto}
+    .ab-col img{max-height:460px;width:auto;max-width:100%;margin:0 auto;display:block}
+    .shot p,.shot-wide p{text-align:left}
+    @media (max-width:900px){
+      .shot img,.shot-row.c2 .shot img{max-height:380px}
+      .shot-wide img,.case-visual img,.media img,.ab-col img{max-height:400px}
+    }
   </style>
 </head>
 <body>

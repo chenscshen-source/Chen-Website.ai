@@ -756,6 +756,33 @@
     main em,.proof-section em{font-size:inherit!important;font-style:normal}
     .proof-title{margin:0 0 var(--s5)!important}
     .case-module.reverse{margin-top:var(--s7)!important}
+
+    /* ═══ 去圆角：仅截图保留 8px ═══════════════════════ */
+    .proof-brand,.era,.media,.pain-card,.anxiety,.stage-card,.conclusion-bar,
+    .multimodal,.mm-card,.mm-lane,.tl-node,.policy,.principle-card,.goal-card,
+    .decision-note,.brief,.case-analysis,.tension,.overview-grid,.overview-grid > *,
+    .work-row,.proof-note,.proof-note > *,.browser-shell,.state,.flow-step,.ia-node
+      {border-radius:0!important}
+    main img,.proof-section img{border-radius:8px!important}
+    .pill,.era-tags span,.badge,.tab{border-radius:999px!important}
+
+    /* ═══ era 画布：统一图片高度与底部基线 ═══════════════ */
+    .era-canvas{align-items:end!important;margin:var(--s4) 0!important;gap:var(--s3)!important}
+    .era-canvas img{height:200px!important;max-height:none!important;width:100%!important;
+      object-fit:contain!important;object-position:bottom center!important;margin:0!important}
+    .era-canvas img:first-child{height:200px!important}
+    .era.agent .era-canvas img{height:200px!important}
+    /* era 卡片等高，结论沉底 */
+    .era{display:flex!important;flex-direction:column!important}
+    .era-outcome{margin-top:auto!important}
+
+    /* ═══ 章节头：编号与标题同栏线 ═══════════════════════ */
+    .section-head{display:block!important}
+    .section-head > div:first-child{display:flex!important;align-items:baseline;gap:var(--s3);margin-bottom:var(--s4)}
+    .section-title{max-width:900px}
+    .section-lead{max-width:760px}
+
+    @media (max-width:900px){ .era-canvas img,.era-canvas img:first-child{height:150px!important} }
   </style>
 </head>
 <body>

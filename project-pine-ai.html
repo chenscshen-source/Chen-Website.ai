@@ -783,6 +783,22 @@
     .section-lead{max-width:760px}
 
     @media (max-width:900px){ .era-canvas img,.era-canvas img:first-child{height:150px!important} }
+
+    /* ═══ Hero 对齐其他子页基准（project-2 等） ═══════════ */
+    .hero-title{font-size:clamp(72px,11vw,160px)!important;letter-spacing:4px!important;line-height:.9!important}
+    .hero-num{font-size:clamp(120px,19vw,280px)!important;color:rgba(175,172,167,.06)!important;
+      top:80px!important;right:var(--gutter)!important}
+    .hero-label{letter-spacing:6px!important;font-size:10px!important}
+    /* meta chip 与其他子页同款 */
+    .hero-meta > *{padding:12px 18px!important;border:1px solid rgba(211,208,202,.35)!important;
+      background:rgba(211,208,202,.04)!important}
+    .hero-meta small{font-size:8px!important;letter-spacing:5px!important;color:var(--accent)!important}
+    .hero-meta span{font-size:11px!important;color:var(--white)!important;letter-spacing:0!important}
+    .hero-meta{gap:10px!important;margin-top:40px!important}
+    @media (max-width:900px){
+      .hero-title{font-size:clamp(56px,13vw,80px)!important}
+      .hero-num{font-size:clamp(90px,24vw,140px)!important;top:60px!important}
+    }
   </style>
 </head>
 <body>

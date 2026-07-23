@@ -125,7 +125,7 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between;
     padding:24px 60px; border-bottom:1px solid var(--dim); background:rgba(5,5,5,0.92); backdrop-filter:blur(12px); }
   .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px; color:var(--acid); text-decoration:none; }
-  .nav-back { display:flex; align-items:center; gap:10px; font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  .nav-back { display:flex; align-items:center; gap:8px; font-size:10px; letter-spacing:4px; text-transform:uppercase;
     color:rgba(233,238,244,0.4); text-decoration:none; transition:color .3s; }
   .nav-back:hover { color:var(--acid); }
   .nav-back svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.5; }
@@ -171,7 +171,7 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     display:inline-block;
     width:2px;
     height:.55em;
-    margin-left:6px;
+    margin-left:8px;
     background:rgba(232,229,222,0.9);
     border-radius:2px;
     transform:translateY(0.08em);
@@ -183,8 +183,8 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     50% { text-shadow:0 0 24px rgba(232,229,222,0.30), 0 0 70px rgba(194,191,185,0.22); }
   }
 
-  .hero-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:40px; padding-top:32px; border-top:1px solid var(--dim); }
-  .meta-chip { display:inline-flex; flex-direction:column; gap:5px; padding:12px 18px;
+  .hero-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:40px; padding-top:32px; border-top:1px solid var(--dim); }
+  .meta-chip { display:inline-flex; flex-direction:column; gap:8px; padding:12px 16px;
     border:1px solid var(--dim); background:var(--dim2);
     position:relative; cursor:default; transition:border-color .3s, background .3s; overflow:hidden; }
   .meta-chip::before { content:''; position:absolute; inset:0;
@@ -194,7 +194,7 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
   .meta-chip-label { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:var(--acid); opacity:.65; }
   .meta-chip-val { font-size:11px; letter-spacing:1.5px; color:var(--white); opacity:.75; white-space:nowrap; }
   .meta-chip.wide { flex:1 1 auto; }
-  .meta-chip.status-chip .meta-chip-val { display:flex; align-items:center; gap:7px; }
+  .meta-chip.status-chip .meta-chip-val { display:flex; align-items:center; gap:8px; }
   .meta-chip-scan { position:absolute; left:0; right:0; height:1px; background:rgba(211,208,202,0.2); top:-1px; transition:top .4s ease; pointer-events:none; }
   .meta-chip:hover .meta-chip-scan { top:100%; }
   .status-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--acid); flex-shrink:0;
@@ -315,8 +315,8 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     .meta-chip-val { white-space:normal; }
     .hero-head { gap:16px; }
     .tabs-bar { width:100%; justify-content:flex-start; }
-    .tabs-track { gap:6px; }
-    .tab-btn { font-size:7px; padding:7px 9px; letter-spacing:1.5px; min-width:50px; }
+    .tabs-track { gap:8px; }
+    .tab-btn { font-size:7px; padding:8px 8px; letter-spacing:1.5px; min-width:50px; }
     .card-wrap { perspective:700px; }
     .card-wrap.reveal-init { transform:translateY(40px) translateZ(-120px) rotateX(10deg); }
   }
@@ -337,7 +337,7 @@ body.glitch .vhs-rgb { opacity:1; animation:rgbShift 0.08s steps(2) infinite; }
     .tab-btn { min-height: 44px; padding-top: 12px; padding-bottom: 12px; }
     .nav-logo { min-height: 44px; display: inline-flex; align-items: center; }
     .nav-back { min-height: 44px; display: inline-flex; align-items: center; }
-    .tabs-track { gap: 10px; flex-wrap: wrap; }
+    .tabs-track { gap: 8px; flex-wrap: wrap; }
     /* 正文可读性下限 */
     .meta-chip-val, .block-body, .card-body, p { font-size: max(12px, 1em); }
   }

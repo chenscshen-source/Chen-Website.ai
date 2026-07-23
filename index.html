@@ -269,10 +269,10 @@
   .nav-hamburger {
     display: none;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     background: none;
     border: none;
-    padding: 6px;
+    padding: 8px;
     cursor: pointer;
     z-index: 200;
   }
@@ -294,7 +294,7 @@
     background: rgba(5,5,5,0.97);
     backdrop-filter: blur(20px);
     z-index: 150;
-    padding: 80px 30px 40px;
+    padding: 80px 32px 40px;
     transform: translateY(-100%);
     transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
     border-bottom: 1px solid rgba(200,220,235,0.15);
@@ -417,7 +417,7 @@
     text-transform: uppercase;
     color: var(--acid);
     opacity: 0.7;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     animation: fadeIn 0.8s 0.15s both;
   }
   .hero-title::before {
@@ -558,7 +558,7 @@
   .hero-subtitle-line {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 32px;
     margin-top: 20px;
     opacity: 0;
     animation: fadeIn 1s 0.9s both;
@@ -1091,7 +1091,7 @@
     position: absolute;
     background: rgba(5,5,5,0.88);
     border: 1px solid rgba(200,220,235,0.25);
-    padding: 8px 14px;
+    padding: 8px 16px;
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--acid);
@@ -1106,7 +1106,7 @@
   .marquee-wrap {
     border-top: 1px solid var(--dim);
     border-bottom: 1px solid var(--dim);
-    padding: 18px 0;
+    padding: 16px 0;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -1203,8 +1203,8 @@
   .about-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-top: 50px;
+    gap: 32px;
+    margin-top: 48px;
   }
   .stat-item {
     border-left: 2px solid var(--acid);
@@ -1298,7 +1298,7 @@
     transform-origin: top;
   }
   .timeline-item {
-    padding-left: 50px;
+    padding-left: 48px;
     padding-bottom: 60px;
     position: relative;
   }
@@ -1321,7 +1321,7 @@
     animation: narrative-signal 1.4s steps(2) 1;
   }
   @keyframes narrative-signal { 0% { opacity: 0; transform: translateX(-12px); } 30%,75% { opacity: .7; } 100% { opacity: 0; transform: translateX(10px); } }
-  .pine-scroll-signal { display: flex; align-items: center; gap: 7px; margin: 16px 0 0; opacity: 0; transition: opacity .45s ease; }
+  .pine-scroll-signal { display: flex; align-items: center; gap: 8px; margin: 16px 0 0; opacity: 0; transition: opacity .45s ease; }
   .pine-scroll-signal::before { content: ''; width: 68px; height: 1px; background: linear-gradient(90deg, var(--acid), transparent); box-shadow: 0 0 12px rgba(255,90,46,.7); }
   .pine-scroll-signal span { width: 5px; height: 5px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px rgba(255,90,46,.85); }
   #pineai-item.narrative-active .pine-scroll-signal { opacity: 1; }
@@ -1345,7 +1345,7 @@
     letter-spacing: 2px;
     opacity: 0.4;
     text-transform: uppercase;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
   .timeline-desc {
     font-size: 13px;
@@ -1363,7 +1363,7 @@
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 5px 10px;
+    padding: 8px 8px;
     border: 1px solid var(--dim);
     color: var(--acid);
     opacity: 0.7;
@@ -1598,7 +1598,7 @@
   .terminal-output:hover {
     opacity: 1;
     color: rgba(240,237,230,0.9);
-    padding-left: 6px;
+    padding-left: 8px;
   }
 
 
@@ -1800,7 +1800,7 @@
   #education .education-terminal .terminal-card { width: 100%; }
   .terminal-header {
     background: rgba(240,237,230,0.05);
-    padding: 14px 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1821,12 +1821,12 @@
     text-transform: uppercase;
   }
   .terminal-body {
-    padding: 30px;
+    padding: 32px;
     font-size: 12px;
     line-height: 2;
     color: var(--matrix);
   }
-  .terminal-line { display: flex; gap: 10px; }
+  .terminal-line { display: flex; gap: 8px; }
   .terminal-prompt { opacity: 0.4; }
   .terminal-cmd { color: var(--white); }
   .terminal-output { color: rgba(240,237,230,0.5); margin-left: 20px; }
@@ -2098,9 +2098,9 @@
     .hero-name-mega { font-size: clamp(64px, 22vw, 120px); }
     .hero-subtitle { font-size: 10px; letter-spacing: .7px; line-height: 1.65; max-width: 340px; }
     .hero-subtitle-line { gap: 16px; margin-top: 12px; }
-    .hero-bottom { width: 100%; margin-top: 22px; gap: 12px; }
-    .hero-cta { gap: 10px; }
-    .hero-tag { font-size: 9px; letter-spacing: 1.6px; line-height: 1.6; padding: 0; margin-bottom: 10px; }
+    .hero-bottom { width: 100%; margin-top: 24px; gap: 12px; }
+    .hero-cta { gap: 8px; }
+    .hero-tag { font-size: 9px; letter-spacing: 1.6px; line-height: 1.6; padding: 0; margin-bottom: 8px; }
     .hero-bg-text { display: none; }
     .hero-mega-wrap { margin-top: 0; }
 
@@ -2154,7 +2154,7 @@
       order: -1;
       height: 250px;
       overflow: hidden;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
 
     .avatar-reactive-field { display: none !important; }
@@ -2247,7 +2247,7 @@
 
 
     #works {
-      padding: 60px 0 50px;
+      padding: 60px 0 48px;
       overflow: hidden;
     }
     .works-header {
@@ -2255,7 +2255,7 @@
       margin-bottom: 32px;
       flex-direction: column;
       align-items: flex-start;
-      gap: 10px;
+      gap: 8px;
     }
     .works-hint { font-size: 9px; letter-spacing: 2px; }
 
@@ -2265,8 +2265,8 @@
 
     .works-track {
       display: flex;
-      gap: 14px;
-      padding: 16px 20px 30px;
+      gap: 16px;
+      padding: 16px 20px 32px;
       width: max-content;
     }
 
@@ -2323,7 +2323,7 @@
 
     .skills-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
     .skill-card { padding: 24px; }
-    .skill-icon { font-size: 26px; margin-bottom: 14px; }
+    .skill-icon { font-size: 26px; margin-bottom: 16px; }
     .skill-name { font-size: 18px; letter-spacing: 2px; }
     .skill-desc { font-size: 10px; }
 
@@ -2359,8 +2359,8 @@
 
   @media (max-width: 380px) {
     .hero-name-mega { font-size: clamp(54px, 19vw, 90px); }
-    section { padding: 50px 16px; }
-    #works { padding: 50px 0 40px; }
+    section { padding: 48px 16px; }
+    #works { padding: 48px 0 40px; }
     .works-header { padding: 0 16px; }
     .works-track { padding: 12px 16px 24px; gap: 12px; }
     .work-card, .work-card.wide {
@@ -2643,7 +2643,7 @@
     font-size: 10px; letter-spacing: 3px;
     color: var(--acid); opacity: 0.5;
     text-transform: uppercase;
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 8px;
   }
   .works-hint-arrow { display:inline-block; animation: hint-drift 1.8s ease-in-out infinite; }
   @keyframes hint-drift { 0%,100%{transform:translateX(0)} 50%{transform:translateX(8px)} }
@@ -2669,7 +2669,7 @@
   .works-track {
     display: flex;
     gap: 20px;
-    padding: 30px 60px 50px;
+    padding: 32px 60px 48px;
     width: max-content;
     will-change: transform;
   }
@@ -2750,7 +2750,7 @@
     border-bottom: 1px solid rgba(200,220,235,0.12);
     display: flex;
     align-items: center;
-    padding: 0 14px;
+    padding: 0 16px;
     gap: 8px;
     z-index: 11;
     backdrop-filter: blur(8px);
@@ -2937,7 +2937,7 @@
 
   .wc-content {
     position: absolute; bottom: 32px; left: 0; right: 0;
-    padding: 28px 26px 0; z-index: 6;
+    padding: 28px 24px 0; z-index: 6;
     transform: translateY(10px); opacity: 0.4;
     transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s;
   }
@@ -2946,8 +2946,8 @@
 
   .wc-tag {
     font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--acid); opacity: 0.7; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 10px;
+    color: var(--acid); opacity: 0.7; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
   }
   .wc-tag::before {
     content: '▶'; font-size: 7px;
@@ -2981,7 +2981,7 @@
     color: var(--acid); margin-top: 16px;
     opacity: 0; transform: translateY(6px);
     border: 1px solid rgba(200,220,235,0.3);
-    padding: 7px 14px;
+    padding: 8px 16px;
     transition: opacity 0.3s 0.12s, transform 0.3s 0.12s cubic-bezier(0.16,1,0.3,1),
                 background 0.2s, border-color 0.2s;
   }
@@ -3001,7 +3001,7 @@
     background: rgba(6,5,2,0.92);
     backdrop-filter: blur(4px);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 14px;
+    padding: 0 16px;
     font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase;
     color: rgba(200,220,235,0.3);
     opacity: 0; transition: opacity 0.35s;
@@ -3010,7 +3010,7 @@
   .work-card:hover      .wc-statusbar { opacity: 1; }
   .wc-statusbar-dot {
     display: inline-block; width: 4px; height: 4px; border-radius: 50%;
-    background: var(--acid); margin-right: 6px;
+    background: var(--acid); margin-right: 8px;
     animation: sb 1.4s steps(1) infinite;
   }
 
@@ -3094,7 +3094,7 @@
     /* 触控目标 ≥44×44（WCAG 2.5.5）：视觉尺寸不变，靠内边距扩大可点区域 */
     .nav-hamburger {
       min-width: 44px; min-height: 44px;
-      padding: 9px 5px;
+      padding: 8px 8px;
       box-sizing: border-box;
       justify-content: center;
     }
@@ -3542,9 +3542,9 @@ PLATFORM</div>
           <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd">chen --stack</span></div>
           <div class="terminal-line"><span class="terminal-output">→ Figma · Nano Banana · 可灵 · 即梦</span></div>
           <div class="terminal-line"><span class="terminal-output">→ Claude Code · AIGC Tools Suite</span></div>
-          <div class="terminal-line" style="margin-top:10px;"><span class="terminal-prompt">$</span><span class="terminal-cmd">chen --languages</span></div>
+          <div class="terminal-line" style="margin-top:8px;"><span class="terminal-prompt">$</span><span class="terminal-cmd">chen --languages</span></div>
           <div class="terminal-line"><span class="terminal-output">→ Mandarin (Native) · English (Advanced)</span></div>
-          <div class="terminal-line" style="margin-top:10px;"><span class="terminal-prompt">$</span><span class="terminal-cmd">chen --status<span class="cursor-blink" style="background:var(--matrix)"></span></span></div>
+          <div class="terminal-line" style="margin-top:8px;"><span class="terminal-prompt">$</span><span class="terminal-cmd">chen --status<span class="cursor-blink" style="background:var(--matrix)"></span></span></div>
         </div>
       </div>
     </div>
@@ -3721,7 +3721,7 @@ PLATFORM</div>
       <h2 class="contact-headline glitch parallax-enter" data-text="LET'S BUILD.">
         LET'S<br><span style="color:var(--acid)">BUILD.</span>
       </h2>
-      <p class="contact-desc" style="font-size:13px;opacity:0.7;line-height:1.9;margin-top:30px;letter-spacing:0.3px;">
+      <p class="contact-desc" style="font-size:13px;opacity:0.7;line-height:1.9;margin-top:32px;letter-spacing:0.3px;">
         Open to AIGC collaborations, brand creative<br>projects, design consulting, and interesting<br>conversations about the future of AI + design.
       </p>
     </div>

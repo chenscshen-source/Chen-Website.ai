@@ -709,6 +709,8 @@
 
   .hero-right {
     position: relative;
+    /* 仅移动 Hero 内的整体模块，不改变精灵图素材的构图和裁切。 */
+    top: -24px;
     display: flex;
     justify-content: center;
     animation: fadeIn 1.5s 0.3s both;
@@ -756,7 +758,7 @@
     width: 600px;
     height: 750px;
     /* 首屏先用 35KB 静态正面帧秒开；7MB 图集在后台加载完成后由 JS 换上 */
-    background-image: url('images/pine-sprite/avatar-mobile.webp');
+    background-image: url('images/pine-sprite/avatar-mobile.webp?v=v11');
     background-size: contain;
     background-position: center top;
     background-repeat: no-repeat;
@@ -2148,6 +2150,7 @@
 
     .hero-right {
       display: flex !important;
+      top: 0;
       justify-content: center;
       align-items: flex-start;
       width: 100%;
@@ -3082,7 +3085,7 @@
     /* 移动端不加载 7MB 图集：朝向跟随本就禁用，静态帧足够（省 7MB 流量）。
        浏览器只请求胜出的那条 background-image，大图不会被下载。 */
     .avatar-sprite {
-      background-image: url('images/pine-sprite/avatar-mobile.webp') !important;
+      background-image: url('images/pine-sprite/avatar-mobile.webp?v=v11') !important;
       background-size: contain !important;
       background-position: center top !important;
       will-change: auto !important;
@@ -4404,15 +4407,15 @@ if (avatarWrap && window.innerWidth > 600) {
   //   f108-118 左下抬起 · f120-160 左侧脸 · f162-192 由左转回正面
   // 判读依据：耳朵/发量在画面左、脸与墨镜朝画面右 = 向右看（反之向左）。
   const ANGLE_KEYS = Object.freeze({
-    center: 192,       // 正面
-    'right-up': 28,    // 右上（头部水平、已明显转右）
-    right: 38,         // 正右
-    'right-down': 64,
-    down: 100,         // 最低头
-    'left-down': 114,
-    left: 140,         // 正左（左侧脸）
-    'left-up': 170,
-    up: 190            // 素材无仰头，取最水平的正面姿态
+    center: 16,        // 正面微笑
+    'right-up': 28,    // 右上抬头
+    right: 52,         // 右侧脸
+    'right-down': 60,
+    down: 72,          // 最低头
+    'left-down': 112,
+    left: 132,         // 左侧脸
+    'left-up': 156,
+    up: 20             // 抬头（新素材有真仰头）
   });
 
   const FRAME_STEP = 2;
@@ -4585,11 +4588,11 @@ if (avatarWrap && window.innerWidth > 600) {
   // 加载完成后才切换 background-image 并接管渲染 —— 首屏不被大图阻塞。
   const atlas = new Image();
   atlas.onload = () => {
-    sprite.style.backgroundImage = "url('images/pine-sprite/sprite.webp')";
+    sprite.style.backgroundImage = "url('images/pine-sprite/sprite.webp?v=v11')";
     renderAtlasFrame(currentFrame);
     wake();
   };
-  atlas.src = 'images/pine-sprite/sprite.webp';
+  atlas.src = 'images/pine-sprite/sprite.webp?v=v11';
 })();
 
 // HERO REACTIVE FIELD — 首次悬停再加载 Three.js；复用上方角色朝向的 avatar-direction 事件。

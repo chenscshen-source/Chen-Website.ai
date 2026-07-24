@@ -874,20 +874,22 @@
     .iphone{
       position:relative;
       width:var(--iw,220px);
-      aspect-ratio:9 / 19;
+      aspect-ratio:1170 / 2532;                    /* iPhone 14 真机屏幕比例 */
       margin-inline:auto;
-      padding:8px 8px 8px;
-      border:1.5px solid rgba(240,237,230,.42);
-      border-radius:30px;
+      padding:calc(var(--iw) * .03);               /* 四边均匀细边框 */
+      border:1px solid rgba(240,237,230,.5);
+      border-radius:calc(var(--iw) * .17);          /* 机身大圆角，随宽度缩放 */
       background:#080808;
-      box-shadow:0 26px 60px rgba(0,0,0,.5);
+      box-shadow:0 26px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.6);
     }
-    /* 听筒 / 灵动岛 线框 */
-    .iphone::before{content:'';position:absolute;z-index:2;top:10px;left:50%;transform:translateX(-50%);
-      width:46px;height:6px;border-radius:999px;border:1.5px solid rgba(240,237,230,.42);background:#080808}
-    /* 底部 home 指示条 */
-    .iphone::after{content:'';position:absolute;z-index:2;bottom:5px;left:50%;transform:translateX(-50%);
-      width:60px;height:3px;border-radius:999px;background:rgba(240,237,230,.35)}
+    /* 灵动岛：实心黑胶囊，悬在屏幕顶部 */
+    .iphone::before{content:'';position:absolute;z-index:3;top:calc(var(--iw) * .055);left:50%;transform:translateX(-50%);
+      width:calc(var(--iw) * .34);height:calc(var(--iw) * .088);border-radius:999px;
+      background:#000;border:1px solid rgba(240,237,230,.16)}
+    /* 侧键：右电源键 + 左音量键（box-shadow 复制到左缘） */
+    .iphone::after{content:'';position:absolute;z-index:1;right:-1.5px;top:30%;
+      width:2px;height:calc(var(--iw) * .26);border-radius:2px;background:rgba(240,237,230,.4);
+      box-shadow:calc(1.5px - var(--iw)) calc(var(--iw) * -.1) 0 0 rgba(240,237,230,.4)}
 
     /* 各容器下的机身尺寸 */
     .shot-row.c3 .iphone{--iw:202px}
@@ -901,7 +903,7 @@
       width:100%!important;height:100%!important;max-height:none!important;min-width:0!important;
       object-fit:cover!important;object-position:top center!important;
       padding:0!important;margin:0!important;border:0!important;
-      border-radius:22px!important;background:#0b0b0b!important;display:block}
+      border-radius:calc(var(--iw) * .13)!important;background:#0b0b0b!important;display:block}
 
     /* 承托机身的容器统一深色，去掉浮在浅灰里的“单薄”观感 */
     .shot{background:var(--case-panel)!important}
@@ -964,9 +966,57 @@
 
     /* ⑤ DISPLAY clamp — 页面主视觉大标题 */
     .hero-title{font-size:var(--fs-display)!important}
+
+    /* ═══ 排版结构修正 ═══════════════════════════════════
+       解决：章节头分散、编号过大、reflection 无结构、桌面图框套框 */
+
+    /* 1 · 章节头收成左对齐一柱：眉标行（编号+标签）→ 标题 → 导语 */
+    .section-head{display:block!important;grid-template-columns:none!important;
+      column-gap:0!important;row-gap:0!important;
+      border-top:1px solid var(--case-line);padding-top:var(--s4)!important;
+      margin-bottom:var(--s6)!important}
+    .section-head>div:first-child{display:flex!important;align-items:baseline!important;
+      gap:var(--s3)!important;flex-wrap:wrap!important;margin:0 0 var(--s4)!important}
+    /* 编号降级为眉标尺寸（复用 title 档 18，不新增字号） */
+    .section-head .section-index{font-size:var(--fs-title)!important;
+      color:rgba(240,237,230,.38)!important;line-height:1!important;
+      margin:0!important;letter-spacing:1px!important}
+    .section-head .kicker{margin:0!important}
+    .section-head .section-title{grid-column:auto!important;margin:0!important;max-width:1000px!important}
+    .section-head .section-lead{grid-column:auto!important;margin:var(--s4) 0 0!important;max-width:760px!important}
+
+    /* 2 · reflection 改三等分带分隔线卡片，跟全站卡片语言统一 */
+    .reflection-grid{grid-template-columns:repeat(3,1fr)!important;gap:0!important;
+      border:1px solid var(--case-line)!important;background:var(--case-line)!important}
+    .reflection-grid .tension{background:var(--case-panel)!important;
+      padding:var(--s5)!important;min-height:auto!important;border:0!important}
+    .reflection-grid .tension + .tension{border-left:1px solid var(--case-line)!important}
+
+    /* 3 · 桌面宽图：去掉容器外框/内边距，图自带浏览器窗口，直接展示 */
+    .shot-wide{padding:0!important;border:0!important;background:transparent!important}
+    .shot-wide img{border:0!important;border-radius:10px!important;
+      padding:0!important;background:transparent!important;max-height:720px!important}
+
+    @media (max-width:900px){
+      .reflection-grid{grid-template-columns:1fr!important}
+      .reflection-grid .tension + .tension{border-left:0!important;border-top:1px solid var(--case-line)!important}
+    }
+
+    /* 4 · tab 与其他子页统一：方角 + 8px（撤销 pill 圆角与 label 档字号） */
+    .tabs .tab{border-radius:0!important;font-size:8px!important;letter-spacing:2px!important}
+
+    /* 5 · 删掉章节头顶部分割线，收紧章节上下间距 */
+    .section-head{border-top:0!important;padding-top:0!important;margin-bottom:var(--s5)!important}
+    main .section{padding-top:var(--s7)!important;padding-bottom:var(--s7)!important}
+    .proof-section{padding-top:var(--s7)!important;padding-bottom:var(--s7)!important}
+
+    /* 6 · 全局扫描线覆盖层（与其他子页统一复用） */
+    .scanlines { position:fixed; inset:0; pointer-events:none; z-index:181;
+      background:repeating-linear-gradient(180deg, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.18) 2px 3px); }
   </style>
 </head>
 <body>
+  <div class="scanlines"></div>
   <nav>
     <a class="nav-logo" href="index.html">ChEN</a>
     <span class="nav-tag">01 / Pine AI Product Design</span>

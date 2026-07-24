@@ -1,0 +1,7 @@
+.git
+.agents
+.claude
+.DS_Store
+**/.DS_Store
+scripts
+skills-lock.json
